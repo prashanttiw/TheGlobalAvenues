@@ -1,78 +1,97 @@
-import { useRef } from 'react';
-import { ArrowRight } from 'lucide-react';
-import { useCounterAnimation, useSideSlideAnimation } from '../hooks/useScrollAnimation';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { ArrowRight, Globe, Users, TrendingUp } from 'lucide-react';
 
-export default function Hero() {
-  const counterRef = useRef(null);
-  const contentRef = useRef(null);
-  const visualRef = useRef(null);
-
-  useCounterAnimation(counterRef);
-  useSideSlideAnimation(contentRef, 'left');
-  useSideSlideAnimation(visualRef, 'right');
+export function Hero() {
+  const [ref, isVisible] = useScrollAnimation();
 
   return (
-    <section id="home" className="py-20 md:py-32 bg-gradient-to-br from-primary/5 to-secondary/5 overflow-hidden relative">
-      <div className="container-wide">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Content */}
-          <div ref={contentRef} className="flex flex-col gap-8 scroll-slide-in-left" style={{ opacity: 0 }}>
-            <div>
-              <h1 className="section-heading text-foreground leading-tight">
-                Global Talent, <span className="text-primary">Locally Connected</span>
-              </h1>
-              <p className="section-subheading text-muted-foreground">
-                Connecting world-class talent with industry leaders. We bridge the gap between exceptional professionals and transformative opportunities across continents.
-              </p>
-            </div>
+    <section id="home" className="min-h-screen pt-20 px-4 flex items-center relative overflow-hidden">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 -z-10"></div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="btn-primary inline-flex items-center justify-center gap-2 group">
-                Explore Opportunities
-                <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-              <button className="btn-outline inline-flex items-center justify-center gap-2">
-                Learn More
-              </button>
-            </div>
+      {/* Floating Elements */}
+      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10 animate-float" style={{ animationDelay: '0s' }}></div>
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl -z-10 animate-float" style={{ animationDelay: '1s' }}></div>
 
-            {/* Stats with Counter Animation */}
-            <div ref={counterRef} className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
-              <div className="scroll-fade-in stagger-1" data-stagger style={{ animation: 'fadeInUp 0.6s ease-out 0.1s forwards', opacity: 0 }}>
-                <div className="text-3xl md:text-4xl font-bold text-primary" data-counter="5000">0</div>
-                <p className="text-muted-foreground text-sm mt-1">Professionals Placed</p>
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Left Content */}
+        <div
+          ref={ref}
+          className={`space-y-8 transition-all duration-1000 ${
+            isVisible ? 'animate-fade-in-left' : 'opacity-0 translate-x-[-30px]'
+          }`}
+        >
+          <div className="space-y-4">
+            <div className="inline-block px-4 py-2 bg-accent/20 text-accent rounded-full text-sm font-semibold">
+              ✨ Your Global Education Partner
+            </div>
+            <h1 className="text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+              Unlock Your
+              <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent block">
+                International Potential
+              </span>
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-md leading-relaxed">
+              Enabling international universities to effortlessly access the South Asian market through specialized in-country representation and expert guidance.
+            </p>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 py-8">
+            <div className="p-4 bg-muted/50 rounded-lg backdrop-blur hover:bg-muted transition-colors">
+              <div className="flex items-center gap-3 mb-2">
+                <Users className="w-5 h-5 text-primary" />
+                <span className="text-2xl font-bold text-foreground">3000+</span>
               </div>
-              <div className="scroll-fade-in stagger-2" data-stagger style={{ animation: 'fadeInUp 0.6s ease-out 0.2s forwards', opacity: 0 }}>
-                <div className="text-3xl md:text-4xl font-bold text-primary" data-counter="150">0</div>
-                <p className="text-muted-foreground text-sm mt-1">Partner Companies</p>
+              <p className="text-sm text-muted-foreground">Students Placed</p>
+            </div>
+            <div className="p-4 bg-muted/50 rounded-lg backdrop-blur hover:bg-muted transition-colors">
+              <div className="flex items-center gap-3 mb-2">
+                <Globe className="w-5 h-5 text-secondary" />
+                <span className="text-2xl font-bold text-foreground">50+</span>
               </div>
-              <div className="scroll-fade-in stagger-3" data-stagger style={{ animation: 'fadeInUp 0.6s ease-out 0.3s forwards', opacity: 0 }}>
-                <div className="text-3xl md:text-4xl font-bold text-primary" data-counter="45">0</div>
-                <p className="text-muted-foreground text-sm mt-1">Countries Served</p>
+              <p className="text-sm text-muted-foreground">Universities</p>
+            </div>
+            <div className="p-4 bg-muted/50 rounded-lg backdrop-blur hover:bg-muted transition-colors">
+              <div className="flex items-center gap-3 mb-2">
+                <TrendingUp className="w-5 h-5 text-accent" />
+                <span className="text-2xl font-bold text-foreground">98%</span>
               </div>
+              <p className="text-sm text-muted-foreground">Success Rate</p>
             </div>
           </div>
 
-          {/* Right Visual */}
-          <div ref={visualRef} className="relative hidden lg:block scroll-slide-in-right" style={{ opacity: 0 }}>
-            <div className="relative aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 border border-border card-hover card-hover-glow shadow-lg">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-primary/20 rounded-full mx-auto mb-6 flex items-center justify-center float-animation">
-                    <svg className="w-12 h-12 text-primary transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 19H9m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <p className="text-foreground font-semibold">Professional Network</p>
-                  <p className="text-muted-foreground text-sm">Connecting global talent</p>
-                </div>
-              </div>
-            </div>
+          {/* CTA Buttons */}
+          <div className="flex gap-4 flex-wrap">
+            <button className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-secondary transition-all duration-300 transform hover:scale-105 flex items-center gap-2 group">
+              Get Started
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="px-8 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300">
+              Learn More
+            </button>
+          </div>
+        </div>
 
-            {/* Decorative elements with animation */}
-            <div className="absolute -top-8 -right-8 w-32 h-32 bg-secondary/20 rounded-full blur-2xl animate-pulse"></div>
-            <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-primary/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        {/* Right Content - Illustration */}
+        <div
+          className={`relative h-96 lg:h-full min-h-96 transition-all duration-1000 delay-200 ${
+            isVisible ? 'animate-fade-in-right' : 'opacity-0 translate-x-[30px]'
+          }`}
+        >
+          {/* Moving Light Effect */}
+          <div className="corner-light"></div>
+          
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20 rounded-3xl blur-2xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent opacity-10 rounded-3xl"></div>
+          <div className="absolute inset-4 bg-background rounded-3xl flex items-center justify-center">
+            <div className="text-center space-y-4">
+              <div className="inline-block p-4 bg-gradient-to-br from-primary to-secondary rounded-full">
+                <Globe className="w-16 h-16 text-white" />
+              </div>
+              <p className="text-2xl font-bold text-foreground">Global Excellence</p>
+              <p className="text-muted-foreground max-w-xs">Connecting talented students with world-class universities</p>
+            </div>
           </div>
         </div>
       </div>

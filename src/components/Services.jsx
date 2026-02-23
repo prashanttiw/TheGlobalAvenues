@@ -1,79 +1,111 @@
-import { useRef } from 'react';
-import { Globe, Users, TrendingUp, FileText, Zap, Handshake } from 'lucide-react'
-import { useAlternatingSlideAnimation } from '../hooks/useScrollAnimation';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { Building2, Megaphone, Users, BarChart3, Settings, Handshake, ArrowRight } from 'lucide-react';
 
-export default function Services() {
-  const containerRef = useRef(null);
-  useAlternatingSlideAnimation(containerRef, 0.12);
+const services = [
+  {
+    icon: Building2,
+    title: 'In-Country Representation',
+    description: 'Represent international educational institutions locally and establish their presence in the South Asian market.',
+    gradient: 'from-blue-500 to-cyan-500',
+  },
+  {
+    icon: Megaphone,
+    title: 'Marketing & Promotion',
+    description: 'Expert-driven international student recruitment with targeted marketing and promotion strategies.',
+    gradient: 'from-purple-500 to-pink-500',
+  },
+  {
+    icon: Users,
+    title: 'Agent Management',
+    description: 'Develop targeted recruitment strategies and provide personalized counseling for prospective students.',
+    gradient: 'from-green-500 to-emerald-500',
+  },
+  {
+    icon: BarChart3,
+    title: 'Market Research & Analysis',
+    description: 'Conduct comprehensive market research to identify trends and provide strategic recommendations.',
+    gradient: 'from-orange-500 to-red-500',
+  },
+  {
+    icon: Settings,
+    title: 'Administrative Services',
+    description: 'Assist with assessment, application, enrollment, visa, immigration, and student support services.',
+    gradient: 'from-yellow-500 to-orange-500',
+  },
+  {
+    icon: Handshake,
+    title: 'Collaboration & Partnerships',
+    description: 'Enhance global reach through strategic collaboration and comprehensive student recruitment services.',
+    gradient: 'from-indigo-500 to-blue-500',
+  },
+];
 
-  const services = [
-    {
-      icon: Globe,
-      title: 'Executive Search',
-      description: 'Targeted recruitment for C-suite and senior leadership positions across industries and geographies.'
-    },
-    {
-      icon: TrendingUp,
-      title: 'Talent Strategy',
-      description: 'Comprehensive workforce planning and talent acquisition strategies aligned with your business goals.'
-    },
-    {
-      icon: Users,
-      title: 'Permanent Placement',
-      description: 'Dedicated candidate sourcing and placement for permanent roles across multiple sectors and levels.'
-    },
-    {
-      icon: FileText,
-      title: 'Recruitment Process Outsourcing',
-      description: 'End-to-end recruitment management from job analysis to onboarding and talent integration.'
-    },
-    {
-      icon: Zap,
-      title: 'Skills Assessment',
-      description: 'Comprehensive candidate evaluation and verification to ensure quality and authenticity.'
-    },
-    {
-      icon: Handshake,
-      title: 'International Mobility',
-      description: 'Seamless global talent mobility programs facilitating cross-border assignments and visa processing.'
-    },
-  ]
+export function Services() {
+  const [ref, isVisible] = useScrollAnimation();
 
   return (
-    <section id="services" className="py-20 md:py-32 bg-muted/30 overflow-hidden">
-      <div className="container-wide">
-        {/* Section Header */}
-        <div className="text-center mb-16 scroll-fade-in" style={{ animation: 'fadeInUp 0.8s ease-out forwards', opacity: 0 }}>
-          <h2 className="section-heading">Our Services</h2>
-          <p className="section-subheading max-w-3xl mx-auto">
-            Comprehensive talent acquisition and recruitment solutions designed to connect organizations with world-class professionals.
+    <section id="services" className="py-20 px-4 bg-muted/30 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+
+      <div className="max-w-7xl mx-auto w-full">
+        {/* Header */}
+        <div
+          ref={ref}
+          className={`text-center mb-16 transition-all duration-1000 ${
+            isVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-[30px]'
+          }`}
+        >
+          <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
+            🎯 What We Offer
+          </div>
+          <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+            Comprehensive University Solutions
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            We provide end-to-end support to help higher education institutions expand their reach and recruit top-tier international students.
           </p>
         </div>
 
         {/* Services Grid */}
-        <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => {
-            const Icon = service.icon
-            const slideDirection = index % 2 === 0 ? 'scroll-slide-in-left' : 'scroll-slide-in-right'
+            const Icon = service.icon;
+            const [cardRef, cardIsVisible] = useScrollAnimation();
+
             return (
               <div
                 key={index}
-                data-slide
-                className={`group p-8 bg-background border border-border rounded-lg card-hover card-hover-glow ${slideDirection}`}
-                style={{
-                  opacity: 0
-                }}
+                ref={cardRef}
+                className={`group p-8 bg-background border border-border rounded-2xl hover:border-primary hover:shadow-lg transition-all duration-500 hover:-translate-y-2 cursor-pointer ${
+                  cardIsVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-[30px]'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="w-14 h-14 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-gradient-to-br group-hover:from-secondary/30 group-hover:to-primary/30 transition-all duration-300 icon-bounce">
-                  <Icon className="text-primary group-hover:text-secondary transition-colors duration-300" size={28} />
+                {/* Icon */}
+                <div className={`inline-block p-4 bg-gradient-to-br ${service.gradient} rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">{service.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{service.description}</p>
+
+                {/* Content */}
+                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  {service.description}
+                </p>
+
+                {/* Link */}
+                <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
+                  Learn more
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
+                </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }

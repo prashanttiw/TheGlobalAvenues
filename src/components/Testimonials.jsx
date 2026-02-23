@@ -1,108 +1,140 @@
-import { Star } from 'lucide-react'
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 
-export default function Testimonials() {
-  const testimonials = [
-    {
-      name: 'Vardha Kharbanda',
-      location: 'New York, USA',
-      message: 'A truly professional team who extended support and trusted me throughout. I would like to express sincere gratitude to the whole team for all the support during my studies abroad.',
-      rating: 5
-    },
-    {
-      name: 'Pratibha Mittal',
-      location: 'California, USA',
-      message: 'I am pleased with the service I received - their professionalism and dedication exceeded my expectations. The career counseling sessions were commendable and really helped me.',
-      rating: 5
-    },
-    {
-      name: 'Anuj Garg',
-      location: 'Indiana, USA',
-      message: 'My experience with them was extremely positive. They have a very friendly environment where I got to learn a lot and feel supported throughout the entire process.',
-      rating: 5
-    },
-    {
-      name: 'Vibha Kokiloo',
-      location: 'Dubai, UAE',
-      message: 'Amazing team and great services! I would definitely recommend you to my friends who want to study abroad. They truly care about their students\' success.',
-      rating: 5
-    },
-    {
-      name: 'Rajat Chohda',
-      location: 'Netherlands',
-      message: 'Just loved the way they work. If you are looking for some genuine consultant, please visit them. They provide honest advice and real support.',
-      rating: 5
-    },
-    {
-      name: 'Waseem Akram',
-      location: 'France',
-      message: 'I would rank TGA #1 for European study visas. Thank you entire team, I would not forget the excellent experience with your company.',
-      rating: 5
-    },
-  ]
+const testimonials = [
+  {
+    name: 'Vardha Kharbanda',
+    location: 'New York',
+    content: 'A truly professional team who extended support and trusted me throughout. I would like to express sincere gratitude to the whole team for all the support.',
+    rating: 5,
+  },
+  {
+    name: 'Pratibha Mittal',
+    location: 'California',
+    content: 'I am pleased with the service I\'ve received. Their professionalism and ability exceeded my expectations. The team showed commendable customer service.',
+    rating: 5,
+  },
+  {
+    name: 'Anuj Garg',
+    location: 'Indiana',
+    content: 'My experience with them was extremely nice. They have a very friendly environment where I got to learn a lot.',
+    rating: 5,
+  },
+  {
+    name: 'Vibha Kokiloo',
+    location: 'Dubai',
+    content: 'Amazing team and great services! I would definitely recommend you to my friends who want to study abroad.',
+    rating: 5,
+  },
+  {
+    name: 'Rajat Chohda',
+    location: 'Netherlands',
+    content: 'Just loved the way they work. If you are looking for genuine consultants, please visit them.',
+    rating: 5,
+  },
+  {
+    name: 'Waseem Akram',
+    location: 'France',
+    content: 'Wonderful experience with The Global Avenues. Highly professional and best consulting for students who want to study in Europe. Very grateful!',
+    rating: 5,
+  },
+];
+
+export function Testimonials() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [ref, isVisible] = useScrollAnimation();
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
   return (
-    <section className="py-20 md:py-32 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="section-heading">Success Stories from Our Students</h2>
-          <p className="section-subheading max-x-2xl mx-auto">
-            Hear from students who have transformed their lives through our partnerships.
+    <section id="testimonials" className="py-20 px-4 bg-gradient-to-b from-primary/5 to-secondary/5 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute -top-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
+
+      <div className="max-w-7xl mx-auto w-full">
+        {/* Header */}
+        <div
+          ref={ref}
+          className={`text-center mb-16 transition-all duration-1000 ${
+            isVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-[30px]'
+          }`}
+        >
+          <div className="inline-block px-4 py-2 bg-accent/20 text-accent rounded-full text-sm font-semibold mb-4">
+            💬 Testimonials
+          </div>
+          <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+            Stories From Our Satisfied Clients
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Hear from students and institutions who have achieved their international education goals with our support.
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl p-8 border border-border hover:shadow-lg transition-all duration-300"
-            >
-              {/* Stars */}
-              <div className="flex gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={18}
-                    className="fill-secondary text-secondary"
-                  />
-                ))}
-              </div>
+        {/* Testimonials Carousel */}
+        <div className="relative">
+          {/* Slides */}
+          <div className="overflow-hidden rounded-2xl">
+            <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="w-full flex-shrink-0 p-8 md:p-12 bg-background border border-border rounded-2xl mx-auto max-w-2xl">
+                  {/* Stars */}
+                  <div className="flex gap-2 mb-6">
+                    {Array.from({ length: testimonial.rating }).map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-accent text-accent" />
+                    ))}
+                  </div>
 
-              {/* Message */}
-              <p className="text-muted-foreground leading-relaxed mb-6 italic">
-                "{testimonial.message}"
-              </p>
+                  {/* Quote */}
+                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                    "{testimonial.content}"
+                  </p>
 
-              {/* Author */}
-              <div className="border-t border-border pt-6">
-                <p className="font-semibold text-foreground">{testimonial.name}</p>
-                <p className="text-sm text-muted-foreground">{testimonial.location}</p>
-              </div>
+                  {/* Author */}
+                  <div>
+                    <p className="font-bold text-foreground text-lg">{testimonial.name}</p>
+                    <p className="text-muted-foreground">{testimonial.location}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Stats Section */}
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div className="p-6">
-            <p className="text-4xl font-bold text-primary mb-2">3000+</p>
-            <p className="text-muted-foreground">Happy Students</p>
-          </div>
-          <div className="p-6">
-            <p className="text-4xl font-bold text-secondary mb-2">98%</p>
-            <p className="text-muted-foreground">Visa Success</p>
-          </div>
-          <div className="p-6">
-            <p className="text-4xl font-bold text-primary mb-2">15+</p>
-            <p className="text-muted-foreground">Countries</p>
-          </div>
-          <div className="p-6">
-            <p className="text-4xl font-bold text-secondary mb-2">50+</p>
-            <p className="text-muted-foreground">Universities</p>
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute -left-6 top-1/2 -translate-y-1/2 p-3 bg-primary text-primary-foreground rounded-full hover:bg-secondary transition-all duration-300 transform hover:scale-110 shadow-lg z-10"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute -right-6 top-1/2 -translate-y-1/2 p-3 bg-primary text-primary-foreground rounded-full hover:bg-secondary transition-all duration-300 transform hover:scale-110 shadow-lg z-10"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex ? 'bg-primary w-8' : 'bg-muted'
+                }`}
+              />
+            ))}
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

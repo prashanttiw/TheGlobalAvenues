@@ -1,116 +1,107 @@
-import React, { useRef } from 'react';
-import { CheckCircle } from 'lucide-react';
-import { useAlternatingSlideAnimation, useSideSlideAnimation } from '../hooks/useScrollAnimation';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { CheckCircle2 } from 'lucide-react';
 
-export default function About() {
-  const valuesRef = useRef(null);
-  const contentRef = useRef(null);
-  const visualRef = useRef(null);
-  
-  useAlternatingSlideAnimation(valuesRef, 0.1);
-  useSideSlideAnimation(contentRef, 'left');
-  useSideSlideAnimation(visualRef, 'right');
+const offerings = [
+  { title: 'Choosing University/School', description: '350+ degree programs conducted in English from reputed partner universities.' },
+  { title: 'Financial Support', description: 'Guidance on fund requirements and cost of living at your study destination.' },
+  { title: 'Immigration/Arrival Support', description: 'Full assistance with embassy guidelines, accommodation, and practicalities.' },
+  { title: 'Visa Process', description: 'Complete support with visa application, interview preparation, and documentation.' },
+  { title: 'Acceptance within 72hrs', description: 'Simple and fast application process ensuring you do not miss enrollment deadlines.' },
+  { title: 'Pre Departure Briefing', description: 'Key information and checklist to ensure smooth transition to your study destination.' },
+];
 
-  const values = [
-    {
-      title: 'Excellence',
-      description: 'Delivering exceptional results through meticulous attention to detail and unwavering commitment to quality.'
-    },
-    {
-      title: 'Integrity',
-      description: 'Building trust through transparency, honesty, and ethical practices in all our professional relationships.'
-    },
-    {
-      title: 'Innovation',
-      description: 'Leveraging cutting-edge technology and forward-thinking strategies to stay ahead in a dynamic market.'
-    },
-    {
-      title: 'Global Vision',
-      description: 'Understanding diverse cultures and markets to create opportunities that transcend geographical boundaries.'
-    }
-  ];
+export function About() {
+  const [ref, isVisible] = useScrollAnimation();
 
   return (
-    <section id="about" className="py-20 md:py-32 bg-background overflow-hidden">
-      <div className="container-wide">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-          {/* Left Content */}
-          <div ref={contentRef} className="flex flex-col gap-8 scroll-slide-in-left" style={{ opacity: 0 }}>
-            <div>
-              <h2 className="section-heading">Who We Are</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                The Global Avenues is a leading international recruitment and talent consulting firm with a presence across multiple continents. Our team of experienced professionals understands the nuances of global talent acquisition and brings together organizations with the world's best talent.
-              </p>
-            </div>
+    <section id="about" className="py-20 px-4 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-40 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -z-10"></div>
 
-            <div className="space-y-4">
-              <p className="text-muted-foreground leading-relaxed">
-                With over a decade of experience, we've successfully connected thousands of professionals with career-defining opportunities. Our expertise spans multiple industries including technology, finance, healthcare, and executive search.
-              </p>
-              <div className="flex items-start gap-4 scroll-fade-in stagger-1" data-stagger style={{ animation: 'fadeInUp 0.6s ease-out 0.1s forwards', opacity: 0 }}>
-                <CheckCircle className="text-secondary flex-shrink-0 mt-1 icon-scale" size={24} />
-                <div>
-                  <h4 className="font-semibold text-foreground mb-1">Proven Track Record</h4>
-                  <p className="text-muted-foreground">Successfully placed 5000+ professionals globally</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4 scroll-fade-in stagger-2" data-stagger style={{ animation: 'fadeInUp 0.6s ease-out 0.2s forwards', opacity: 0 }}>
-                <CheckCircle className="text-secondary flex-shrink-0 mt-1 icon-scale" size={24} />
-                <div>
-                  <h4 className="font-semibold text-foreground mb-1">Expert Team</h4>
-                  <p className="text-muted-foreground">Industry veterans with deep market knowledge</p>
-                </div>
-              </div>
+      <div className="max-w-7xl mx-auto w-full">
+        {/* Header */}
+        <div
+          ref={ref}
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16 transition-all duration-1000 ${
+            isVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-[30px]'
+          }`}
+        >
+          <div className="space-y-6">
+            <div className="inline-block px-4 py-2 bg-secondary/10 text-secondary rounded-full text-sm font-semibold">
+              📖 About Us
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+              Leading Student Recruitment Experts in South Asia
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              The Global Avenues leverages its strong presence in South Asia and deep expertise in localized outreach to help you achieve your international student enrollment goals. We collaborate with higher education institutions, schools, and education service providers to create customized plans that enhance brand recognition and attract top-tier students.
+            </p>
+            <div className="pt-4">
+              <a href="#contact" className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                Start Your Journey
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
-          {/* Right Visual */}
-          <div ref={visualRef} className="relative hidden lg:block scroll-slide-in-right" style={{ opacity: 0 }}>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl p-8 border border-border aspect-square flex items-end card-hover card-hover-glow scroll-fade-in stagger-1" data-stagger style={{ animation: 'scaleIn 0.6s ease-out 0.1s forwards', opacity: 0 }}>
-                <div>
-                  <p className="text-4xl font-bold text-primary">15+</p>
-                  <p className="text-muted-foreground text-sm mt-2">Years of Excellence</p>
+          {/* Stats Card */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-2xl"></div>
+            <div className="relative bg-background p-8 rounded-3xl border border-border space-y-6">
+              <h3 className="text-2xl font-bold text-foreground">Offering End To End Support</h3>
+              <div className="space-y-4">
+                <div className="flex gap-4 items-start">
+                  <CheckCircle2 className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-foreground">Comprehensive Support</p>
+                    <p className="text-sm text-muted-foreground">From university selection to post-arrival assistance</p>
+                  </div>
                 </div>
-              </div>
-              <div className="bg-gradient-to-br from-secondary/10 to-secondary/5 rounded-xl p-8 border border-border aspect-square flex items-end card-hover card-hover-glow scroll-fade-in stagger-2" data-stagger style={{ animation: 'scaleIn 0.6s ease-out 0.2s forwards', opacity: 0 }}>
-                <div>
-                  <p className="text-4xl font-bold text-secondary">45+</p>
-                  <p className="text-muted-foreground text-sm mt-2">Countries Active</p>
+                <div className="flex gap-4 items-start">
+                  <CheckCircle2 className="w-6 h-6 text-secondary flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-foreground">Expert Guidance</p>
+                    <p className="text-sm text-muted-foreground">Professional consultants with years of experience</p>
+                  </div>
                 </div>
-              </div>
-              <div className="bg-gradient-to-br from-primary/5 to-secondary/10 rounded-xl p-8 border border-border col-span-2 aspect-auto flex items-center justify-center card-hover card-hover-glow scroll-fade-in stagger-3" data-stagger style={{ animation: 'scaleIn 0.6s ease-out 0.3s forwards', opacity: 0 }}>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-foreground mb-2">150+</p>
-                  <p className="text-muted-foreground">Enterprise Partners</p>
+                <div className="flex gap-4 items-start">
+                  <CheckCircle2 className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-foreground">Fast Processing</p>
+                    <p className="text-sm text-muted-foreground">Acceptance within 72 hours of application</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Values Grid */}
+        {/* Offerings Grid */}
         <div>
-          <h3 className="text-4xl font-bold text-foreground mb-4 text-center scroll-fade-in" style={{ animation: 'fadeInUp 0.8s ease-out forwards', opacity: 0 }}>Our Core Values</h3>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto scroll-fade-in" style={{ animation: 'fadeInUp 0.8s ease-out 0.1s forwards', opacity: 0 }}>
-            These principles guide every decision we make and every relationship we build
-          </p>
-          <div ref={valuesRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, idx) => {
-              const slideDirection = idx % 2 === 0 ? 'scroll-slide-in-left' : 'scroll-slide-in-right'
+          <h3 className="text-3xl font-bold text-foreground mb-8 text-center">Our Step-by-Step Support</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {offerings.map((offering, index) => {
+              const [offeringRef, offeringIsVisible] = useScrollAnimation();
               return (
-              <div 
-                key={idx} 
-                data-slide
-                className={`bg-gradient-to-br from-background to-muted/30 border border-border rounded-lg p-8 card-hover card-hover-glow group ${slideDirection}`}
-                style={{ 
-                  opacity: 0
-                }}
-              >
-                <h4 className="font-bold text-foreground text-lg mb-3 group-hover:text-primary transition-colors duration-300">{value.title}</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed">{value.description}</p>
-              </div>
-              )
+                <div
+                  key={index}
+                  ref={offeringRef}
+                  className={`p-6 bg-background border border-border rounded-xl hover:border-primary hover:shadow-md transition-all duration-500 ${
+                    offeringIsVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-[30px]'
+                  }`}
+                  style={{ transitionDelay: `${index * 80}ms` }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="text-2xl font-bold text-primary bg-primary/10 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-foreground mb-2">{offering.title}</h4>
+                      <p className="text-sm text-muted-foreground">{offering.description}</p>
+                    </div>
+                  </div>
+                </div>
+              );
             })}
           </div>
         </div>
@@ -118,3 +109,5 @@ export default function About() {
     </section>
   );
 }
+
+import { ArrowRight } from 'lucide-react';
