@@ -4,6 +4,7 @@ import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { portfolioData, categories, partnerCompanies } from '../data/portfolioData';
 
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -11,13 +12,15 @@ export function Header() {
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
   const dropdownRef = useRef(null);
+  const logo = 'https://theglobalavenues.com/wp-content/uploads/2024/04/Transparent_png-e1722253623779-1536x398.png';
 
   const mainMenuItems = [
     { label: 'Home', path: '/' },
     { label: 'Who We Are', path: '/about' },
     { label: 'Services', path: '/services' },
-    { label: 'Gallery', path: '/gallery' },
+    { label: 'News & Vlog', path: '/news-vlog' },
     { label: 'Partners', path: '/partners' },
+    { label: 'Gallery', path: '/gallery' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -38,15 +41,10 @@ export function Header() {
     <header className="fixed top-0 w-full bg-background/80 backdrop-blur-md border-b border-border z-50 animate-fade-in-down">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* Logo: keeps aspect ratio and avoids shrinking on smaller screens */}
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">TGA</span>
-              </div>
-              <span className="font-bold text-lg text-foreground hidden sm:inline">
-                Global Avenues
-              </span>
+            <Link to="/" className="hover:opacity-80 transition-opacity">
+              <img src={logo} alt="Logo" className="h-12 md:h-16 w-auto" />
             </Link>
           </div>
 
@@ -57,8 +55,8 @@ export function Header() {
                 key={item.label}
                 to={item.path}
                 className={`px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-md ${isActive(item.path)
-                    ? 'text-primary border-b-2 border-primary'
-                    : 'text-foreground hover:text-primary'
+                  ? 'text-primary border-b-2 border-primary'
+                  : 'text-foreground hover:text-primary'
                   }`}
               >
                 {item.label}
@@ -123,60 +121,7 @@ export function Header() {
               )}
             </div>
 
-            {/* Partners Dropdown */}
-            <div className="relative group">
-              <button
-                onMouseEnter={() => setOpenDropdown('partners')}
-                className="px-4 py-2 text-sm font-medium text-foreground hover:text-secondary transition-colors flex items-center gap-2 rounded-md hover:bg-secondary/5"
-              >
-                Partners
-                <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
-              </button>
 
-              {(openDropdown === 'partners') && (
-                <div
-                  className="absolute right-0 mt-2 w-80 bg-background border border-border rounded-xl shadow-xl animate-fade-in-down origin-top"
-                  onMouseEnter={() => setOpenDropdown('partners')}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  {/* Header with gradient */}
-                  <div className="bg-gradient-to-r from-secondary to-primary text-white px-6 py-4">
-                    <h3 className="text-lg font-bold">Our Partnerships</h3>
-                    <p className="text-sm text-white/80 mt-1">Strategic collaborations & memberships</p>
-                  </div>
-
-                  {/* Partners Grid */}
-                  <div className="p-4 max-h-80 overflow-y-auto">
-                    <div className="space-y-3">
-                      {partnerCompanies.map((partner) => (
-                        <div
-                          key={partner.id}
-                          className="p-4 rounded-lg bg-gradient-to-br from-secondary/5 to-primary/5 border border-secondary/20 hover:border-secondary/50 transition-all duration-300 cursor-pointer group/partner"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-secondary/20 flex items-center justify-center flex-shrink-0 group-hover/partner:bg-secondary/30 transition-colors">
-                              <span className="text-lg text-secondary">🤝</span>
-                            </div>
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-foreground group-hover/partner:text-secondary transition-colors">{partner.name}</h4>
-                              <p className="text-xs text-muted-foreground mt-1">{partner.type}</p>
-                              <p className="text-xs text-muted-foreground mt-1">{partner.description}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="border-t border-border px-6 py-3 bg-muted/20">
-                    <p className="text-xs text-muted-foreground">
-                      ICEF Accredited | NET24 Member | EAIE Member
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
           </nav>
 
           {/* Right Actions */}
@@ -216,13 +161,17 @@ export function Header() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <nav className="md:hidden pb-4 space-y-2 animate-fade-in-down">
+            {/* show logo at top of mobile menu for branding */}
+            <div className="flex justify-center py-2">
+              <img src={logo} alt="Logo" className="h-10 w-auto" />
+            </div>
             {mainMenuItems.map((item) => (
               <Link
                 key={item.label}
                 to={item.path}
                 className={`block px-4 py-2 rounded-lg transition-colors text-sm ${isActive(item.path)
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-foreground hover:bg-muted'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-foreground hover:bg-muted'
                   }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -256,26 +205,7 @@ export function Header() {
               </div>
             )}
 
-            {/* Mobile Partners Dropdown */}
-            <button
-              onClick={() => setOpenMobileDropdown(openMobileDropdown === 'partners' ? null : 'partners')}
-              className="w-full text-left px-4 py-2 rounded-lg text-foreground hover:bg-muted transition-colors flex items-center justify-between text-sm"
-            >
-              Partners
-              <ChevronDown className={`w-4 h-4 transition-transform ${openMobileDropdown === 'partners' ? 'rotate-180' : ''}`} />
-            </button>
-            {openMobileDropdown === 'partners' && (
-              <div className="pl-4 space-y-1">
-                {partnerCompanies.map((partner) => (
-                  <div
-                    key={partner.id}
-                    className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/10 rounded-md transition-colors"
-                  >
-                    {partner.name}
-                  </div>
-                ))}
-              </div>
-            )}
+
 
             <Link
               to="/collaborate"

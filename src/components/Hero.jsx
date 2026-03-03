@@ -1,11 +1,95 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { ArrowRight, Globe, Users, TrendingUp } from 'lucide-react';
+import { ArrowRight, Globe, Users, TrendingUp, Bell, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+const CountUpNumber = ({ target, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+
+  return count;
+};
+
+const NotificationStrip = () => {
+  const [showNotification, setShowNotification] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const notifications = [
+    { text: 'New Partnership with UK Universities! ', link: '/news-vlog' },
+    { text: 'Latest IELTS Prep Guide Available ', link: '/news-vlog' },
+    { text: 'Success Story: Student Placed in Canada ', link: '/news-vlog' },
+    { text: 'Australia Visa Updates 2024 ', link: '/news-vlog' },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % notifications.length);
+    }, 5000); // Change every 5 seconds
+    return () => clearInterval(timer);
+  }, [notifications.length]);
+
+  if (!showNotification) return null;
+
+  return (
+    <div className="bg-gradient-to-r from-accent/90 to-primary/90 text-white py-3 px-4 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-center gap-3">
+          <Bell className="w-4 h-4 flex-shrink-0 animate-pulse" />
+          
+          <Link
+            to={notifications[currentIndex].link}
+            className="flex-1 text-center text-sm md:text-base font-medium hover:underline transition-all duration-300 group"
+          >
+            {notifications[currentIndex].text}
+            <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
+
+          <button
+            onClick={() => setShowNotification(false)}
+            className="flex-shrink-0 p-1 hover:bg-white/20 rounded transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="hidden sm:flex gap-1 ml-2">
+            {notifications.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                  index === currentIndex ? 'bg-white w-6' : 'bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export function Hero() {
   const [ref, isVisible] = useScrollAnimation();
 
   return (
-    <section id="home" className="min-h-screen pt-20 px-4 flex items-center relative overflow-hidden">
+    <>
+      <NotificationStrip />
+      <section id="home" className="min-h-screen pt-20 px-4 flex items-center relative overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 -z-10"></div>
 
@@ -41,21 +125,21 @@ export function Hero() {
             <div className="p-4 bg-muted/50 rounded-lg backdrop-blur hover:bg-muted transition-colors">
               <div className="flex items-center gap-3 mb-2">
                 <Users className="w-5 h-5 text-primary" />
-                <span className="text-2xl font-bold text-foreground">3000+</span>
+                <span className="text-2xl font-bold text-foreground">{isVisible ? <CountUpNumber target={3000} /> : 0}+</span>
               </div>
               <p className="text-sm text-muted-foreground">Students Placed</p>
             </div>
             <div className="p-4 bg-muted/50 rounded-lg backdrop-blur hover:bg-muted transition-colors">
               <div className="flex items-center gap-3 mb-2">
                 <Globe className="w-5 h-5 text-secondary" />
-                <span className="text-2xl font-bold text-foreground">50+</span>
+                <span className="text-2xl font-bold text-foreground">{isVisible ? <CountUpNumber target={50} /> : 0}+</span>
               </div>
               <p className="text-sm text-muted-foreground">Universities</p>
             </div>
             <div className="p-4 bg-muted/50 rounded-lg backdrop-blur hover:bg-muted transition-colors">
               <div className="flex items-center gap-3 mb-2">
                 <TrendingUp className="w-5 h-5 text-accent" />
-                <span className="text-2xl font-bold text-foreground">98%</span>
+                <span className="text-2xl font-bold text-foreground">{isVisible ? <CountUpNumber target={98} /> : 0}%</span>
               </div>
               <p className="text-sm text-muted-foreground">Success Rate</p>
             </div>
@@ -96,5 +180,6 @@ export function Hero() {
         </div>
       </div>
     </section>
+    </>
   );
 }

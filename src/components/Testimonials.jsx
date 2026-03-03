@@ -1,6 +1,6 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const testimonials = [
   {
@@ -44,6 +44,7 @@ const testimonials = [
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [ref, isVisible] = useScrollAnimation();
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -52,6 +53,17 @@ export function Testimonials() {
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (!isAutoPlay) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(timer);
+  }, [isAutoPlay]);
 
   return (
     <section id="testimonials" className="py-20 px-4 bg-gradient-to-b from-primary/5 to-secondary/5 relative overflow-hidden">
@@ -79,7 +91,11 @@ export function Testimonials() {
         </div>
 
         {/* Testimonials Carousel */}
-        <div className="relative">
+        <div 
+          className="relative"
+          onMouseEnter={() => setIsAutoPlay(false)}
+          onMouseLeave={() => setIsAutoPlay(true)}
+        >
           {/* Slides */}
           <div className="overflow-hidden rounded-2xl">
             <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
@@ -109,13 +125,19 @@ export function Testimonials() {
 
           {/* Navigation Buttons */}
           <button
-            onClick={prevSlide}
+            onClick={() => {
+              prevSlide();
+              setIsAutoPlay(false);
+            }}
             className="absolute -left-6 top-1/2 -translate-y-1/2 p-3 bg-primary text-primary-foreground rounded-full hover:bg-secondary transition-all duration-300 transform hover:scale-110 shadow-lg z-10"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
-            onClick={nextSlide}
+            onClick={() => {
+              nextSlide();
+              setIsAutoPlay(false);
+            }}
             className="absolute -right-6 top-1/2 -translate-y-1/2 p-3 bg-primary text-primary-foreground rounded-full hover:bg-secondary transition-all duration-300 transform hover:scale-110 shadow-lg z-10"
           >
             <ChevronRight className="w-6 h-6" />
@@ -126,12 +148,29 @@ export function Testimonials() {
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setIsAutoPlay(false);
+                }}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex ? 'bg-primary w-8' : 'bg-muted'
                 }`}
               />
             ))}
+          </div>
+
+          {/* Auto-play indicator */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => setIsAutoPlay(!isAutoPlay)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                isAutoPlay
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted-foreground/20'
+              }`}
+            >
+              {isAutoPlay ? '⏸ Auto-playing' : '▶ Paused'}
+            </button>
           </div>
         </div>
       </div>

@@ -242,72 +242,133 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Accreditation Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/20">
-        <div className="max-w-4xl mx-auto">
+      {/* Accreditation & Memberships Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
+        <div className="max-w-6xl mx-auto">
+          {/* Section Header */}
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-20"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl font-bold mb-4">Accreditation & Memberships</h2>
+            <h2 className="text-5xl font-bold mb-4 text-blue-600">Accreditation & Memberships</h2>
             <p className="text-muted-foreground text-lg">Industry Recognition & Professional Partnerships</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* ICEF */}
-            <motion.div
-              className="bg-background border border-border rounded-xl p-8 hover:border-primary/50 transition-all"
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-6 h-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-xl font-bold text-foreground mb-2">ICEF Accreditation</h4>
-                  <p className="text-muted-foreground">ICEF's industry-leading quality assurance processes are recognized worldwide as a benchmark for education agencies. This accreditation affirms The Global Avenues has been thoroughly screened and accredited for its quality work, professional approach, and strong ethical standards in recruiting international students.</p>
+          {/* Accreditation Section */}
+          <motion.div
+            className="mb-20 pb-20 border-b border-border"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-3xl font-bold text-blue-600 mb-12 text-center">Accreditation</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+              {/* ICEF Badge */}
+              <div className="flex justify-center md:justify-start">
+                <div className="bg-white p-8 rounded-lg border border-border/50 inline-block">
+                  <span id="iasBadge" data-account-id="5944"></span>
                 </div>
               </div>
-            </motion.div>
 
-            {/* NET24 & EAIE */}
-            <motion.div
-              className="bg-background border border-border rounded-xl p-8 hover:border-secondary/50 transition-all"
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0">
-                    <Lightbulb className="w-6 h-6 text-secondary" />
+              {/* ICEF Description */}
+              <motion.div
+                className="flex flex-col justify-center"
+                initial={{ x: 20, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  ICEF's industry-leading quality assurance processes are increasingly recognized worldwide as a benchmark for education agencies and industry stakeholders, allowing for the easy identification of accredited organisations.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  This recognition affirms that The Global Avenues has been thoroughly screened and accredited for its quality work, professional approach, and strong ethical standards in recruiting international students.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  It reinforces our credibility and commitment to excellence in guiding students towards global opportunities. With this accreditation, we continue to strengthen trust among our partners, students, and the wider education community.
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Membership Section */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-3xl font-bold text-blue-600 mb-12 text-center">Membership</h3>
+
+            {/* NET24 */}
+            <div className="mb-16 pb-16 border-b border-border">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                {/* NET24 Description */}
+                <motion.div
+                  className="flex flex-col justify-center"
+                  initial={{ x: -20, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <p className="text-muted-foreground leading-relaxed">
+                    NET24 connects educational institutions with reputable student recruitment agencies through its advanced online platform (NET24Apply) and a series of impactful B2B events, including conferences and workshops. Their core aim is to enhance the enrollment of international students and support global student mobility by fostering efficient and reliable partnerships.
+                  </p>
+                </motion.div>
+
+                {/* NET24 Logo */}
+                <motion.div
+                  className="flex justify-center md:justify-end"
+                  initial={{ x: 20, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  <div className="bg-white p-8 rounded-lg border border-border/50 inline-block">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-GUrYXfZRVyPpqFswzm4YXvBmq13UKu.png" alt="NET24" className="h-24 w-auto object-contain" />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-foreground mb-1">NET24 Member</h4>
-                    <p className="text-sm text-muted-foreground">Connects educational institutions with reputable student recruitment agencies through advanced platform and B2B events.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                    <Award className="w-6 h-6 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-foreground mb-1">EAIE Member</h4>
-                    <p className="text-sm text-muted-foreground">European Association for International Education - member-led, non-profit organization promoting international higher education.</p>
-                  </div>
-                </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </div>
+            </div>
+
+            {/* EAIE */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+              {/* EAIE Logo */}
+              <motion.div
+                className="flex justify-center md:justify-start"
+                initial={{ x: -20, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <div className="bg-white p-8 rounded-lg border border-border/50 inline-block">
+                  <div className="w-48 h-20 flex items-center justify-center text-xl font-bold text-green-600">EAIE</div>
+                </div>
+              </motion.div>
+
+              {/* EAIE Description */}
+              <motion.div
+                className="flex flex-col justify-center"
+                initial={{ x: 20, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <p className="text-muted-foreground leading-relaxed">
+                  The European Association for International Education (EAIE) is a member-led, non-profit organization founded in 1989 that serves as a European center for expertise, networking, and resources in international higher education. The EAIE provides professionals with training, conferences, publications, and a platform for sharing knowledge to promote and advance responsible international education in Europe and beyond.
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
+
+      {/* Script for ICEF Badge */}
+      <script async defer crossOrigin="anonymous" src="https://www-cdn.icef.com/scripts/iasbadgeid.js"></script>
     </div>
   );
 }

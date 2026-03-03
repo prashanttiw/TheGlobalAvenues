@@ -15,6 +15,7 @@ import CollaboratePage from './pages/CollaboratePage';
 import UniversitiesPage from './pages/UniversitiesPage';
 import GalleryPage from './pages/GalleryPage';
 import PartnersPage from './pages/PartnersPage';
+import NewsVlogPage from './pages/NewsVlogPage';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/universities" element={<UniversitiesPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/partners" element={<PartnersPage />} />
+            <Route path="/news-vlog" element={<NewsVlogPage />} />
           </Routes>
         </main>
         <Footer />

@@ -63,11 +63,12 @@ export function Footer() {
               isVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-[30px]'
             }`}
           >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">TGA</span>
-              </div>
-              <span className="font-bold text-lg text-foreground">Global Avenues</span>
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="https://theglobalavenues.com/wp-content/uploads/2024/04/Transparent_png-e1722253623779-1536x398.png"
+                alt="The Global Avenues Logo"
+                className="h-12 w-auto"
+              />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Your trusted partner for international education and student recruitment across South Asia.
