@@ -1,6 +1,7 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { Building2, Megaphone, Users, BarChart3, Settings, Handshake, ArrowRight, Briefcase, X } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const services = [
   {
@@ -54,8 +55,20 @@ const UniversitySolutionsModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl">
+    <motion.div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl"
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        transition={{ duration: 0.3 }}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-primary to-secondary text-white px-8 py-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold">Comprehensive University Solutions</h2>
@@ -101,8 +114,8 @@ const UniversitySolutionsModal = ({ isOpen, onClose }) => {
             Close
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -110,8 +123,20 @@ const EducationalSolutionsModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl">
+    <motion.div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl"
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        transition={{ duration: 0.3 }}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-accent to-primary text-white px-8 py-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold">Complete Educational Solutions</h2>
@@ -156,8 +181,8 @@ const EducationalSolutionsModal = ({ isOpen, onClose }) => {
             Close
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -165,8 +190,20 @@ const ServiceCardModal = ({ isOpen, onClose, service }) => {
   if (!isOpen || !service) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl">
+    <motion.div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl"
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        transition={{ duration: 0.3 }}
+      >
         {/* Header */}
         <div className={`sticky top-0 bg-gradient-to-r ${service.gradient} text-white px-8 py-6 flex justify-between items-center`}>
           <h2 className="text-2xl font-bold">{service.title}</h2>
@@ -207,8 +244,8 @@ const ServiceCardModal = ({ isOpen, onClose, service }) => {
             Close
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -216,8 +253,20 @@ const EndToEndModal = ({ isOpen, onClose, item }) => {
   if (!isOpen || !item) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl">
+    <motion.div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        className="bg-background border border-border rounded-2xl max-w-lg w-full max-h-96 overflow-y-auto shadow-2xl"
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        transition={{ duration: 0.3 }}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-accent to-accent/80 text-white px-8 py-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold">{item.title}</h2>
@@ -258,8 +307,8 @@ const EndToEndModal = ({ isOpen, onClose, item }) => {
             Close
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

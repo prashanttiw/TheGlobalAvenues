@@ -29,10 +29,10 @@ const NotificationStrip = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const notifications = [
-    { text: 'New Partnership with UK Universities! ', link: '/news-vlog' },
-    { text: 'Latest IELTS Prep Guide Available ', link: '/news-vlog' },
-    { text: 'Success Story: Student Placed in Canada ', link: '/news-vlog' },
-    { text: 'Australia Visa Updates 2024 ', link: '/news-vlog' },
+    { text: 'New Partnership with UK Universities! ', link: '/news-blog' },
+    { text: 'Latest IELTS Prep Guide Available ', link: '/news-blog' },
+    { text: 'Success Story: Student Placed in Canada ', link: '/news-blog' },
+    { text: 'Australia Visa Updates 2024 ', link: '/news-blog' },
   ];
 
   useEffect(() => {

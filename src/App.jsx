@@ -16,6 +16,7 @@ import UniversitiesPage from './pages/UniversitiesPage';
 import GalleryPage from './pages/GalleryPage';
 import PartnersPage from './pages/PartnersPage';
 import NewsVlogPage from './pages/NewsVlogPage';
+import NewsDetailPage from './pages/NewsDetailPage';
 import EducationProgramPage from './pages/EducationProgramPage';
 import WhatWeOfferPage from './pages/WhatWeOfferPage';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/partners" element={<PartnersPage />} />
             <Route path="/news-blog" element={<NewsVlogPage />} />
+            <Route path="/news/:id" element={<NewsDetailPage />} />
             <Route path="/what-we-offer" element={<WhatWeOfferPage />} />
             <Route path="/education-program/:programType/:degreeLevel" element={<EducationProgramPage />} />
           </Routes>

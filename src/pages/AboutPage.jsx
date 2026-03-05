@@ -269,8 +269,8 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
               {/* ICEF Badge */}
               <div className="flex justify-center md:justify-start">
-                <div className="bg-white p-8 rounded-lg border border-border/50 inline-block">
-                  <span id="iasBadge" data-account-id="5944"></span>
+                <div className="bg-white p-12 rounded-lg border border-border/50 inline-block">
+                  <span id="iasBadge" data-account-id="5944" style={{transform: 'scale(1.5)', transformOrigin: 'top left'}}></span>
                 </div>
               </div>
 
@@ -328,8 +328,8 @@ export default function AboutPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                  <div className="bg-white p-8 rounded-lg border border-border/50 inline-block">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-GUrYXfZRVyPpqFswzm4YXvBmq13UKu.png" alt="NET24" className="h-24 w-auto object-contain" />
+                  <div className="bg-white p-12 rounded-lg border border-border/50 inline-block">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-GUrYXfZRVyPpqFswzm4YXvBmq13UKu.png" alt="NET24" className="h-32 w-auto object-contain" />
                   </div>
                 </motion.div>
               </div>
@@ -345,8 +345,8 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="bg-white p-8 rounded-lg border border-border/50 inline-block">
-                  <div className="w-48 h-20 flex items-center justify-center text-xl font-bold text-green-600">EAIE</div>
+                <div className="bg-white p-12 rounded-lg border border-border/50 inline-block">
+                  <div className="w-64 h-28 flex items-center justify-center text-3xl font-bold text-green-600">EAIE</div>
                 </div>
               </motion.div>
 

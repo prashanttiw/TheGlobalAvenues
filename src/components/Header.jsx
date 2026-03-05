@@ -17,9 +17,8 @@ export function Header() {
   const mainMenuItems = [
     { label: 'Home', path: '/' },
     { label: 'Who We Are', path: '/about' },
-    { label: 'Services', path: '/services' },
+    // { label: 'Services', path: '/services' },
     { label: 'News & Blog', path: '/news-blog' },
-    { label: 'Partners', path: '/partners' },
     { label: 'Gallery', path: '/gallery' },
   ];
 
@@ -69,7 +68,7 @@ export function Header() {
                 onMouseEnter={() => setOpenDropdown('offer')}
                 className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2 rounded-md hover:bg-primary/5"
               >
-                What We Offer
+                Offerings
                 <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
               </button>
 
@@ -145,7 +144,7 @@ export function Header() {
                 onMouseEnter={() => setOpenDropdown('portfolio')}
                 className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2 rounded-md hover:bg-primary/5"
               >
-                Portfolio
+                Our Portfolio
                 <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
               </button>
 
@@ -253,12 +252,12 @@ export function Header() {
               </Link>
             ))}
 
-            {/* Mobile What We Offer Dropdown */}
+            {/* Mobile Offerings Dropdown */}
             <button
               onClick={() => setOpenMobileDropdown(openMobileDropdown === 'offer' ? null : 'offer')}
               className="w-full text-left px-4 py-2 rounded-lg text-foreground hover:bg-muted transition-colors flex items-center justify-between text-sm"
             >
-              What We Offer
+              Offerings
               <ChevronDown className={`w-4 h-4 transition-transform ${openMobileDropdown === 'offer' ? 'rotate-180' : ''}`} />
             </button>
             {openMobileDropdown === 'offer' && (
@@ -326,12 +325,12 @@ export function Header() {
               </div>
             )}
 
-            {/* Mobile Portfolio Dropdown */}
+            {/* Mobile Our Portfolio Dropdown */}
             <button
               onClick={() => setOpenMobileDropdown(openMobileDropdown === 'portfolio' ? null : 'portfolio')}
               className="w-full text-left px-4 py-2 rounded-lg text-foreground hover:bg-muted transition-colors flex items-center justify-between text-sm"
             >
-              Portfolio
+              Our Portfolio
               <ChevronDown className={`w-4 h-4 transition-transform ${openMobileDropdown === 'portfolio' ? 'rotate-180' : ''}`} />
             </button>
             {openMobileDropdown === 'portfolio' && (

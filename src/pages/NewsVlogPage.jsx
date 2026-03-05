@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Play, Calendar, User, Tag, ArrowRight, Flame } from 'lucide-react';
 
 export default function NewsVlogPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
@@ -22,10 +24,10 @@ export default function NewsVlogPage() {
     },
     {
       id: 2,
-      type: 'vlog',
+      type: 'blog',
       title: 'Student Success Story: From India to Canada',
-      excerpt: 'Watch how Priya transformed her dreams into reality with our comprehensive guidance and support through her Canadian education journey.',
-      content: 'In this exclusive vlog, Priya shares her incredible journey from applying to Canadian universities, getting accepted, and now thriving in her first year. She discusses the challenges she faced and how our team supported her every step of the way.',
+      excerpt: 'Read how Priya transformed her dreams into reality with our comprehensive guidance and support through her Canadian education journey.',
+      content: 'In this exclusive blog post, Priya shares her incredible journey from applying to Canadian universities, getting accepted, and now thriving in her first year. She discusses the challenges she faced and how our team supported her every step of the way.',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
       duration: '12:45',
       date: '2024-03-10',
@@ -49,10 +51,10 @@ export default function NewsVlogPage() {
     },
     {
       id: 4,
-      type: 'vlog',
+      type: 'blog',
       title: 'IELTS Preparation Tips with Expert Trainer',
       excerpt: 'Master IELTS exam strategies with our expert trainer. Learn proven techniques to maximize your band score.',
-      content: 'In this comprehensive vlog, our IELTS expert shares insider tips, common mistakes, and preparation strategies used by top scorers.',
+      content: 'In this comprehensive blog post, our IELTS expert shares insider tips, common mistakes, and preparation strategies used by top scorers.',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
       duration: '18:20',
       date: '2024-03-05',
@@ -76,9 +78,9 @@ export default function NewsVlogPage() {
     },
     {
       id: 6,
-      type: 'vlog',
+      type: 'blog',
       title: 'Campus Life: A Day in the Life of an International Student',
-      excerpt: 'Follow Arjun as he takes you through a typical day at his university in the UK.',
+      excerpt: 'Follow Arjun as he shares his experience through a typical day at his university in the UK.',
       content: 'Experience campus life through the eyes of Arjun, an international student thriving in his UK university.',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
       duration: '15:30',
@@ -129,7 +131,7 @@ export default function NewsVlogPage() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            News & Vlogs
+            News & Blog
           </motion.h1>
           <motion.p
             className="text-xl text-muted-foreground max-w-3xl mx-auto"
@@ -169,18 +171,20 @@ export default function NewsVlogPage() {
               {featuredItems.map((item) => (
                 <motion.div
                   key={item.id}
-                  className="group bg-background border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl"
+                  className="group bg-background border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl cursor-pointer"
                   variants={itemVariants}
+                  whileHover={{ translateY: -8 }}
+                  onClick={() => navigate(`/news/${item.id}`)}
                 >
                   <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
-                    {item.type === 'vlog' ? (
+                    {item.type === 'blog' ? (
                       <>
                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
                           <div className="w-16 h-16 bg-accent/80 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Play className="w-8 h-8 text-white fill-white ml-1" />
                           </div>
                         </div>
-                        <img src="/vlog-thumbnail.jpg" alt={item.title} className="w-full h-full object-cover" />
+                        <img src="/blog-thumbnail.jpg" alt={item.title} className="w-full h-full object-cover" />
                       </>
                     ) : (
                       <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -192,7 +196,7 @@ export default function NewsVlogPage() {
                       <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
                         {item.category}
                       </span>
-                      {item.type === 'vlog' && (
+                      {item.type === 'blog' && (
                         <span className="px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
                           {item.duration}
                         </span>
@@ -235,7 +239,7 @@ export default function NewsVlogPage() {
           >
             <h3 className="text-sm font-semibold text-muted-foreground mb-4 uppercase">Type</h3>
             <div className="flex gap-3 flex-wrap">
-              {['all', 'news', 'vlog'].map((tab) => (
+              {['all', 'news', 'blog'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -245,7 +249,7 @@ export default function NewsVlogPage() {
                       : 'bg-muted text-muted-foreground hover:bg-muted/80'
                   }`}
                 >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {tab === 'blog' ? 'Blog' : tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
               ))}
             </div>
@@ -295,16 +299,17 @@ export default function NewsVlogPage() {
                   className="group bg-background border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg cursor-pointer"
                   variants={itemVariants}
                   whileHover={{ translateY: -4 }}
+                  onClick={() => navigate(`/news/${item.id}`)}
                 >
                   <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
-                    {item.type === 'vlog' ? (
+                    {item.type === 'blog' ? (
                       <>
                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 group-hover:bg-black/40 transition-colors">
                           <div className="w-14 h-14 bg-accent/80 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Play className="w-6 h-6 text-white fill-white ml-1" />
                           </div>
                         </div>
-                        <img src="/vlog-thumbnail.jpg" alt={item.title} className="w-full h-full object-cover" />
+                        <img src="/blog-thumbnail.jpg" alt={item.title} className="w-full h-full object-cover" />
                       </>
                     ) : (
                       <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -316,7 +321,7 @@ export default function NewsVlogPage() {
                       <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-semibold rounded">
                         {item.category}
                       </span>
-                      {item.type === 'vlog' && (
+                      {item.type === 'blog' && (
                         <span className="text-xs text-muted-foreground">{item.duration}</span>
                       )}
                     </div>
