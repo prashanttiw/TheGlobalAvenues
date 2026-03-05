@@ -63,6 +63,82 @@ export function Header() {
               </Link>
             ))}
 
+            {/* What We Offer Dropdown */}
+            <div className="relative group">
+              <button
+                onMouseEnter={() => setOpenDropdown('offer')}
+                className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2 rounded-md hover:bg-primary/5"
+              >
+                What We Offer
+                <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
+              </button>
+
+              {(openDropdown === 'offer') && (
+                <div
+                  className="absolute left-0 mt-2 w-80 bg-background border border-border rounded-xl shadow-xl animate-fade-in-down origin-top overflow-hidden"
+                  onMouseEnter={() => setOpenDropdown('offer')}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  {/* Header with gradient */}
+                  <div className="bg-gradient-to-r from-primary to-secondary text-white px-6 py-4">
+                    <h3 className="text-lg font-bold">Programs</h3>
+                    <p className="text-sm text-white/80 mt-1">Explore our educational pathways</p>
+                  </div>
+
+                  {/* Program Links */}
+                  <div className="p-4 max-h-96 overflow-y-auto space-y-1">
+                    <Link
+                      to="/what-we-offer"
+                      className="block p-3 rounded-lg hover:bg-primary/10 transition-colors border border-transparent hover:border-primary/30"
+                    >
+                      <h4 className="font-semibold text-foreground hover:text-primary">All Programs</h4>
+                      <p className="text-xs text-muted-foreground mt-1">View all educational offerings</p>
+                    </Link>
+
+                    <div className="border-t border-border pt-2 mt-2">
+                      <Link
+                        to="/education-program/fulltime-degree/undergraduate"
+                        className="block p-3 rounded-lg hover:bg-blue-500/10 transition-colors"
+                      >
+                        <h4 className="font-semibold text-foreground text-sm">Full Time Degree</h4>
+                      </Link>
+                      <Link
+                        to="/education-program/online-program/undergraduate"
+                        className="block p-3 rounded-lg hover:bg-purple-500/10 transition-colors"
+                      >
+                        <h4 className="font-semibold text-foreground text-sm">Online Program</h4>
+                      </Link>
+                      <Link
+                        to="/education-program/vocational-courses/undergraduate"
+                        className="block p-3 rounded-lg hover:bg-green-500/10 transition-colors"
+                      >
+                        <h4 className="font-semibold text-foreground text-sm">Vocational Courses</h4>
+                      </Link>
+                      <Link
+                        to="/education-program/internship-abroad/undergraduate"
+                        className="block p-3 rounded-lg hover:bg-orange-500/10 transition-colors"
+                      >
+                        <h4 className="font-semibold text-foreground text-sm">Internship Abroad</h4>
+                      </Link>
+                      <Link
+                        to="/education-program/summer-winter-school/undergraduate"
+                        className="block p-3 rounded-lg hover:bg-pink-500/10 transition-colors"
+                      >
+                        <h4 className="font-semibold text-foreground text-sm">Summer/Winter School</h4>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Footer Link */}
+                  <div className="border-t border-border px-6 py-3 bg-muted/20">
+                    <Link to="/what-we-offer" className="text-sm font-medium text-primary hover:text-secondary transition-colors">
+                      Learn More →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Portfolio Dropdown */}
             <div className="relative group">
               <button
@@ -176,6 +252,79 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+
+            {/* Mobile What We Offer Dropdown */}
+            <button
+              onClick={() => setOpenMobileDropdown(openMobileDropdown === 'offer' ? null : 'offer')}
+              className="w-full text-left px-4 py-2 rounded-lg text-foreground hover:bg-muted transition-colors flex items-center justify-between text-sm"
+            >
+              What We Offer
+              <ChevronDown className={`w-4 h-4 transition-transform ${openMobileDropdown === 'offer' ? 'rotate-180' : ''}`} />
+            </button>
+            {openMobileDropdown === 'offer' && (
+              <div className="pl-4 space-y-1">
+                <Link
+                  to="/what-we-offer"
+                  className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-primary/10 rounded-md transition-colors font-medium"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setOpenMobileDropdown(null);
+                  }}
+                >
+                  All Programs
+                </Link>
+                <Link
+                  to="/education-program/fulltime-degree/undergraduate"
+                  className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setOpenMobileDropdown(null);
+                  }}
+                >
+                  Full Time Degree
+                </Link>
+                <Link
+                  to="/education-program/online-program/undergraduate"
+                  className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setOpenMobileDropdown(null);
+                  }}
+                >
+                  Online Program
+                </Link>
+                <Link
+                  to="/education-program/vocational-courses/undergraduate"
+                  className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setOpenMobileDropdown(null);
+                  }}
+                >
+                  Vocational Courses
+                </Link>
+                <Link
+                  to="/education-program/internship-abroad/undergraduate"
+                  className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setOpenMobileDropdown(null);
+                  }}
+                >
+                  Internship Abroad
+                </Link>
+                <Link
+                  to="/education-program/summer-winter-school/undergraduate"
+                  className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setOpenMobileDropdown(null);
+                  }}
+                >
+                  Summer/Winter School
+                </Link>
+              </div>
+            )}
 
             {/* Mobile Portfolio Dropdown */}
             <button

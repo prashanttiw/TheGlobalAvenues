@@ -1,15 +1,45 @@
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ChevronDown } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState(null)
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'Services', href: '#services' },
-    { name: 'Portfolio', href: '#portfolio' },
-    { name: 'About', href: '#about' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'Services', href: '/services' },
+    { name: 'Portfolio', href: '/portfolio' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+  ]
+
+  const educationPrograms = [
+    {
+      id: 'fulltime-degree',
+      name: 'Full Time Degree Program',
+      path: '/education-program/fulltime-degree/undergraduate'
+    },
+    {
+      id: 'online-program',
+      name: 'Online Program',
+      path: '/education-program/online-program/undergraduate'
+    },
+    {
+      id: 'vocational-courses',
+      name: 'Vocational Courses',
+      path: '/education-program/vocational-courses/undergraduate'
+    },
+    {
+      id: 'internship-abroad',
+      name: 'Internship Abroad',
+      path: '/education-program/internship-abroad/undergraduate'
+    },
+    {
+      id: 'summer-winter-school',
+      name: 'Summer/Winter School',
+      path: '/education-program/summer-winter-school/undergraduate'
+    },
   ]
 
   return (
@@ -27,14 +57,37 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="hover:text-secondary transition-colors font-medium"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
+            
+            {/* What We Offer Dropdown */}
+            <div className="relative group">
+              <button className="flex items-center gap-1 hover:text-secondary transition-colors font-medium">
+                What We Offer
+                <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
+              </button>
+              
+              {/* Dropdown Menu */}
+              <div className="absolute left-0 mt-0 w-64 bg-white text-foreground rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 group-hover:mt-2 z-50">
+                <div className="p-3 space-y-1">
+                  {educationPrograms.map((program) => (
+                    <Link
+                      key={program.id}
+                      to={program.path}
+                      className="block px-4 py-3 rounded-lg hover:bg-primary/10 text-foreground font-medium transition-colors"
+                    >
+                      {program.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* CTA Button */}
@@ -56,15 +109,49 @@ export default function Navigation() {
         {isOpen && (
           <div className="md:hidden pb-4 space-y-2">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="block px-4 py-2 hover:bg-primary-foreground/10 rounded transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
+            
+            {/* Mobile What We Offer Dropdown */}
+            <div className="px-2 py-2">
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'programs' ? null : 'programs')}
+                className="w-full text-left px-2 py-2 flex items-center justify-between hover:bg-primary-foreground/10 rounded transition-colors font-medium"
+              >
+                What We Offer
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-300 ${
+                    openDropdown === 'programs' ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+              
+              {openDropdown === 'programs' && (
+                <div className="ml-2 mt-2 space-y-1 border-l-2 border-primary-foreground/20">
+                  {educationPrograms.map((program) => (
+                    <Link
+                      key={program.id}
+                      to={program.path}
+                      className="block px-4 py-2 text-sm hover:bg-primary-foreground/10 rounded transition-colors"
+                      onClick={() => {
+                        setIsOpen(false);
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {program.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            
             <button className="w-full btn-secondary mt-4">Connect Now</button>
           </div>
         )}
