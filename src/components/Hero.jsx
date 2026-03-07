@@ -1,7 +1,7 @@
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { ArrowRight, Bell, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
+import { ArrowRight, Users, Globe, Award } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const CountUpNumber = ({ target, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -27,127 +27,90 @@ const CountUpNumber = ({ target, duration = 2000 }) => {
   return count;
 };
 
-const NotificationStrip = ({ isDarkMode }) => {
-  const [showNotification, setShowNotification] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const notifications = [
-    { text: 'New Partnership with UK Universities!', link: '/news-blog' },
-    { text: 'Latest IELTS Prep Guide Available', link: '/news-blog' },
-    { text: 'Success Story: Student Placed in Canada', link: '/news-blog' },
-    { text: 'Australia Visa Updates 2024', link: '/news-blog' },
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % notifications.length);
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  if (!showNotification) return null;
-
-  return (
-    <div
-      className={`py-2 px-4 md:py-3 text-sm md:text-base ${
-        isDarkMode
-          ? 'bg-gradient-to-r from-slate-800 to-slate-900 text-white'
-          : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-center gap-2 md:gap-3">
-          <Bell className="w-4 h-4 flex-shrink-0 animate-pulse" />
-
-          <Link
-            to={notifications[currentIndex].link}
-            className="flex-1 text-center font-medium hover:underline transition-all duration-300 group line-clamp-1"
-          >
-            {notifications[currentIndex].text}
-            <span className="inline-block ml-1 group-hover:translate-x-1 transition-transform">
-              →
-            </span>
-          </Link>
-
-          <button
-            onClick={() => setShowNotification(false)}
-            className="flex-shrink-0 p-1 hover:bg-white/20 rounded transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export function Hero() {
   const [ref, isVisible] = useScrollAnimation();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains('dark');
-    setIsDarkMode(isDark);
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          const isDark = document.documentElement.classList.contains('dark');
-          setIsDarkMode(isDark);
-        }
-      });
-    });
-
-    observer.observe(document.documentElement, { attributes: true });
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
-    <>
-      <NotificationStrip isDarkMode={isDarkMode} />
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+    >
+      {/* Background Image */}
+      <img
+        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+        className="absolute inset-0 w-full h-full object-cover"
+        alt="Students"
+      />
 
-   <section
-  id="home"
-  className="relative min-h-screen flex items-center justify-center overflow-hidden"
->
-  {/* Background Image */}
-  <div className="absolute inset-0">
-    <img
-      src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
-      alt="Students"
-      className="w-full h-full object-cover"
-    />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/60"></div>
+
+      {/* Hero Content */}
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-20 text-center max-w-4xl mx-auto">
+        <div
+          ref={ref}
+          className={`transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          {/* Heading */}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            Unlock Your Potential With
+            <span className="block text-blue-300 text-5xl sm:text-6xl lg:text-7xl mt-2">
+              THE GLOBAL AVENUES
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-lg sm:text-xl text-gray-200 mb-10 max-w-2xl mx-auto">
+            Connecting students and professionals to
+            <span className="text-blue-300 font-semibold">
+              {" "}Global Education Opportunities!
+            </span>
+          </p>
+
+          {/* Button */}
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg"
+          >
+            Explore Pathways
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+   <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full px-6 pb-16">
+  
+  {/* Card 1 */}
+  <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-lg text-left text-white">
+    <Users className="text-blue-400 mb-3" size={28} />
+    <h3 className="text-3xl font-bold">
+      <CountUpNumber target={5000} />+
+    </h3>
+    <p className="text-gray-200 mt-1">Students Placed</p>
   </div>
 
-  {/* Overlay */}
-  <div className="absolute inset-0 bg-black/50"></div>
+  {/* Card 2 */}
+  <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-lg text-left text-white">
+    <Globe className="text-blue-400 mb-3" size={28} />
+    <h3 className="text-3xl font-bold">
+      <CountUpNumber target={50} />+
+    </h3>
+    <p className="text-gray-200 mt-1">Universities</p>
+  </div>
 
-  {/* Content */}
-  <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-  
-  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-    Unlock Your Potential With
-    <span className="block text-blue-400 text-3xl sm:text-4xl lg:text-5xl mt-2">
-      THE GLOBAL AVENUES
-    </span>
-  </h1>
-
-  <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-    Connecting students and professionals to 
-    <span className="text-blue-300 font-semibold"> Global Education Opportunities!</span>
-  </p>
-
-  <Link
-    to="/services"
-    className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105"
-  >
-    Explore Pathways →
-  </Link>
+  {/* Card 3 */}
+  <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-lg text-left text-white">
+    <Award className="text-blue-400 mb-3" size={28} />
+    <h3 className="text-3xl font-bold">
+      <CountUpNumber target={98} />%
+    </h3>
+    <p className="text-gray-200 mt-1">Success Rate</p>
+  </div>
 
 </div>
-</section>
-    </>
+    </section>
   );
 }
