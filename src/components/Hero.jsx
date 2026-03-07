@@ -126,23 +126,27 @@ export function Hero() {
 
   {/* Content */}
   <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6">
-      Explore Our
-      <span className="block text-blue-300">Educational Pathways</span>
-    </h1>
+  
+  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+    Unlock Your Potential With
+    <span className="block text-blue-400 text-3xl sm:text-4xl lg:text-5xl mt-2">
+      THE GLOBAL AVENUES
+    </span>
+  </h1>
 
-    <p className="text-lg sm:text-xl text-gray-200 mb-8">
-      Transform your future by connecting with world-class universities and
-      unlocking global opportunities
-    </p>
+  <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+    Connecting students and professionals to 
+    <span className="text-blue-300 font-semibold"> Global Education Opportunities!</span>
+  </p>
 
-    <Link
-      to="/services"
-      className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
-    >
-      Explore Pathways →
-    </Link>
-  </div>
+  <Link
+    to="/services"
+    className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105"
+  >
+    Explore Pathways →
+  </Link>
+
+</div>
 </section>
     </>
   );
