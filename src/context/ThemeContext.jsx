@@ -1,35 +1,58 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 
-const ThemeContext = createContext();
+export const ThemeContext = createContext(undefined);
+
+const getInitialTheme = () => {
+  if (typeof window === 'undefined') {
+    return 'light';
+  }
+
+  try {
+    const storedTheme = window.localStorage.getItem('tga-theme');
+    if (storedTheme === 'light' || storedTheme === 'dark') {
+      return storedTheme;
+    }
+  } catch (error) {
+    // Ignore storage access failures and continue to system preference fallback.
+  }
+
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+
+  return 'light';
+};
 
 export function ThemeProvider({ children }) {
-  const [isDark, setIsDark] = useState(false);
+  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
-    // Light mode is default - only use dark if explicitly set
-    const isDarkMode = localStorage.getItem('theme') === 'dark';
-    setIsDark(isDarkMode);
-    document.documentElement.classList.toggle('dark', isDarkMode);
-  }, []);
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const root = window.document.documentElement;
+    root.classList.toggle('dark', theme === 'dark');
+
+    try {
+      window.localStorage.setItem('tga-theme', theme);
+    } catch (error) {
+      // Ignore storage access failures; the DOM theme still updates correctly.
+    }
+  }, [theme]);
 
   const toggleTheme = () => {
-    const newIsDark = !isDark;
-    setIsDark(newIsDark);
-    localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark', newIsDark);
+    setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
   };
 
-  return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
+  const value = useMemo(
+    () => ({
+      theme,
+      toggleTheme,
+      isDark: theme === 'dark',
+    }),
+    [theme]
   );
-}
 
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
-  return context;
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
