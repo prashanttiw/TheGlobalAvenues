@@ -1,3 +1,5 @@
+import useTheme from '../../hooks/useTheme';
+
 const trustItems = [
   { id: 1, label: 'Mesoyios College', href: 'https://www.mesoyios.ac.cy/' },
   { id: 2, label: 'CEFAM International School', href: 'https://www.cefam.fr/en/' },
@@ -11,17 +13,40 @@ const trustItems = [
 ];
 
 export default function UniversityTrustBar() {
+  const { isDark } = useTheme();
   const marqueeItems = [...trustItems, ...trustItems];
+  const sectionBackground = isDark
+    ? 'linear-gradient(to bottom, #0D0A1A 0%, #1A1033 100%)'
+    : '#F5F3FC';
 
   return (
     <section
-      className="relative overflow-hidden px-4 py-10 sm:px-6 lg:px-8"
+      className="relative overflow-hidden px-4 pb-10 pt-4 sm:px-6 sm:pb-10 sm:pt-5 lg:px-8"
       style={{
-        background: 'linear-gradient(to bottom, #0D0A1A 0%, #1A1033 100%)',
+        background: sectionBackground,
       }}
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-12"
+        style={{
+          background: isDark
+            ? 'linear-gradient(to bottom, rgba(13,10,26,0.55) 0%, transparent 100%)'
+            : 'linear-gradient(to bottom, rgba(255,255,255,0.28) 0%, transparent 100%)',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-16"
+        style={{
+          background: isDark
+            ? 'linear-gradient(to bottom, transparent 0%, rgba(26,16,51,0.65) 100%)'
+            : 'linear-gradient(to bottom, transparent 0%, rgba(245,243,252,0.2) 100%)',
+        }}
+      />
+
       <div className="mx-auto max-w-7xl">
-        <p className="mb-6 text-center text-xs font-semibold uppercase tracking-[0.28em] text-white/30">
+        <p className="mx-auto mb-7 w-fit rounded-full border border-[#2D1B69]/15 bg-white/70 px-5 py-2.5 text-center text-[12px] font-semibold uppercase tracking-[0.28em] text-[#4F3F84] shadow-[0_8px_24px_rgba(45,27,105,0.08)] backdrop-blur-sm dark:border-white/15 dark:bg-white/[0.06] dark:text-white/65 dark:shadow-[0_10px_24px_rgba(4,2,20,0.42)]">
           Trusted by leading universities worldwide
         </p>
 
@@ -41,13 +66,12 @@ export default function UniversityTrustBar() {
                 href={item.href}
                 target="_blank"
                 rel="noreferrer"
-                className="flex h-9 min-w-[90px] flex-shrink-0 items-center justify-center rounded-[10px] border border-white/8 bg-white/5 px-4 text-[11px] text-white/40 opacity-40 transition-all duration-200 hover:border-brand-orange hover:opacity-100 sm:h-12 sm:min-w-[120px]"
-                style={{
-                  filter: 'grayscale(1) brightness(0) invert(1)',
-                }}
+                className="group flex h-9 min-w-[90px] flex-shrink-0 items-center justify-center rounded-[10px] border border-[#2D1B69]/14 bg-gradient-to-b from-white/96 to-[#F7F4FF]/96 px-4 text-[11px] text-[#3E316E] opacity-95 shadow-[0_2px_10px_rgba(45,27,105,0.05)] transition-[background-color,border-color,color,box-shadow] duration-200 hover:border-[#5340B0]/35 hover:bg-white hover:shadow-[0_8px_18px_rgba(83,64,176,0.14)] dark:border-white/14 dark:bg-gradient-to-b dark:from-white/[0.08] dark:to-white/[0.03] dark:text-white/72 dark:shadow-[0_10px_24px_rgba(4,2,20,0.46)] dark:hover:border-white/22 dark:hover:bg-white/[0.06] sm:h-12 sm:min-w-[120px]"
               >
                 {/* TODO: replace with university <img> logo */}
-                <span className="whitespace-nowrap font-medium tracking-[0.12em]">{item.label}</span>
+                <span className="whitespace-nowrap font-medium tracking-[0.12em] transition-colors duration-200 group-hover:text-[#2D1B69] dark:group-hover:text-white/85">
+                  {item.label}
+                </span>
               </a>
             ))}
           </div>

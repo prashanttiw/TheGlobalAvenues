@@ -1,4 +1,5 @@
 
+import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { SettingsProvider } from './context/SettingsContext';
 import { Header } from './components/Header';
@@ -6,19 +7,19 @@ import { Footer } from './components/Footer';
 import { ScrollRestoration } from './components/ScrollRestoration';
 
 // Pages
-import HomePage from './pages/HomePage';
-import PortfolioPage from './pages/PortfolioPage';
-import PortfolioDetailPage from './pages/PortfolioDetailPage';
-import AboutPage from './pages/AboutPage';
-import ServicesPage from './pages/ServicesPage';
-import CollaboratePage from './pages/CollaboratePage';
-import UniversitiesPage from './pages/UniversitiesPage';
-import GalleryPage from './pages/GalleryPage';
-import PartnersPage from './pages/PartnersPage';
-import NewsVlogPage from './pages/NewsVlogPage';
-import NewsDetailPage from './pages/NewsDetailPage';
-import EducationProgramPage from './pages/EducationProgramPage';
-import WhatWeOfferPage from './pages/WhatWeOfferPage';
+const HomePage = lazy(() => import('./pages/HomePage'));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
+const PortfolioDetailPage = lazy(() => import('./pages/PortfolioDetailPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ServicesPage = lazy(() => import('./pages/ServicesPage'));
+const CollaboratePage = lazy(() => import('./pages/CollaboratePage'));
+const UniversitiesPage = lazy(() => import('./pages/UniversitiesPage'));
+const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const PartnersPage = lazy(() => import('./pages/PartnersPage'));
+const NewsVlogPage = lazy(() => import('./pages/NewsVlogPage'));
+const NewsDetailPage = lazy(() => import('./pages/NewsDetailPage'));
+const EducationProgramPage = lazy(() => import('./pages/EducationProgramPage'));
+const WhatWeOfferPage = lazy(() => import('./pages/WhatWeOfferPage'));
 
 function App() {
   return (
@@ -27,22 +28,33 @@ function App() {
         <ScrollRestoration />
         <Header />
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/portfolio" element={<PortfolioPage />} />
-            <Route path="/portfolio/:id" element={<PortfolioDetailPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/collaborate" element={<CollaboratePage />} />
-            <Route path="/universities" element={<UniversitiesPage />} />
-            <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/partners" element={<PartnersPage />} />
-            <Route path="/news-blog" element={<NewsVlogPage />} />
-            <Route path="/news/:id" element={<NewsDetailPage />} />
-            <Route path="/what-we-offer" element={<WhatWeOfferPage />} />
-            <Route path="/education-program" element={<Navigate to="/what-we-offer" replace />} />
-            <Route path="/education-program/:programType/:degreeLevel" element={<EducationProgramPage />} />
-          </Routes>
+          <Suspense
+            fallback={
+              <div className="container mx-auto px-4 py-20 text-center text-text-muted">
+                Loading page...
+              </div>
+            }
+          >
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/portfolio/:id" element={<PortfolioDetailPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/collaborate" element={<CollaboratePage />} />
+              <Route path="/universities" element={<UniversitiesPage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/partners" element={<PartnersPage />} />
+              <Route path="/news-blog" element={<NewsVlogPage />} />
+              <Route path="/news/:id" element={<NewsDetailPage />} />
+              <Route path="/what-we-offer" element={<WhatWeOfferPage />} />
+              <Route path="/education-program" element={<Navigate to="/what-we-offer" replace />} />
+              <Route
+                path="/education-program/:programType/:degreeLevel"
+                element={<EducationProgramPage />}
+              />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>

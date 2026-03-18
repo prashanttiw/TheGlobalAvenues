@@ -68,7 +68,8 @@ export default function ImageCarousel() {
   };
 
   return (
-    <section className="py-20 sm:py-28 lg:py-32 bg-gradient-to-br from-white via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 overflow-hidden relative">
+    <section className="relative -mt-px overflow-hidden bg-gradient-to-br from-[#F2EEFF] via-[#FBFAFF] to-[#EEF3FF] py-20 sm:py-28 lg:py-32 dark:from-[#1A1033] dark:via-[#120F25] dark:to-[#0C1220]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#F2EEFF] to-transparent dark:from-[#1A1033]/90" />
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-72 h-72 bg-blue-200/20 dark:bg-blue-900/20 rounded-full blur-3xl"></div>
