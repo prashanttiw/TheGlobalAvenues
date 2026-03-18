@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { SettingsProvider } from './context/SettingsContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { ScrollToTop } from './components/ScrollToTop';
 import { ScrollRestoration } from './components/ScrollRestoration';
 
 // Pages
@@ -46,7 +45,6 @@ function App() {
           </Routes>
         </main>
         <Footer />
-        <ScrollToTop />
       </div>
     </SettingsProvider>
   );
