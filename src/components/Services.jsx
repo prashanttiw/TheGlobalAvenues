@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
   BarChart3,
+  CheckCircle2,
   Briefcase,
   Building2,
+  Compass,
+  GraduationCap,
   Handshake,
+  LifeBuoy,
   Megaphone,
   Settings,
+  ShieldCheck,
   Users,
   X,
 } from 'lucide-react';
@@ -58,6 +63,33 @@ const services = [
   },
 ];
 
+const serviceCardMeta = {
+  'In-Country Representation': {
+    tag: 'Local Presence',
+    outcomes: ['Market Entry', 'Partner Network'],
+  },
+  'Marketing & Promotion': {
+    tag: 'Growth Engine',
+    outcomes: ['Lead Capture', 'Brand Lift'],
+  },
+  'Agent Management': {
+    tag: 'Channel Ops',
+    outcomes: ['Agent Network', 'Enrollment Ops'],
+  },
+  'Market Research & Analysis': {
+    tag: 'Insight Lab',
+    outcomes: ['Trend Mapping', 'Strategy'],
+  },
+  'Administrative Services': {
+    tag: 'Back Office',
+    outcomes: ['Compliance', 'Student Care'],
+  },
+  'Collaboration & Partnerships': {
+    tag: 'Alliances',
+    outcomes: ['Global Reach', 'Strategic Deals'],
+  },
+};
+
 const endToEndSupport = [
   {
     title: 'Institutional Support',
@@ -84,6 +116,75 @@ const endToEndSupport = [
     description: 'Ongoing support throughout the entire student journey',
   },
 ];
+
+const endToEndModalDetails = {
+  'Institutional Support': {
+    icon: Building2,
+    tag: 'Institution Growth',
+    gradient: 'from-[#2B3BA8] via-[#3D56CC] to-[#5A72F4]',
+    highlights: [
+      'Localized expansion roadmap with market-entry strategy',
+      'Representative office setup and channel partner onboarding',
+      'Performance tracking dashboards for enrollment pipelines',
+    ],
+    outcomes: ['Go-to-market', 'Partner Network', 'Enrollment Ops'],
+  },
+  'Student Recruitment': {
+    icon: Users,
+    tag: 'Admissions Funnel',
+    gradient: 'from-[#2E3FAE] via-[#4361EE] to-[#7A5CFF]',
+    highlights: [
+      'Segmented campaigns targeting high-intent student profiles',
+      'Application-to-offer journey management with SLA tracking',
+      'Counselor-guided conversion support for faster decisions',
+    ],
+    outcomes: ['Lead Quality', 'Faster Conversions', 'Offer-to-Enroll'],
+  },
+  'Visa & Immigration': {
+    icon: ShieldCheck,
+    tag: 'Compliance Ready',
+    gradient: 'from-[#24567A] via-[#3178A8] to-[#48A6D7]',
+    highlights: [
+      'Document validation workflows to reduce rejection risks',
+      'Country-specific visa guidance with compliance checkpoints',
+      'Interview preparation and timeline monitoring end-to-end',
+    ],
+    outcomes: ['Document Accuracy', 'Higher Approval', 'Timeline Clarity'],
+  },
+  'Career Guidance': {
+    icon: Compass,
+    tag: 'Student Direction',
+    gradient: 'from-[#5B3A9D] via-[#7A45C4] to-[#A05AF2]',
+    highlights: [
+      'Program matching based on profile, goals, and budget',
+      'Career pathway planning aligned with destination markets',
+      'One-on-one advisory for applications and statement strategy',
+    ],
+    outcomes: ['Program Fit', 'Career Mapping', 'Decision Confidence'],
+  },
+  'Quality Assurance': {
+    icon: GraduationCap,
+    tag: 'Process Excellence',
+    gradient: 'from-[#225D5A] via-[#2A8A84] to-[#36B2A9]',
+    highlights: [
+      'Standardized workflows aligned with global education norms',
+      'Quality audits across counseling, documentation, and support',
+      'Transparent reporting with milestone-based accountability',
+    ],
+    outcomes: ['Standardized Ops', 'Audit Visibility', 'Quality Delivery'],
+  },
+  'Continuous Support': {
+    icon: LifeBuoy,
+    tag: 'Always-On Support',
+    gradient: 'from-[#6B3444] via-[#9C425F] to-[#CC5E83]',
+    highlights: [
+      'Dedicated guidance from inquiry to post-arrival stages',
+      'Rapid issue resolution through centralized support channels',
+      'Regular progress follow-ups and student wellbeing check-ins',
+    ],
+    outcomes: ['Faster Resolution', 'Ongoing Guidance', 'Student Success'],
+  },
+};
 
 const ModalShell = ({ title, accentClass, isOpen, onClose, children }) => {
   if (!isOpen) {
@@ -127,133 +228,563 @@ const ModalShell = ({ title, accentClass, isOpen, onClose, children }) => {
   );
 };
 
-const UniversitySolutionsModal = ({ isOpen, onClose }) => (
-  <ModalShell
-    title="Comprehensive University Solutions"
-    accentClass="bg-gradient-to-r from-primary to-secondary"
-    isOpen={isOpen}
-    onClose={onClose}
-  >
-    <p className="text-lg leading-relaxed text-muted-foreground">
-      Our comprehensive university solutions provide international educational institutions with complete
-      support to establish and expand their presence in the South Asian market.
-    </p>
+const UniversitySolutionsModal = ({ isOpen, onClose }) => {
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
 
-    <div className="space-y-4">
-      <h3 className="text-lg font-bold text-foreground">Key Benefits</h3>
-      <ul className="space-y-2 text-muted-foreground">
-        {[
-          'In-country representation and local market establishment',
-          'Expert-driven student recruitment and marketing strategies',
-          'Comprehensive market research and strategic analysis',
-          'Full administrative and student support services',
-          'Strategic partnerships and collaboration opportunities',
-        ].map((item) => (
-          <li key={item} className="flex items-start gap-3">
-            <span className="mt-1 font-bold text-primary">*</span>
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </ModalShell>
-);
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-[3px] sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.28 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="relative w-full max-w-5xl overflow-hidden rounded-[32px] border border-white/25 bg-white/95 shadow-[0_30px_80px_rgba(20,16,45,0.38)] backdrop-blur-sm dark:border-[#2B2354] dark:bg-[#0F0C1E]/95 dark:shadow-[0_40px_90px_rgba(5,4,18,0.65)]"
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 z-20 rounded-full border border-white/40 bg-white/70 p-2 text-[#2D1B69] shadow-sm transition-all hover:bg-white dark:border-white/20 dark:bg-[#191230] dark:text-white"
+          type="button"
+          aria-label="Close details"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="space-y-6 p-7 sm:p-10">
+            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary dark:border-white/15 dark:bg-white/10 dark:text-white">
+              Comprehensive University Solutions
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
+                Scale international reach with a full-service partner.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                We help universities expand in South Asia with localized representation, strategic recruitment,
+                and operational support across the entire student journey.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {[
+                { title: 'Local Presence', detail: 'In-country teams' },
+                { title: 'Recruitment Ops', detail: 'Pipeline optimized' },
+                { title: 'Compliance Ready', detail: 'Visa support' },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-border/80 bg-muted/40 px-4 py-3 text-sm dark:border-[#2B2354]/80 dark:bg-[#16122D]/70"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80 dark:text-white/70">
+                    {item.title}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-foreground">{item.detail}</p>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/80 dark:text-white/70">
+                Key Benefits
+              </p>
+              <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+                {[
+                  'In-country representation and market entry execution',
+                  'Expert-driven recruitment and targeted marketing support',
+                  'Market research with data-backed strategy insights',
+                  'Administrative and student support services end-to-end',
+                  'Partnership development with trusted agents',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-primary dark:bg-white/15 dark:text-white">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-wrap gap-3 pt-2">
+              <button
+                onClick={onClose}
+                className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:brightness-110"
+                type="button"
+              >
+                Close Overview
+              </button>
+              <a
+                href="/portfolio"
+                className="inline-flex items-center justify-center rounded-full border border-primary/30 px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:border-primary hover:bg-primary/10 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
+              >
+                View Partner Institutions
+              </a>
+            </div>
+          </div>
+
+          <div className="relative min-h-[320px] overflow-hidden bg-gradient-to-br from-primary/10 via-white to-accent/10 p-6 dark:from-[#1B1238] dark:via-[#120C24] dark:to-[#2A1408] sm:p-8">
+            <div className="absolute inset-0">
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=900&fit=crop&q=80"
+                alt="University partnership strategy session"
+                className="h-full w-full object-cover opacity-90 transition-all duration-500 dark:opacity-80 dark:brightness-90"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+            </div>
+
+            <div className="relative z-10 flex h-full flex-col justify-between">
+              <div className="rounded-2xl border border-white/30 bg-white/15 p-4 text-white backdrop-blur-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
+                  Partnership Snapshot
+                </p>
+                <p className="mt-2 text-lg font-semibold">Targeted growth plans built with local insight.</p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: 'Market Entry', value: 'Localized execution' },
+                  { label: 'Admissions', value: 'Funnel optimization' },
+                  { label: 'Student Care', value: 'Lifecycle support' },
+                  { label: 'Brand Lift', value: 'Trusted visibility' },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl border border-white/25 bg-white/10 p-4 text-white backdrop-blur-sm"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+                      {item.label}
+                    </p>
+                    <p className="mt-2 text-sm font-semibold">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const ServiceCardModal = ({ isOpen, onClose, service }) => {
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !service) {
     return null;
   }
 
-  return (
-    <ModalShell
-      title={service.title}
-      accentClass={`bg-gradient-to-r ${service.gradient}`}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
-      <p className="text-lg leading-relaxed text-muted-foreground">{service.description}</p>
+  const meta = serviceCardMeta[service.title] || {
+    tag: 'Core Service',
+    outcomes: ['Global Reach', 'Student Support'],
+  };
+  const Icon = service.icon;
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-bold text-foreground">Key Features</h3>
-        <ul className="space-y-2 text-muted-foreground">
-          {[
-            'Expert professional guidance and support',
-            'Comprehensive service delivery',
-            'Tailored solutions for your needs',
-            'Quality assurance and transparency',
-          ].map((item) => (
-            <li key={item} className="flex items-start gap-3">
-              <span className="mt-1 font-bold text-primary">*</span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </ModalShell>
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-[3px] sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.28 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="relative w-full max-w-3xl overflow-hidden rounded-3xl p-[1px]"
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div
+          className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.gradient} opacity-45 blur-[0.6px]`}
+        />
+        <div className="relative z-10 rounded-3xl border border-[#E6E1F6]/80 bg-[#F5F3FF]/95 p-7 shadow-[0_24px_60px_rgba(45,27,105,0.2)] backdrop-blur-sm dark:border-[#3A2A78] dark:bg-[#1A1033]/95 dark:shadow-[0_30px_70px_rgba(0,0,0,0.6)] sm:p-9">
+          <button
+            onClick={onClose}
+            className="absolute right-4 top-4 rounded-full border border-white/40 bg-white/80 p-2 text-[#2D1B69] shadow-sm transition-all hover:bg-white dark:border-white/20 dark:bg-[#191230] dark:text-white"
+            type="button"
+            aria-label="Close details"
+          >
+            <X className="h-5 w-5" />
+          </button>
+
+          <div className="inline-flex items-center rounded-full border border-white/25 bg-gradient-to-r px-3 py-1 text-xs font-semibold text-white shadow-sm dark:border-white/20">
+            <span className={`bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent`}>
+              {meta.tag}
+            </span>
+          </div>
+
+          <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-start">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/25 bg-white/80 text-[#2D1B69] shadow-sm dark:border-white/15 dark:bg-white/10 dark:text-white">
+              <Icon className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-foreground">{service.title}</h3>
+              <p className="mt-3 text-base leading-relaxed text-muted-foreground">{service.description}</p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {meta.outcomes.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-[#D9D3F0]/80 bg-white/70 px-3 py-1 text-xs font-medium text-[#2D1B69]/80 dark:border-[#5340B0]/40 dark:bg-[#22164A] dark:text-[#F5F3FF]/80"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80 dark:text-white/70">
+              Key Features
+            </p>
+            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+              {[
+                'Expert professional guidance and support',
+                'Comprehensive service delivery',
+                'Tailored solutions for your needs',
+                'Quality assurance and transparency',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-primary dark:bg-white/15 dark:text-white">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-3">
+            <button
+              onClick={onClose}
+              className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:brightness-110"
+              type="button"
+            >
+              Close
+            </button>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-full border border-primary/30 px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:border-primary hover:bg-primary/10 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
+            >
+              Talk to Us
+            </a>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
 const EndToEndModal = ({ isOpen, onClose, item }) => {
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !item) {
     return null;
   }
 
-  return (
-    <ModalShell
-      title={item.title}
-      accentClass="bg-gradient-to-r from-accent to-accent/80"
-      isOpen={isOpen}
-      onClose={onClose}
-    >
-      <p className="text-lg leading-relaxed text-muted-foreground">{item.description}</p>
+  const detail = endToEndModalDetails[item.title] || {
+    icon: Briefcase,
+    tag: 'Complete Support',
+    gradient: 'from-[#2E3FAE] via-[#4361EE] to-[#7A5CFF]',
+    highlights: [
+      'Professional and experienced team support',
+      'Comprehensive service coverage',
+      'Quality assurance and best practices',
+    ],
+    outcomes: ['Reliable Delivery', 'Transparent Process', 'Ongoing Support'],
+  };
+  const DetailIcon = detail.icon;
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-bold text-foreground">What We Provide</h3>
-        <ul className="space-y-2 text-muted-foreground">
-          {[
-            'Professional and experienced team support',
-            'Comprehensive service coverage',
-            'Quality assurance and best practices',
-            'Ongoing support and updates',
-          ].map((benefit) => (
-            <li key={benefit} className="flex items-start gap-3">
-              <span className="mt-1 font-bold text-accent">+</span>
-              <span>{benefit}</span>
-            </li>
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 backdrop-blur-[3px] sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.28 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/15 bg-white shadow-[0_26px_70px_rgba(16,15,40,0.42)] dark:border-[#2B2354] dark:bg-[#0F0C1E]"
+        initial={{ opacity: 0, scale: 0.96, y: 18 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 18 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 z-20 rounded-lg border border-white/30 bg-white/20 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/35 dark:border-white/20 dark:bg-black/30"
+          type="button"
+          aria-label="Close details"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="max-h-[88vh] overflow-y-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className={`relative overflow-hidden bg-gradient-to-br ${detail.gradient} p-6 text-white sm:p-8`}>
+              <div className="pointer-events-none absolute -right-14 -top-12 h-40 w-40 rounded-full bg-white/12" />
+              <div className="pointer-events-none absolute -bottom-20 -left-10 h-44 w-44 rounded-full bg-black/10" />
+
+              <div className="relative z-10">
+                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em]">
+                  {detail.tag}
+                </div>
+
+                <h3 className="text-3xl font-bold leading-tight sm:text-[2rem]">{item.title}</h3>
+                <p className="mt-4 text-base leading-relaxed text-white/90">{item.description}</p>
+
+                <div className="mt-7 rounded-2xl border border-white/25 bg-white/12 p-4 backdrop-blur-[2px]">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20 ring-1 ring-white/35">
+                      <DetailIcon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/75">
+                        Focus Area
+                      </p>
+                      <p className="mt-1 text-base font-semibold">Strategic execution with measurable outcomes</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  {detail.outcomes.map((itemValue) => (
+                    <span
+                      key={itemValue}
+                      className="rounded-full border border-white/35 bg-white/18 px-3 py-1.5 text-xs font-medium text-white"
+                    >
+                      {itemValue}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 sm:p-8 dark:bg-[#0F0C1E]">
+              <div className="mb-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary/80">What You Get</p>
+                <h4 className="mt-2 text-2xl font-bold text-foreground">Premium Service Scope</h4>
+              </div>
+
+              <ul className="space-y-3">
+                {detail.highlights.map((benefit) => (
+                  <li
+                    key={benefit}
+                    className="flex items-start gap-3 rounded-xl border border-border/80 bg-muted/40 px-4 py-3 dark:border-[#2B2354]/80 dark:bg-[#16122D]/65"
+                  >
+                    <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary dark:bg-primary/25">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                    </span>
+                    <span className="text-sm leading-relaxed text-muted-foreground">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 rounded-2xl border border-border/80 bg-background/80 p-4 dark:border-[#2B2354]/80 dark:bg-[#15112B]/80">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary/80">Delivery Model</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Structured planning, expert execution, and continuous optimization throughout the full education journey.
+                </p>
+              </div>
+
+              <button
+                onClick={onClose}
+                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:brightness-110"
+                type="button"
+              >
+                Close Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const EndToEndSupportCard = ({ item, index, onClick }) => {
+  const detail = endToEndModalDetails[item.title] || {
+    icon: Briefcase,
+    gradient: 'from-[#2D1B69] via-[#5340B0] to-[#E8521A]',
+    outcomes: ['Complete Support'],
+  };
+  const CardIcon = detail.icon;
+  const topTag = detail.outcomes?.[0] || 'Complete Support';
+
+  return (
+    <div
+      onClick={() => onClick(item)}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick(item);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      className={`group relative cursor-pointer rounded-2xl p-[1px] transition-all duration-500 hover:-translate-y-1 ${
+        index % 2 === 0 ? 'lg:-translate-y-2 lg:hover:-translate-y-3' : ''
+      }`}
+      style={{ animationDelay: `${index * 80}ms` }}
+    >
+      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${detail.gradient} opacity-35 blur-[0.5px] transition-all duration-500 group-hover:opacity-70 dark:opacity-20 dark:group-hover:opacity-45`} />
+
+      <div className="relative z-10 flex min-h-[280px] flex-col overflow-hidden rounded-2xl border border-[#E6E1F6]/70 bg-[#F5F3FF]/95 p-6 shadow-[0_14px_34px_rgba(45,27,105,0.12)] backdrop-blur-sm transition-colors duration-300 group-hover:border-[#5340B0]/60 dark:border-[#3A2A78] dark:bg-[#1A1033] dark:shadow-[0_22px_48px_rgba(0,0,0,0.55)] dark:group-hover:border-[#5340B0]">
+        <div className="pointer-events-none absolute right-0 top-0 h-24 w-24 -translate-y-2 translate-x-2 rounded-full bg-[#E8521A]/15 blur-2xl transition-opacity duration-500 group-hover:opacity-80 dark:bg-[#5340B0]/35" />
+
+        <div className="relative z-10 mb-6 flex items-center justify-between gap-3">
+          <div className={`inline-flex items-center rounded-full border border-white/25 bg-gradient-to-r ${detail.gradient} px-3 py-1 text-xs font-semibold text-white shadow-sm`}>
+            {topTag}
+          </div>
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#5340B0]/30 bg-[#5340B0]/10 transition-all duration-300 group-hover:scale-105 group-hover:border-[#E8521A]/60 group-hover:bg-[#E8521A]/15 dark:border-[#5340B0]/60 dark:bg-[#2D1B69] dark:group-hover:border-[#E8521A]/70 dark:group-hover:bg-[#E8521A]/20">
+            <CardIcon className="h-5 w-5 text-[#2D1B69] dark:text-[#F5F3FF]" />
+          </div>
+        </div>
+
+        <h4 className="text-2xl font-bold leading-tight text-[#2D1B69] transition-colors duration-300 group-hover:text-[#5340B0] dark:text-[#F5F3FF] dark:group-hover:text-[#E8521A]">
+          {item.title}
+        </h4>
+        <p className="mt-3 text-base leading-relaxed text-[#1A1033]/80 dark:text-[#F5F3FF]/85">{item.description}</p>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          {detail.outcomes?.slice(0, 2).map((value) => (
+            <span
+              key={value}
+              className="rounded-full border border-[#D9D3F0]/80 bg-white/70 px-3 py-1 text-xs font-medium text-[#2D1B69]/80 dark:border-[#5340B0]/40 dark:bg-[#22164A] dark:text-[#F5F3FF]/80"
+            >
+              {value}
+            </span>
           ))}
-        </ul>
+        </div>
+
+        <div className="mt-auto pt-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#E8521A]/45 bg-[#E8521A]/12 px-4 py-2 text-sm font-semibold text-[#E8521A] transition-all duration-300 group-hover:bg-[#E8521A] group-hover:text-white dark:border-[#E8521A]/70 dark:bg-[#E8521A]/18 dark:text-[#E8521A] dark:group-hover:bg-[#E8521A] dark:group-hover:text-white">
+            Learn more
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </div>
+        </div>
       </div>
-    </ModalShell>
+    </div>
   );
 };
 
 const ServiceGridCard = ({ service, index, onClick }) => {
   const [cardRef, cardIsVisible] = useScrollAnimation();
+  const meta = serviceCardMeta[service.title] || {
+    tag: 'Core Service',
+    outcomes: ['Global Reach', 'Student Support'],
+  };
   const Icon = service.icon;
 
   return (
     <div
       ref={cardRef}
       onClick={() => onClick(service)}
-      className={`group cursor-pointer rounded-2xl border border-border bg-background p-8 transition-all duration-500 hover:-translate-y-2 hover:border-primary hover:shadow-lg ${
-        cardIsVisible ? 'animate-fade-in-up' : 'translate-y-[30px] opacity-0'
-      }`}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick(service);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      className={`group relative cursor-pointer rounded-2xl p-[1px] transition-all duration-500 hover:-translate-y-1 ${
+        index % 2 === 0 ? 'lg:-translate-y-2 lg:hover:-translate-y-3' : ''
+      } ${cardIsVisible ? 'animate-fade-in-up' : 'translate-y-[30px] opacity-0'}`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <div
-        className={`mb-6 inline-block rounded-xl bg-gradient-to-br p-4 transition-transform duration-300 group-hover:scale-110 ${service.gradient}`}
-      >
-        <Icon className="h-6 w-6 text-white" />
-      </div>
+      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${service.gradient} opacity-35 blur-[0.5px] transition-all duration-500 group-hover:opacity-70 dark:opacity-20 dark:group-hover:opacity-45`} />
 
-      <h3 className="mb-3 text-xl font-bold text-foreground transition-colors group-hover:text-primary">
-        {service.title}
-      </h3>
-      <p className="mb-6 leading-relaxed text-muted-foreground">{service.description}</p>
+      <div className="relative z-10 flex min-h-[280px] flex-col overflow-hidden rounded-2xl border border-[#E6E1F6]/70 bg-[#F5F3FF]/95 p-6 shadow-[0_14px_34px_rgba(45,27,105,0.12)] backdrop-blur-sm transition-colors duration-300 group-hover:border-[#5340B0]/60 dark:border-[#3A2A78] dark:bg-[#1A1033] dark:shadow-[0_22px_48px_rgba(0,0,0,0.55)] dark:group-hover:border-[#5340B0]">
+        <div className="pointer-events-none absolute right-0 top-0 h-24 w-24 -translate-y-2 translate-x-2 rounded-full bg-white/60 blur-2xl transition-opacity duration-500 group-hover:opacity-80 dark:bg-[#5340B0]/35" />
 
-      <div className="flex items-center font-semibold text-primary transition-all group-hover:gap-2">
-        Learn more
-        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-2" />
+        <div className="relative z-10 mb-6 flex items-center justify-between gap-3">
+          <div className={`inline-flex items-center rounded-full border border-white/25 bg-gradient-to-r ${service.gradient} px-3 py-1 text-xs font-semibold text-white shadow-sm`}>
+            {meta.tag}
+          </div>
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/30 bg-white/80 transition-all duration-300 group-hover:scale-105 group-hover:bg-white dark:border-[#5340B0]/60 dark:bg-[#2D1B69] dark:group-hover:border-white/40">
+            <Icon className="h-5 w-5 text-[#2D1B69] dark:text-[#F5F3FF]" />
+          </div>
+        </div>
+
+        <h3 className="text-2xl font-bold leading-tight text-[#2D1B69] transition-colors duration-300 group-hover:text-[#5340B0] dark:text-[#F5F3FF] dark:group-hover:text-[#E8521A]">
+          {service.title}
+        </h3>
+        <p className="mt-3 text-base leading-relaxed text-[#1A1033]/80 dark:text-[#F5F3FF]/85">{service.description}</p>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          {meta.outcomes.map((value) => (
+            <span
+              key={value}
+              className="rounded-full border border-[#D9D3F0]/80 bg-white/70 px-3 py-1 text-xs font-medium text-[#2D1B69]/80 dark:border-[#5340B0]/40 dark:bg-[#22164A] dark:text-[#F5F3FF]/80"
+            >
+              {value}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-auto pt-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#E8521A]/45 bg-[#E8521A]/12 px-4 py-2 text-sm font-semibold text-[#E8521A] transition-all duration-300 group-hover:bg-[#E8521A] group-hover:text-white dark:border-[#E8521A]/70 dark:bg-[#E8521A]/18 dark:text-[#E8521A] dark:group-hover:bg-[#E8521A] dark:group-hover:text-white">
+            Learn more
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -279,30 +810,88 @@ export function Services() {
           }`}
         >
           <div className="text-center lg:text-left">
-            <div className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+            <div className="inline-flex items-center rounded-full border border-primary/20 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary shadow-sm dark:border-white/15 dark:bg-white/10 dark:text-white">
               What We Offer
             </div>
-            <h2 className="mb-4 text-4xl font-bold text-foreground lg:text-5xl">
-              Comprehensive University Solutions
-            </h2>
-            <p className="mb-6 text-lg text-muted-foreground">
+            <div className="mt-4">
+              <h2 className="text-4xl font-bold text-foreground sm:text-5xl lg:text-6xl">
+                Comprehensive
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
+                  University Solutions
+                </span>
+              </h2>
+              <div className="mt-4 h-1.5 w-16 rounded-full bg-gradient-to-r from-primary to-accent" />
+            </div>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
               We provide end-to-end support to help higher education institutions expand their reach and recruit top-tier international students.
             </p>
-            <button
-              onClick={() => setShowUniversityModal(true)}
-              className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-all duration-300 hover:bg-secondary"
-              type="button"
-            >
-              Learn More
-            </button>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => setShowUniversityModal(true)}
+                className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                type="button"
+              >
+                Learn More
+              </button>
+              <a
+                href="/portfolio"
+                className="rounded-full border border-primary/30 px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:border-primary hover:bg-primary/10 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
+              >
+                View Portfolio
+              </a>
+            </div>
+
+            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+              {[
+                { title: 'Strategy', detail: 'Market entry design' },
+                { title: 'Recruitment', detail: 'Pipeline management' },
+                { title: 'Operations', detail: 'Student lifecycle care' },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-border/80 bg-white/80 px-4 py-3 text-sm shadow-sm dark:border-[#2B2354]/80 dark:bg-[#16122D]/70"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80 dark:text-white/70">
+                    {item.title}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-foreground">{item.detail}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="hidden overflow-hidden rounded-2xl shadow-lg lg:block">
-            <img
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=500&fit=crop&q=80"
-              alt="Educational services"
-              className="h-96 w-full object-cover transition-transform duration-300 hover:scale-105"
-            />
+          <div className="relative hidden lg:block">
+            <div className="absolute -inset-6 rounded-[36px] bg-gradient-to-br from-primary/20 via-transparent to-accent/20 blur-2xl" />
+            <div className="relative overflow-hidden rounded-[28px] border border-white/40 bg-white/70 p-3 shadow-[0_30px_60px_rgba(16,12,40,0.18)] dark:border-[#2B2354]/80 dark:bg-[#120C24]/75 dark:shadow-[0_40px_80px_rgba(6,5,20,0.7)]">
+              <div className="relative overflow-hidden rounded-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=720&fit=crop&q=80"
+                  alt="Educational services"
+                  className="h-[420px] w-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-tr from-black/35 via-transparent to-transparent" />
+              </div>
+
+              <div className="absolute -bottom-6 left-6 right-6 rounded-2xl border border-white/40 bg-white/90 p-4 shadow-lg backdrop-blur-sm dark:border-white/10 dark:bg-[#140E2A]/90">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/70 dark:text-white/70">
+                  Trusted Execution
+                </p>
+                <p className="mt-2 text-sm font-semibold text-foreground">
+                  Global recruitment with local execution and measurable outcomes.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {['Institutional Growth', 'Student Success'].map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary dark:border-white/15 dark:bg-white/10 dark:text-white"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -337,26 +926,12 @@ export function Services() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {endToEndSupport.map((item, index) => (
-              <div
+              <EndToEndSupportCard
                 key={item.title}
-                onClick={() => setSelectedEndToEnd(item)}
-                className="group cursor-pointer rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-secondary/5 p-8 transition-all duration-500 hover:-translate-y-2 hover:border-accent hover:shadow-lg"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="mb-4 flex items-start gap-3">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-accent/20 transition-colors group-hover:bg-accent/30">
-                    <Briefcase className="h-5 w-5 text-accent" />
-                  </div>
-                </div>
-                <h4 className="mb-2 text-xl font-bold text-foreground transition-colors group-hover:text-accent">
-                  {item.title}
-                </h4>
-                <p className="text-muted-foreground">{item.description}</p>
-                <div className="mt-10 flex items-center font-semibold text-primary transition-all group-hover:gap-2">
-                  Learn more
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-2" />
-                </div>
-              </div>
+                item={item}
+                index={index}
+                onClick={setSelectedEndToEnd}
+              />
             ))}
           </div>
         </div>

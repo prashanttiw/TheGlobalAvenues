@@ -1,6 +1,6 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Star } from 'lucide-react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import { getTestimonials } from '../services/contentApi';
 import { resolveMediaUrl } from '../services/apiClient';
 
@@ -8,94 +8,248 @@ const fallbackTestimonials = [
   {
     name: 'Vardha Kharbanda',
     location: 'New York',
-    content: 'A truly professional team who extended support and trusted me throughout. I would like to express sincere gratitude to the whole team for all the support.',
+    photo: 'https://i.pravatar.cc/160?img=47',
+    content:
+      'A truly professional team who extended support and trusted me throughout. I would like to express sincere gratitude to the whole team for all the support.',
     rating: 5,
   },
   {
     name: 'Pratibha Mittal',
     location: 'California',
-    content: 'I am pleased with the service I\'ve received. Their professionalism and ability exceeded my expectations. The team showed commendable customer service.',
+    photo: 'https://i.pravatar.cc/160?img=32',
+    content:
+      "I am pleased with the service I've received. Their professionalism and ability exceeded my expectations. The team showed commendable customer service.",
     rating: 5,
   },
   {
     name: 'Anuj Garg',
     location: 'Indiana',
-    content: 'My experience with them was extremely nice. They have a very friendly environment where I got to learn a lot.',
+    photo: 'https://i.pravatar.cc/160?img=15',
+    content:
+      'My experience with them was extremely nice. They have a very friendly environment where I got to learn a lot.',
     rating: 5,
   },
   {
     name: 'Vibha Kokiloo',
     location: 'Dubai',
-    content: 'Amazing team and great services! I would definitely recommend you to my friends who want to study abroad.',
+    photo: 'https://i.pravatar.cc/160?img=5',
+    content:
+      'Amazing team and great services! I would definitely recommend you to my friends who want to study abroad.',
     rating: 5,
   },
   {
     name: 'Rajat Chohda',
     location: 'Netherlands',
-    content: 'Just loved the way they work. If you are looking for genuine consultants, please visit them.',
+    photo: 'https://i.pravatar.cc/160?img=68',
+    content:
+      'Just loved the way they work. If you are looking for genuine consultants, please visit them.',
     rating: 5,
   },
   {
     name: 'Waseem Akram',
     location: 'France',
-    content: 'Wonderful experience with The Global Avenues. Highly professional and best consulting for students who want to study in Europe. Very grateful!',
+    photo: 'https://i.pravatar.cc/160?img=11',
+    content:
+      'Wonderful experience with The Global Avenues. Highly professional and best consulting for students who want to study in Europe. Very grateful!',
     rating: 5,
   },
+].map((item, index) => ({
+  id: `fallback-${index + 1}`,
+  ...item,
+}));
+
+const LAYOUTS = [
+  { key: 'two_big', minCount: 2 },
+  { key: 'four_small', minCount: 4 },
 ];
+const ROTATION_INTERVAL_MS = 5200;
+const SLIDE_DURATION_MS = 1000;
+
+const clampRating = (value) => {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return 5;
+  return Math.min(5, Math.max(1, Math.round(num)));
+};
+
+const firstValue = (source, keys) => {
+  for (const key of keys) {
+    const value = source?.[key];
+    if (value !== undefined && value !== null && String(value).trim() !== '') {
+      return value;
+    }
+  }
+  return '';
+};
+
+const normalizeTestimonials = (rawTestimonials = []) =>
+  rawTestimonials
+    .map((item, index) => {
+      const name = firstValue(item, ['name', 'author', 'client_name', 'student_name']);
+      const location = firstValue(item, [
+        'designation',
+        'location',
+        'city',
+        'country',
+        'program',
+        'role',
+      ]);
+      const content = firstValue(item, ['message', 'content', 'quote', 'review', 'testimonial']);
+      const photo = firstValue(item, ['photo', 'image', 'avatar', 'profile_image']);
+
+      return {
+        id: firstValue(item, ['id', 'slug']) || `${name || 'testimonial'}-${index}`,
+        name: name || 'Student',
+        location: location || 'Global Student',
+        content,
+        rating: clampRating(firstValue(item, ['rating', 'stars'])),
+        photo: photo ? resolveMediaUrl(photo) : '',
+      };
+    })
+    .filter((item) => item.content);
+
+const getInitials = (name = '') =>
+  name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || '')
+    .join('') || 'TG';
+
+const trimText = (text = '', maxLength = 160) =>
+  text.length > maxLength ? `${text.slice(0, maxLength).trim()}...` : text;
+
+const getAvailableLayouts = (total) => LAYOUTS.filter((layout) => total >= layout.minCount);
+
+const pickRandomLayout = (total, previous) => {
+  const available = getAvailableLayouts(total);
+  if (available.length === 0) return 'two_big';
+  if (available.length === 1) return available[0].key;
+
+  const pool = available.filter((layout) => layout.key !== previous);
+  const candidates = pool.length > 0 ? pool : available;
+  return candidates[Math.floor(Math.random() * candidates.length)].key;
+};
+
+const getInitialLayout = (total) => {
+  const available = getAvailableLayouts(total);
+  if (available.some((layout) => layout.key === 'two_big')) return 'two_big';
+  return available[0]?.key || 'two_big';
+};
+
+const Avatar = ({ testimonial, size = 'h-10 w-10' }) => {
+  if (testimonial.photo) {
+    return (
+      <img
+        src={testimonial.photo}
+        alt={testimonial.name}
+        className={`${size} rounded-full border border-white/30 object-cover dark:border-white/20`}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`${size} flex items-center justify-center rounded-full bg-brand-orange text-sm font-semibold text-white`}
+    >
+      {getInitials(testimonial.name)}
+    </div>
+  );
+};
+
+const RatingStars = ({ rating }) => (
+  <div className="flex items-center gap-1.5">
+    {Array.from({ length: rating }).map((_, index) => (
+      <Star key={index} className="h-3.5 w-3.5 fill-brand-orange text-brand-orange" />
+    ))}
+  </div>
+);
 
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [layoutKey, setLayoutKey] = useState('two_big');
+  const [nextIndex, setNextIndex] = useState(0);
+  const [nextLayoutKey, setNextLayoutKey] = useState('two_big');
+  const [isSliding, setIsSliding] = useState(false);
   const [ref, isVisible] = useScrollAnimation();
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [testimonials, setTestimonials] = useState(fallbackTestimonials);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isUsingFallback, setIsUsingFallback] = useState(false);
 
-  const nextSlide = () => {
-    if (testimonials.length === 0) return;
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
+  const totalTestimonials = testimonials.length;
+  const activeDotIndex = isSliding ? nextIndex : currentIndex;
 
-  const prevSlide = () => {
-    if (testimonials.length === 0) return;
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
+  const triggerSlide = useCallback((targetIndex, targetLayout) => {
+    if (isSliding || totalTestimonials <= 1) return;
 
-  // Auto-play carousel
+    setNextIndex(targetIndex);
+    setNextLayoutKey(targetLayout);
+    setIsSliding(true);
+  }, [isSliding, totalTestimonials]);
+
   useEffect(() => {
-    if (!isAutoPlay || testimonials.length <= 1) return;
+    if (!isAutoPlay || totalTestimonials <= 1 || isSliding) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 5000); // Change slide every 5 seconds
+      const upcomingIndex = (currentIndex + 1) % totalTestimonials;
+      const upcomingLayout = pickRandomLayout(totalTestimonials, layoutKey);
+      triggerSlide(upcomingIndex, upcomingLayout);
+    }, ROTATION_INTERVAL_MS);
 
     return () => clearInterval(timer);
-  }, [isAutoPlay, testimonials.length]);
+  }, [isAutoPlay, totalTestimonials, isSliding, currentIndex, layoutKey, triggerSlide]);
+
+  useEffect(() => {
+    if (!isSliding) return undefined;
+
+    const timer = setTimeout(() => {
+      setCurrentIndex(nextIndex);
+      setLayoutKey(nextLayoutKey);
+      setIsSliding(false);
+    }, SLIDE_DURATION_MS);
+
+    return () => clearTimeout(timer);
+  }, [isSliding, nextIndex, nextLayoutKey]);
 
   useEffect(() => {
     const controller = new AbortController();
 
     const loadTestimonials = async () => {
       setIsLoading(true);
-      setErrorMessage('');
+      setIsUsingFallback(false);
 
       try {
         const data = await getTestimonials({ signal: controller.signal });
-        const mapped = (data || []).map((item) => ({
-          name: item.name,
-          location: item.designation || item.location || 'Student',
-          content: item.message || '',
-          rating: Number(item.rating) || 5,
-          photo: item.photo ? resolveMediaUrl(item.photo) : '',
-        }));
+        const mapped = normalizeTestimonials(Array.isArray(data) ? data : []);
 
         if (mapped.length > 0) {
           setTestimonials(mapped);
           setCurrentIndex(0);
+          const initialLayout = getInitialLayout(mapped.length);
+          setLayoutKey(initialLayout);
+          setNextIndex(0);
+          setNextLayoutKey(initialLayout);
+          setIsSliding(false);
+        } else {
+          setTestimonials(fallbackTestimonials);
+          setCurrentIndex(0);
+          const initialLayout = getInitialLayout(fallbackTestimonials.length);
+          setLayoutKey(initialLayout);
+          setNextIndex(0);
+          setNextLayoutKey(initialLayout);
+          setIsSliding(false);
+          setIsUsingFallback(true);
         }
       } catch (error) {
         if (error.name !== 'AbortError') {
-          setErrorMessage(error.message || 'Unable to load testimonials');
+          setTestimonials(fallbackTestimonials);
+          setCurrentIndex(0);
+          const initialLayout = getInitialLayout(fallbackTestimonials.length);
+          setLayoutKey(initialLayout);
+          setNextIndex(0);
+          setNextLayoutKey(initialLayout);
+          setIsSliding(false);
+          setIsUsingFallback(true);
         }
       } finally {
         setIsLoading(false);
@@ -107,122 +261,180 @@ export function Testimonials() {
     return () => controller.abort();
   }, []);
 
-  return (
-    <section id="testimonials" className="py-20 px-4 bg-gradient-to-b from-primary/5 to-secondary/5 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute -top-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
+  useEffect(() => {
+    if (!getAvailableLayouts(totalTestimonials).some((layout) => layout.key === layoutKey)) {
+      const initialLayout = getInitialLayout(totalTestimonials);
+      setLayoutKey(initialLayout);
+      setNextLayoutKey(initialLayout);
+    }
+  }, [layoutKey, totalTestimonials]);
 
-      <div className="max-w-7xl mx-auto w-full">
-        {/* Header */}
+  useEffect(() => {
+    if (!getAvailableLayouts(totalTestimonials).some((layout) => layout.key === nextLayoutKey)) {
+      setNextLayoutKey(getInitialLayout(totalTestimonials));
+    }
+  }, [nextLayoutKey, totalTestimonials]);
+
+  const getByOffset = (baseIndex, offset) => {
+    if (totalTestimonials === 0) return null;
+    return testimonials[(baseIndex + offset) % totalTestimonials];
+  };
+
+  const getVisibleCards = (activeLayoutKey, baseIndex) =>
+    activeLayoutKey === 'four_small'
+      ? [0, 1, 2, 3].map((offset) => getByOffset(baseIndex, offset)).filter(Boolean)
+      : [0, 1].map((offset) => getByOffset(baseIndex, offset)).filter(Boolean);
+
+  const pauseAutoPlay = () => setIsAutoPlay(false);
+  const resumeAutoPlay = () => setIsAutoPlay(true);
+
+  const renderBigCard = (item, keyPrefix, tone = 'blue') => (
+    <article
+      key={`${keyPrefix}-${item.id}`}
+      className={
+        tone === 'blue'
+          ? 'relative min-h-[220px] overflow-hidden rounded-2xl border border-[#7E8CFF]/40 bg-gradient-to-br from-[#2E3FAE] via-[#3850C8] to-[#4361EE] p-5 shadow-[0_16px_34px_rgba(34,49,132,0.32)]'
+          : 'min-h-[220px] rounded-2xl border border-[#D8D2EE] bg-white/92 p-5 shadow-[0_14px_30px_rgba(37,23,90,0.12)] dark:border-[#2B2354] dark:bg-[#17122E]/84 dark:shadow-[0_20px_40px_rgba(0,0,0,0.45)]'
+      }
+      onMouseEnter={pauseAutoPlay}
+      onMouseLeave={resumeAutoPlay}
+    >
+      {tone === 'blue' && (
+        <div className="pointer-events-none absolute -right-10 -top-8 h-28 w-28 rounded-full bg-white/12" />
+      )}
+
+      <RatingStars rating={item.rating} />
+      <p className={`mt-3 text-base leading-relaxed ${tone === 'blue' ? 'text-white/95' : 'text-[#3B2E6E] dark:text-[#DDD6FF]'}`}>
+        "{trimText(item.content, 120)}"
+      </p>
+
+      <div className="mt-4 flex items-center gap-2.5">
+        <Avatar testimonial={item} size="h-9 w-9" />
+        <div className="min-w-0">
+          <p className={`truncate text-lg font-semibold ${tone === 'blue' ? 'text-white' : 'text-[#1D1340] dark:text-white'}`}>{item.name}</p>
+          <p className={`truncate text-sm ${tone === 'blue' ? 'text-white/80' : 'text-[#6A5A9D] dark:text-[#B4A8E8]'}`}>{item.location}</p>
+        </div>
+      </div>
+    </article>
+  );
+
+  const renderSmallCard = (item, keyPrefix) => (
+    <article
+      key={`${keyPrefix}-${item.id}`}
+      className="min-h-[220px] rounded-2xl border border-[#D8D2EE] bg-white/92 p-4 shadow-[0_14px_32px_rgba(37,23,90,0.12)] dark:border-[#2B2354] dark:bg-[#17122E]/84 dark:shadow-[0_20px_42px_rgba(0,0,0,0.45)]"
+      onMouseEnter={pauseAutoPlay}
+      onMouseLeave={resumeAutoPlay}
+    >
+      <RatingStars rating={item.rating} />
+      <p className="mt-3 text-base leading-relaxed text-[#3B2E6E] dark:text-[#DDD6FF]">"{trimText(item.content, 85)}"</p>
+
+      <div className="mt-4 flex items-center gap-2.5">
+        <Avatar testimonial={item} size="h-9 w-9" />
+        <div className="min-w-0">
+          <p className="truncate text-lg font-semibold text-[#1D1340] dark:text-white">{item.name}</p>
+          <p className="truncate text-sm text-[#6A5A9D] dark:text-[#B4A8E8]">{item.location}</p>
+        </div>
+      </div>
+    </article>
+  );
+
+  const renderLayout = (activeLayoutKey, baseIndex, keyPrefix) => {
+    const visibleCards = getVisibleCards(activeLayoutKey, baseIndex);
+
+    if (activeLayoutKey === 'four_small') {
+      return (
+        <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+          {visibleCards.map((item) => renderSmallCard(item, keyPrefix))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        {visibleCards.map((item, index) =>
+          renderBigCard(item, `${keyPrefix}-${index}`, index % 2 === 0 ? 'blue' : 'light')
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <section
+      id="testimonials"
+      className="relative overflow-hidden bg-gradient-to-b from-[#F7F4FF] via-[#FDFDFF] to-[#F3F0FF] px-4 py-20 dark:from-[#130F26] dark:via-[#0E0C1C] dark:to-[#161032] sm:py-24 lg:py-28"
+    >
+      <div className="mx-auto w-full max-w-7xl">
         <div
           ref={ref}
-          className={`text-center mb-16 transition-all duration-1000 ${
-            isVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-[30px]'
+          className={`mb-12 text-center transition-all duration-1000 ${
+            isVisible ? 'animate-fade-in-up' : 'translate-y-[30px] opacity-0'
           }`}
         >
-          <div className="inline-block px-4 py-2 bg-accent/20 text-accent rounded-full text-sm font-semibold mb-4">
-            💬 Testimonials
+          <div className="mb-4 inline-flex rounded-full border border-brand-orange/30 bg-brand-orange/12 px-4 py-2 text-sm font-semibold text-brand-orange dark:border-brand-orange/35 dark:bg-brand-orange/18">
+            Testimonials
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Stories From Our Satisfied Clients
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Hear from students and institutions who have achieved their international education goals with our support.
+          <h2 className="mb-4 text-4xl font-bold text-foreground lg:text-5xl">What Students Say About Us</h2>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+            Trusted voices from students and families we have guided across international admissions.
           </p>
         </div>
 
-        {/* Testimonials Carousel */}
-        <div 
-          className="relative"
-          onMouseEnter={() => setIsAutoPlay(false)}
-          onMouseLeave={() => setIsAutoPlay(true)}
-        >
-          {isLoading && (
-            <div className="py-10 text-center text-muted-foreground">Loading testimonials...</div>
-          )}
-
-          {!isLoading && errorMessage && (
-            <div className="py-10 text-center text-muted-foreground">{errorMessage}</div>
-          )}
-
-          {/* Slides */}
-          <div className="overflow-hidden rounded-2xl">
-            <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="w-full flex-shrink-0 p-8 md:p-12 bg-background border border-border rounded-2xl mx-auto max-w-2xl">
-                  {/* Stars */}
-                  <div className="flex gap-2 mb-6">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-accent text-accent" />
-                    ))}
-                  </div>
-
-                  {/* Quote */}
-                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                    "{testimonial.content}"
-                  </p>
-
-                  {/* Author */}
-                  <div>
-                    <p className="font-bold text-foreground text-lg">{testimonial.name}</p>
-                    <p className="text-muted-foreground">{testimonial.location}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {isLoading ? (
+          <div className="rounded-3xl border border-border/70 bg-background/70 p-10 text-center text-muted-foreground">
+            Loading testimonials...
           </div>
-
-          {/* Navigation Buttons */}
-          <button
-            onClick={() => {
-              prevSlide();
-              setIsAutoPlay(false);
-            }}
-            className="absolute -left-6 top-1/2 -translate-y-1/2 p-3 bg-primary text-primary-foreground rounded-full hover:bg-secondary transition-all duration-300 transform hover:scale-110 shadow-lg z-10"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={() => {
-              nextSlide();
-              setIsAutoPlay(false);
-            }}
-            className="absolute -right-6 top-1/2 -translate-y-1/2 p-3 bg-primary text-primary-foreground rounded-full hover:bg-secondary transition-all duration-300 transform hover:scale-110 shadow-lg z-10"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-
-          {/* Dots Indicator */}
-          <div className="flex justify-center gap-2 mt-8">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setCurrentIndex(index);
-                  setIsAutoPlay(false);
-                }}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? 'bg-primary w-8' : 'bg-muted'
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Auto-play indicator */}
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={() => setIsAutoPlay(!isAutoPlay)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                isAutoPlay
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted-foreground/20'
+        ) : (
+          <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl">
+            <div
+              className={`flex ${
+                isSliding
+                  ? 'transition-transform ease-[cubic-bezier(0.22,1,0.36,1)]'
+                  : 'transition-none'
               }`}
+              style={{
+                transform: `translateX(-${isSliding ? 100 : 0}%)`,
+                transitionDuration: `${SLIDE_DURATION_MS}ms`,
+              }}
             >
-              {isAutoPlay ? '⏸ Auto-playing' : '▶ Paused'}
-            </button>
+              <div className="w-full flex-shrink-0">{renderLayout(layoutKey, currentIndex, 'current')}</div>
+              <div className="w-full flex-shrink-0">{renderLayout(nextLayoutKey, nextIndex, 'next')}</div>
+            </div>
+
+            {totalTestimonials > 1 && (
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
+                <div className="flex items-center gap-2.5">
+                  {testimonials.map((testimonial, index) => (
+                    <button
+                      key={`${testimonial.id}-dot`}
+                      onClick={() => {
+                        if (index === activeDotIndex || isSliding) return;
+                        triggerSlide(index, pickRandomLayout(totalTestimonials, layoutKey));
+                      }}
+                      className={`h-2.5 rounded-full transition-all ${
+                        index === activeDotIndex
+                          ? 'w-8 bg-brand-purple dark:bg-brand-orange'
+                          : 'w-2.5 bg-brand-purple/25 hover:bg-brand-purple/45 dark:bg-white/25 dark:hover:bg-white/45'
+                      }`}
+                      style={{ transitionDuration: `${SLIDE_DURATION_MS}ms` }}
+                      aria-label={`Show testimonial ${index + 1} of ${testimonials.length}`}
+                      type="button"
+                    />
+                  ))}
+                </div>
+
+                <p className="text-sm font-medium text-[#5F4E95] dark:text-[#B8ADDD]">
+                  {activeDotIndex + 1} / {testimonials.length}
+                </p>
+              </div>
+            )}
+
+            {isUsingFallback && (
+              <p className="mt-5 text-center text-sm text-muted-foreground">
+                Showing offline testimonials while API is unavailable.
+              </p>
+            )}
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

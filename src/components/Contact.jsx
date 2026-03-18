@@ -1,34 +1,12 @@
 import { useState } from 'react';
-import {
-  Facebook,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-  Send,
-  Twitter,
-  Youtube,
-} from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { formatAddress } from '../config';
-import { useSettings } from '../context/SettingsContext';
-
-const socialIcons = {
-  facebook: Facebook,
-  linkedin: Linkedin,
-  youtube: Youtube,
-  instagram: Instagram,
-  twitter: Twitter,
-  whatsapp: MessageCircle,
-};
+import { InteractiveGlobe } from './contact/InteractiveGlobe';
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [ref, isVisible] = useScrollAnimation();
-  const { siteConfig } = useSettings();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -42,17 +20,15 @@ export function Contact() {
     window.setTimeout(() => setSubmitted(false), 3000);
   };
 
-  const visibleSocialLinks = Object.entries(siteConfig.social).filter(([, href]) => Boolean(href));
-
   return (
-    <section id="contact" className="relative overflow-hidden bg-muted/30 px-4 py-20">
-      <div className="absolute top-0 right-0 -z-10 h-96 w-96 rounded-full bg-secondary/10 blur-3xl" />
-      <div className="absolute bottom-0 left-0 -z-10 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
+    <section id="contact" className="relative overflow-hidden bg-muted/30 px-4 pb-0 pt-20">
+      <div className="absolute top-0 right-0 z-0 h-96 w-96 rounded-full bg-secondary/10 blur-3xl" />
+      <div className="absolute bottom-0 left-0 z-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
 
-      <div className="mx-auto w-full max-w-7xl">
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div
           ref={ref}
-          className={`mb-16 text-center transition-all duration-1000 ${
+          className={`mb-2 text-center transition-all duration-1000 ${
             isVisible ? 'animate-fade-in-up' : 'translate-y-[30px] opacity-0'
           }`}
         >
@@ -65,80 +41,19 @@ export function Contact() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2">
-          <div className="space-y-8">
-            <div className="rounded-xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md">
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary/10 p-3">
-                  <Phone className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="mb-2 font-bold text-foreground">Phone</h3>
-                  {siteConfig.contact.phone.map((phone) => (
-                    <p key={phone} className="text-muted-foreground">
-                      {phone}
-                    </p>
-                  ))}
-                </div>
-              </div>
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_24.5rem] lg:items-center lg:gap-0">
+          <div className="order-2 overflow-hidden rounded-[28px] lg:order-1 lg:pt-20">
+            <div className="h-[400px] sm:h-[500px] lg:h-[650px]">
+              <InteractiveGlobe />
             </div>
-
-            <div className="rounded-xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md">
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-secondary/10 p-3">
-                  <Mail className="h-6 w-6 text-secondary" />
-                </div>
-                <div>
-                  <h3 className="mb-2 font-bold text-foreground">Email</h3>
-                  <p className="text-muted-foreground">{siteConfig.contact.email.general}</p>
-                  <p className="text-muted-foreground">{siteConfig.contact.email.admissions}</p>
-                  <p className="text-muted-foreground">{siteConfig.contact.email.partnerships}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md">
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-accent/20 p-3">
-                  <MapPin className="h-6 w-6 text-accent" />
-                </div>
-                <div>
-                  <h3 className="mb-2 font-bold text-foreground">Address</h3>
-                  <p className="text-muted-foreground">{formatAddress(siteConfig.contact.address)}</p>
-                </div>
-              </div>
-            </div>
-
-            {visibleSocialLinks.length > 0 && (
-              <div className="space-y-4">
-                <p className="font-semibold text-foreground">Connect With Us</p>
-                <div className="flex gap-4">
-                  {visibleSocialLinks.map(([key, href]) => {
-                    const Icon = socialIcons[key];
-                    return (
-                      <a
-                        key={key}
-                        href={href}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={key}
-                        className="rounded-lg border border-border bg-background p-3 transition-all duration-300 hover:scale-110 hover:border-primary hover:bg-primary hover:text-primary-foreground"
-                      >
-                        <Icon className="h-5 w-5" />
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
           </div>
 
           <div
-            className={`rounded-2xl border border-border bg-background p-8 transition-all duration-1000 ${
+            className={`order-1 w-full max-w-[24.5rem] rounded-2xl border border-slate-200 bg-background/62 p-4 shadow-[0_24px_60px_rgba(13,10,26,0.22)] backdrop-blur-md transition-all duration-1000 dark:border-white/12 sm:p-5 lg:order-2 lg:mt-24 lg:-ml-[5.25rem] lg:justify-self-start lg:p-5 ${
               isVisible ? 'animate-fade-in-right' : 'translate-x-[30px] opacity-0'
             }`}
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="mb-2 block text-sm font-medium text-foreground">Full Name</label>
                 <input
@@ -147,8 +62,8 @@ export function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-border bg-muted px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Your name"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all placeholder:text-slate-500 focus:border-brand-purple/40 focus:outline-none focus:ring-1 focus:ring-brand-purple/40 dark:border-white/10 dark:bg-white/10 dark:text-white dark:placeholder:text-white/60"
+                  placeholder="Aarav Mehta"
                 />
               </div>
 
@@ -160,8 +75,8 @@ export function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-border bg-muted px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="your@email.com"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all placeholder:text-slate-500 focus:border-brand-purple/40 focus:outline-none focus:ring-1 focus:ring-brand-purple/40 dark:border-white/10 dark:bg-white/10 dark:text-white dark:placeholder:text-white/60"
+                  placeholder="aarav.mehta@example.com"
                 />
               </div>
 
@@ -173,8 +88,8 @@ export function Contact() {
                   onChange={handleChange}
                   required
                   rows="5"
-                  className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Tell us about your inquiry..."
+                  className="w-full resize-none rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all placeholder:text-slate-500 focus:border-brand-purple/40 focus:outline-none focus:ring-1 focus:ring-brand-purple/40 dark:border-white/10 dark:bg-white/10 dark:text-white dark:placeholder:text-white/60"
+                  placeholder="I want guidance for studying abroad in Europe."
                 />
               </div>
 

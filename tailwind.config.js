@@ -1,77 +1,62 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: ["class"],
-  content: [
-    "./pages/**/*.{js,jsx}",
-    "./components/**/*.{js,jsx}",
-    "./app/**/*.{js,jsx}",
-    "./src/**/*.{js,jsx}",
-    "*.{js,ts,jsx,tsx,mdx}",
-  ],
+  darkMode: 'class',
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        brand: {
+          purple: '#2D1B69',
+          'purple-mid': '#5340B0',
+          'purple-light': '#F5F3FF',
+          orange: '#E8521A',
+          'orange-light': '#F57C46',
+          'orange-bg': '#FEF0E7',
+        },
+        'text-primary': 'rgb(var(--color-text-primary-rgb) / <alpha-value>)',
+        'text-muted': 'rgb(var(--color-text-muted-rgb) / <alpha-value>)',
+        'bg-primary': 'rgb(var(--color-bg-primary-rgb) / <alpha-value>)',
+        'bg-surface': 'rgb(var(--color-bg-surface-rgb) / <alpha-value>)',
+        'border-color': 'rgb(var(--color-border-color-rgb) / <alpha-value>)',
+        border: 'rgb(var(--color-border-color-rgb) / <alpha-value>)',
+        input: 'rgb(var(--color-bg-surface-rgb) / <alpha-value>)',
+        ring: 'rgb(var(--color-brand-purple-rgb) / <alpha-value>)',
+        background: 'rgb(var(--color-bg-primary-rgb) / <alpha-value>)',
+        foreground: 'rgb(var(--color-text-primary-rgb) / <alpha-value>)',
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: 'rgb(var(--color-brand-purple-rgb) / <alpha-value>)',
+          foreground: '#FFFFFF',
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: 'rgb(var(--color-brand-purple-mid-rgb) / <alpha-value>)',
+          foreground: '#FFFFFF',
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: 'rgb(var(--color-bg-surface-rgb) / <alpha-value>)',
+          foreground: 'rgb(var(--color-text-muted-rgb) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: 'rgb(var(--color-brand-orange-rgb) / <alpha-value>)',
+          foreground: '#FFFFFF',
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: 'rgb(var(--color-bg-primary-rgb) / <alpha-value>)',
+          foreground: 'rgb(var(--color-text-primary-rgb) / <alpha-value>)',
+        },
+        popover: {
+          DEFAULT: 'rgb(var(--color-bg-primary-rgb) / <alpha-value>)',
+          foreground: 'rgb(var(--color-text-primary-rgb) / <alpha-value>)',
+        },
+        destructive: {
+          DEFAULT: '#DC2626',
+          foreground: '#FFFFFF',
         },
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        heading: ['Poppins', 'sans-serif'],
       },
     },
   },
   plugins: [],
-}
+};
