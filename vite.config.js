@@ -9,8 +9,6 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) return 'vendor'
-          if (id.includes('src/pages')) return 'pages'
-          if (id.includes('src/components')) return 'components'
         },
       },
     },
