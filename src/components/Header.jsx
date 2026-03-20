@@ -16,6 +16,7 @@ import useTheme from '../hooks/useTheme';
 import { useSettings } from '../context/SettingsContext';
 import { portfolioMenuLabel } from '../config';
 import { portfolioData } from '../data/portfolioData';
+import { getPortfolios } from '../services/portfolioService';
 import ThemeToggle from './ui/ThemeToggle';
 
 const portfolioIconMap = {
@@ -36,6 +37,7 @@ export function Header() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [portfolioItems, setPortfolioItems] = useState(portfolioData);
   const { isDark } = useTheme();
   const { siteConfig } = useSettings();
   const location = useLocation();
@@ -123,6 +125,30 @@ export function Header() {
       void import('../pages/EducationProgramPage');
     }
   };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadPortfolioMenu = async () => {
+      try {
+        const result = await getPortfolios({}, 1, 200);
+        const list = Array.isArray(result?.data) ? result.data : [];
+        if (isMounted && list.length > 0) {
+          setPortfolioItems(list);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setPortfolioItems(portfolioData);
+        }
+      }
+    };
+
+    loadPortfolioMenu();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -239,7 +265,7 @@ export function Header() {
                   </div>
 
                   <div className="grid max-h-[20rem] grid-cols-1 gap-1.5 overflow-y-auto p-2.5">
-                    {portfolioData.map((portfolio) => (
+                    {portfolioItems.map((portfolio) => (
                       <Link
                         key={portfolio.id}
                         to={`/portfolio/${portfolio.slug || portfolio.id}`}
@@ -464,7 +490,7 @@ export function Header() {
 
                 {openMobileDropdown === 'portfolio' && (
                   <div className="space-y-2 px-2 pb-2">
-                    {portfolioData.map((portfolio) => (
+                    {portfolioItems.map((portfolio) => (
                       <Link
                         key={portfolio.id}
                         to={`/portfolio/${portfolio.slug || portfolio.id}`}

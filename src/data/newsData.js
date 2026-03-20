@@ -2,11 +2,11 @@ export const newsItems = [
   {
     id: 1,
     type: 'news',
-    title: 'Partnership with Top UK Universities Announced',
+    title: 'Partnership Expansion Across the UK',
     excerpt:
-      'The Global Avenues partners with leading UK institutions to expand opportunities for South Asian students seeking quality education abroad.',
+      'The Global Avenues expanded collaboration with leading UK institutions to strengthen recruitment quality in South Asia.',
     content:
-      'We are excited to announce our strategic partnerships with top UK universities including Edinburgh, Manchester, and Durham. These collaborations will provide students unprecedented access to world-class education and enhanced placement opportunities. Our commitment to facilitating quality education for South Asian students has led us to partner with some of the most prestigious institutions in the United Kingdom. Through these partnerships, we aim to create a seamless pathway for students aspiring to pursue higher education in the UK. Students will benefit from enhanced counseling, admission support, and placement assistance.',
+      'The Global Avenues has expanded its collaboration portfolio with leading UK institutions, including multi-intake recruitment plans and in-market visibility initiatives. The engagement model focuses on qualified application pipelines, counselor enablement, and transparent reporting for admissions teams. This expansion supports institutional goals for sustainable growth, stronger conversion quality, and long-term regional presence.',
     image:
       'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=800&fit=crop&q=80',
     date: '2024-03-15',
@@ -19,18 +19,18 @@ export const newsItems = [
   {
     id: 2,
     type: 'blog',
-    title: 'Student Success Story: From India to Canada',
+    title: 'How Universities Can Improve Offer Conversion in India',
     excerpt:
-      'Read how Priya transformed her dreams into reality with our comprehensive guidance and support through her Canadian education journey.',
+      'A practical framework for institutions to improve application quality, decision speed, and final enrollment conversion.',
     content:
-      "In this exclusive blog post, Priya shares her incredible journey from applying to Canadian universities, getting accepted, and now thriving in her first year. She discusses the challenges she faced and how our team supported her every step of the way. Priya's journey is an inspiration to many aspiring students who dream of studying abroad. From her initial consultation with our team to receiving her acceptance letter, Priya shares the ups and downs of the process. Her story showcases the importance of proper guidance, timely application, and consistent support throughout the journey.",
+      'Offer conversion improves when institutions align market messaging, counselor enablement, and admissions SLAs. In this article, we break down a practical operating model used by our partner network: profile filtering, quality checks before submission, decision timeline governance, and conversion follow-up workflows. Universities using this structure typically see stronger predictability across intakes and better alignment between regional demand and institutional capacity.',
     thumbnail:
       'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=800&fit=crop&q=80',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     duration: '12:45',
     date: '2024-03-10',
     author: 'The Global Avenues',
-    category: 'Success Story',
+    category: 'Growth Strategy',
     featured: true,
     views: 5800,
     readTime: '8 min read',
@@ -38,16 +38,16 @@ export const newsItems = [
   {
     id: 3,
     type: 'news',
-    title: 'Australia Study Visa Updates 2024',
+    title: 'Australia Policy Update: Institutional Action Checklist',
     excerpt:
-      'Latest changes in Australian student visa requirements and how they impact South Asian applicants seeking to study in Australia.',
+      'Key policy updates affecting international recruitment and the operational checklist institutions should follow.',
     content:
-      'The Australian government has announced new changes to student visa processing. We break down what these changes mean for you and how to navigate them successfully. These new regulations aim to streamline the application process while maintaining strict security standards. International students applying to Australian universities should be aware of the updated requirements. Our experts have compiled a comprehensive guide to help you understand the implications and prepare your application accordingly.',
+      'Recent policy updates in Australia affect documentation timelines, applicant profiling, and communication cadence. This update outlines what institutions should align immediately: requirement updates across channels, counselor briefing packs, and SLA checkpoints for the admissions desk. The objective is simple: protect conversion quality while maintaining compliance across every stage of the funnel.',
     image:
       'https://images.unsplash.com/photo-1498419043582-62c3f1f42b78?w=1200&h=800&fit=crop&q=80',
     date: '2024-03-08',
     author: 'Deepshikha Chauhan',
-    category: 'Visa Updates',
+    category: 'Policy Updates',
     featured: false,
     views: 1800,
     readTime: '6 min read',
@@ -55,18 +55,18 @@ export const newsItems = [
   {
     id: 4,
     type: 'blog',
-    title: 'IELTS Preparation Tips with Expert Trainer',
+    title: 'Building a High-Performance Counselor Enablement Program',
     excerpt:
-      'Master IELTS exam strategies with our expert trainer. Learn proven techniques to maximize your band score.',
+      'What top-performing institutions do differently to keep counselor channels informed, compliant, and conversion-ready.',
     content:
-      "In this comprehensive blog post, our IELTS expert shares insider tips, common mistakes, and preparation strategies used by top scorers. Whether you're preparing for the first time or retaking the exam, these strategies will help you maximize your band score. Our expert covers all four sections of the IELTS exam: Listening, Reading, Writing, and Speaking. Learn practical techniques that have helped hundreds of students achieve their target scores.",
+      'Counselor channels perform best when institutions provide structured enablement. This post covers practical frameworks for quarterly training, program update broadcasts, quality scorecards, and escalation paths. With the right enablement rhythm, institutions reduce mismatch submissions, improve communication quality, and create a more reliable flow of qualified applications.',
     thumbnail:
       'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&h=800&fit=crop&q=80',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     duration: '18:20',
     date: '2024-03-05',
     author: 'The Global Avenues',
-    category: 'Exam Prep',
+    category: 'Channel Enablement',
     featured: false,
     views: 3200,
     readTime: '10 min read',
@@ -74,16 +74,16 @@ export const newsItems = [
   {
     id: 5,
     type: 'news',
-    title: 'New Scholarship Opportunities for 2024-25',
+    title: 'Merit and Scholarship Campaign Playbook Released',
     excerpt:
-      'Exciting scholarship programs launched by our partner universities for outstanding students from India.',
+      'A campaign model to communicate scholarship opportunities clearly while preserving quality-led recruitment outcomes.',
     content:
-      'We are thrilled to announce multiple scholarship opportunities for the 2024-25 academic year. These scholarships cover tuition, living expenses, and more. Our partner universities have committed significant funding to support talented students from India. Applications are now open for various scholarship programs ranging from 50% to 100% tuition coverage. Early applications are encouraged as funding is limited and allocated on a first-come, first-served basis.',
+      'Scholarship campaigns are most effective when institutions align financial messaging with profile quality requirements. This release includes a practical playbook for intake planning, campaign sequencing, counselor communication, and fast-response admissions handling. The model helps institutions attract right-fit applicants while keeping conversion quality stable.',
     image:
       'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1200&h=800&fit=crop&q=80',
     date: '2024-03-01',
     author: 'Naman Sharma',
-    category: 'Scholarship',
+    category: 'Campaigns',
     featured: false,
     views: 4200,
     readTime: '4 min read',
@@ -91,18 +91,18 @@ export const newsItems = [
   {
     id: 6,
     type: 'blog',
-    title: 'Campus Life: A Day in the Life of an International Student',
+    title: 'From Inquiry to Enrollment: A B2B Operations Blueprint',
     excerpt:
-      'Follow Arjun as he shares his experience through a typical day at his university in the UK.',
+      'A detailed operating model for institutions looking to optimize each stage of their international recruitment pipeline.',
     content:
-      'Experience campus life through the eyes of Arjun, an international student thriving in his UK university. From early morning classes to late-night study sessions and weekend adventures, discover what life is really like as an international student. Arjun shares his experiences with university facilities, social life, and the support systems available to international students. His candid account provides valuable insights for students considering studying in the UK.',
+      'This blueprint outlines the core stages of a scalable international recruitment pipeline: inquiry qualification, application readiness, offer conversion management, and post-offer coordination. It also includes reporting structures and accountability checkpoints that help institutions track performance by market, partner type, and intake. Institutions implementing this model gain better visibility and stronger conversion consistency over time.',
     thumbnail:
       'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=800&fit=crop&q=80',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     duration: '15:30',
     date: '2024-02-25',
     author: 'The Global Avenues',
-    category: 'Campus Life',
+    category: 'Operations',
     featured: false,
     views: 2900,
     readTime: '7 min read',

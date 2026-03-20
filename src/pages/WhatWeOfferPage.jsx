@@ -1,235 +1,332 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookOpen, Zap, Users, Globe, Award, CheckCircle, ArrowRight, MapPin } from 'lucide-react';
+import { getOfferings } from '../services/contentApi';
 
 const programsData = {
   'fulltime-degree': {
-    name: 'Full Time Degree Program',
-    description: 'Comprehensive degree programs from top universities worldwide',
+    name: 'Market Entry & Representation',
+    description: 'Localized institutional representation for sustained growth in South Asia',
     color: 'from-blue-500 to-blue-600',
     icon: BookOpen,
-    overview: 'Full-time degree programs involve enrolling in undergraduate or postgraduate studies at a university abroad. These programs typically last for a minimum of one year and require a student visa, which allows you to reside in the country for the duration of your studies.',
+    overview: 'We position your university in high-potential markets through on-ground representation, recruitment strategy, and brand visibility programs.',
     services: [
       {
-        title: 'Pre-Departure Briefing',
-        description: 'Guidance on travel, accommodation, and settling into your new academic environment.'
+        title: 'In-Country Representation',
+        description: 'Dedicated local team to represent your institution in priority markets.'
       },
       {
-        title: 'Visa Interview Preparation',
-        description: 'In-depth training to prepare you for student visa interviews, which are often required for countries like the USA, Canada, and the UK.'
+        title: 'Institution Positioning',
+        description: 'Clear value proposition and messaging adapted to regional decision-makers.'
       },
       {
-        title: 'Visa Application Guidance',
-        description: 'Step-by-step support with completing and submitting your visa application, ensuring all criteria are met.'
+        title: 'Channel Development',
+        description: 'Build and activate counselor and agency networks aligned to your goals.'
       },
       {
-        title: 'Document Preparation',
-        description: 'Support in preparing required documents, such as admission letters, financial proof, academic transcripts, and more.'
+        title: 'Admissions Process Alignment',
+        description: 'Optimize workflows between your admissions team and market channels.'
       },
       {
-        title: 'University and Program Selection',
-        description: 'Assistance in selecting the right institution and program that aligns with your academic and career goals.'
+        title: 'Quarterly Business Reviews',
+        description: 'Performance reviews with insights, opportunities, and action plans.'
       },
     ],
     requirements: [
-      { title: 'Acceptance Letter', description: 'From a recognized institution in the destination country.' },
-      { title: 'Financial Proof', description: 'Demonstrating that you have sufficient funds to cover tuition fees and living expenses.' },
-      { title: 'Health Insurance', description: 'Mandatory in most countries for international students.' },
-      { title: 'Proof of Language Proficiency', description: 'Depending on the program\'s language, you might need to prove your skills in English (IELTS, TOEFL) or another language.' },
-      { title: 'Visa Application Fee', description: 'Varies by country.' },
+      { title: 'Program Portfolio Clarity', description: 'Defined priority programs and intake cycles.' },
+      { title: 'Admissions Guidelines', description: 'Transparent criteria and turnaround expectations.' },
+      { title: 'Brand Assets', description: 'Approved marketing collateral and communication standards.' },
+      { title: 'Decision-Making SPOC', description: 'Institutional point of contact for campaign alignment.' },
+      { title: 'Growth KPIs', description: 'Agreement on measurable goals and reporting cadence.' },
     ],
     documents: [
-      'Proof of accommodation (if required)',
-      'Health insurance (if required by the host country)',
-      'Visa application form',
-      'Valid passport',
-      'Proof of sufficient financial means (e.g., bank statements or scholarship letters)',
-      'Admission letter from a recognized institution'
+      'Institution profile and brand guidelines',
+      'Program matrix with entry requirements',
+      'Admissions SOP and timelines',
+      'Scholarship and fee policy',
+      'Offer and policy process notes',
+      'Compliance and partnership policy'
     ],
     countries: [
-      'USA', 'Canada', 'UK', 'Germany', 'France', 'Italy', 'Switzerland', 'Spain', 'Netherlands'
+      'India', 'Nepal', 'Bangladesh', 'Sri Lanka', 'UAE', 'UK', 'Canada', 'Germany', 'Australia'
     ]
   },
   'online-program': {
-    name: 'Online Program',
-    description: 'Flexible learning from anywhere in the world',
+    name: 'Digital Demand Generation',
+    description: 'Campaign-led digital outreach for quality application demand',
     color: 'from-purple-500 to-purple-600',
     icon: Zap,
-    overview: 'Study world-class programs from the comfort of your home. Our online programs offer flexibility with industry-recognized certifications and global accessibility.',
+    overview: 'Run digital-first campaigns to improve program awareness, generate qualified leads, and increase conversion efficiency.',
     services: [
       {
-        title: 'Enrollment Support',
-        description: 'Complete guidance through the online registration and enrollment process.'
+        title: 'Campaign Strategy',
+        description: 'Channel mix planning for high-intent segments and priority geographies.'
       },
       {
-        title: 'Technical Setup',
-        description: 'Assistance with learning platform access, software requirements, and technical troubleshooting.'
+        title: 'Landing Page & Funnel Setup',
+        description: 'Build conversion-ready pathways from awareness to qualified inquiry.'
       },
       {
-        title: 'Mentorship Program',
-        description: 'One-on-one support from academic mentors and industry professionals.'
+        title: 'Content Localization',
+        description: 'Region-specific content adapted for applicants, counselors, and institution stakeholders.'
       },
       {
-        title: 'Time Management Coaching',
-        description: 'Strategies for balancing online studies with work and personal commitments.'
+        title: 'Lead Qualification Framework',
+        description: 'Scoring and filtering rules to improve application quality.'
       },
       {
-        title: 'Certification Preparation',
-        description: 'Guidance for completing coursework and preparing for final assessments.'
+        title: 'Performance Optimization',
+        description: 'Weekly optimization based on CPL, conversion, and intake demand.'
       },
     ],
     requirements: [
-      { title: 'Internet Connection', description: 'Stable high-speed internet for attending live sessions and accessing materials.' },
-      { title: 'Academic Credentials', description: 'Relevant educational qualifications as per program requirements.' },
-      { title: 'Computer Access', description: 'Laptop or desktop with required software capabilities.' },
-      { title: 'English Language Proficiency', description: 'Minimum IELTS/TOEFL scores for non-native speakers.' },
+      { title: 'Target Segment Definition', description: 'Priority audience and program focus.' },
+      { title: 'Approved Messaging', description: 'Institutional positioning for campaign consistency.' },
+      { title: 'Response SLA', description: 'Timely follow-up from admissions or recruitment teams.' },
+      { title: 'CRM Visibility', description: 'Lead tracking and funnel transparency.' },
     ],
     documents: [
-      'Academic transcripts',
-      'Passport copy',
-      'Proof of English proficiency',
-      'Statement of purpose',
-      'CV/Resume',
-      'Reference letters'
+      'Campaign brief and intake objectives',
+      'Approved communication templates',
+      'Program brochures and fee sheets',
+      'Application process FAQs',
+      'Scholarship and financial aid details',
+      'Contact matrix for escalations'
     ],
-    countries: ['Global - No Geographic Restriction']
+    countries: ['Global - Digital Outreach']
   },
   'vocational-courses': {
-    name: 'Vocational Courses',
-    description: 'Industry-focused certifications and skill development',
+    name: 'Counselor & Agent Enablement',
+    description: 'Structured training and quality controls for partner channels',
     color: 'from-green-500 to-green-600',
     icon: Award,
-    overview: 'Gain practical skills and industry certifications through hands-on vocational training programs. Perfect for career advancement and skill-based employment.',
+    overview: 'Strengthen your channel ecosystem with training frameworks, governance controls, and performance-led partner enablement.',
     services: [
       {
-        title: 'Career Counseling',
-        description: 'Identify the right vocational path based on your interests and market demand.'
+        title: 'Partner Onboarding',
+        description: 'Structured onboarding for counselors and recruitment agencies.'
       },
       {
-        title: 'Practical Training',
-        description: 'Hands-on instruction in real-world workplace environments.'
+        title: 'Training Modules',
+        description: 'Program updates, admission criteria, and compliance best practices.'
       },
       {
-        title: 'Internship Placement',
-        description: 'Direct placement opportunities with leading industry partners.'
+        title: 'Quality Monitoring',
+        description: 'Application quality checks and partner performance review loops.'
       },
       {
-        title: 'Certification Support',
-        description: 'Preparation for industry-recognized certifications and licenses.'
+        title: 'Incentive Design',
+        description: 'Aligned reward models for sustainable and ethical growth.'
       },
       {
-        title: 'Job Placement Assistance',
-        description: 'Resume building and interview coaching for employment opportunities.'
+        title: 'Partner Communication Hub',
+        description: 'Centralized updates, webinars, and support touchpoints.'
       },
     ],
     requirements: [
-      { title: 'Educational Background', description: 'Minimum secondary education qualification.' },
-      { title: 'Language Proficiency', description: 'Basic to intermediate English for international programs.' },
-      { title: 'Technical Aptitude', description: 'Interest in hands-on, practical learning.' },
+      { title: 'Channel Policy', description: 'Defined partner code of conduct and compliance terms.' },
+      { title: 'Training Calendar', description: 'Regular enablement schedule across intakes.' },
+      { title: 'Quality Benchmarks', description: 'Submission standards and rejection controls.' },
     ],
     documents: [
-      'Educational certificates',
-      'Passport',
-      'Medical clearance',
-      'Work visa (if applicable)',
-      'Insurance documentation'
+      'Partner onboarding toolkit',
+      'Program fact sheets',
+      'Admission and visa requirement notes',
+      'Compliance declaration templates',
+      'Performance scorecard format'
     ],
-    countries: ['Germany', 'Switzerland', 'Austria', 'Australia', 'Canada']
+    countries: ['India', 'Nepal', 'Bangladesh', 'Sri Lanka', 'Middle East']
   },
   'internship-abroad': {
-    name: 'Internship Abroad',
-    description: 'Gain international experience with leading companies',
+    name: 'Application Conversion Operations',
+    description: 'End-to-end operations to improve offer quality and conversion velocity',
     color: 'from-orange-500 to-orange-600',
     icon: Globe,
-    overview: 'Build professional experience through internships at top international companies. Develop global networks and enhance your resume with valuable work experience.',
+    overview: 'We support your admission funnel from inquiry to enrollment with process governance, conversion nudges, and stakeholder coordination.',
     services: [
       {
-        title: 'Internship Placement',
-        description: 'Placement with reputed multinational companies and organizations.'
+        title: 'Application Triage',
+        description: 'Pre-screening and profile matching to reduce non-fit submissions.'
       },
       {
-        title: 'Work Visa Processing',
-        description: 'Complete assistance with internship/work visa applications and documentation.'
+        title: 'Document Readiness',
+        description: 'Structured support to improve first-pass application quality.'
       },
       {
-        title: 'Pre-Departure Orientation',
-        description: 'Cultural and workplace orientation programs.'
+        title: 'Offer Acceptance Support',
+        description: 'Coordinated communication to improve decision timelines.'
       },
       {
-        title: 'Mentorship During Internship',
-        description: 'Regular check-ins and support throughout your internship period.'
+        title: 'Offer Conversion Coordination',
+        description: 'Support operations for post-offer conversion continuity.'
       },
       {
-        title: 'Post-Internship Career Support',
-        description: 'Help with full-time job conversions and future career planning.'
+        title: 'Intake Forecasting',
+        description: 'Pipeline forecasting for better planning and resource allocation.'
       },
     ],
     requirements: [
-      { title: 'Enrollment Status', description: 'Currently enrolled in an undergraduate or postgraduate program.' },
-      { title: 'Academic Standing', description: 'Maintain good academic progress (minimum GPA requirements vary).' },
-      { title: 'Work Authorization', description: 'Eligible for work visa in the destination country.' },
-      { title: 'Language Skills', description: 'Intermediate English and subject-specific language proficiency.' },
+      { title: 'Clear Admissions Criteria', description: 'Program-level eligibility and priorities.' },
+      { title: 'Offer Timelines', description: 'Defined SLA for review and decisions.' },
+      { title: 'Conversion KPIs', description: 'Offer-to-enrollment targets and monitoring cadence.' },
+      { title: 'Escalation Matrix', description: 'Fast resolution path for critical cases.' },
     ],
     documents: [
-      'Student ID/Enrollment certificate',
-      'Academic transcript',
-      'CV and cover letter',
-      'Passport',
-      'Work visa application',
-      'Insurance',
-      'Background check'
+      'Application checklist by program',
+      'Decision timeline matrix',
+      'Offer communication templates',
+      'Visa support FAQs',
+      'Pre-departure communication flow'
     ],
-    countries: ['USA', 'UK', 'Canada', 'Germany', 'Singapore', 'Australia', 'Japan']
+    countries: ['UK', 'Canada', 'USA', 'Germany', 'France', 'Australia', 'Netherlands']
   },
   'summer-winter-school': {
-    name: 'Summer/Winter School',
-    description: 'Short-term immersive learning experiences',
+    name: 'Partner Events & Delegations',
+    description: 'B2B events, institutional visits, and recruitment-facing engagement',
     color: 'from-pink-500 to-pink-600',
     icon: Users,
-    overview: 'Experience intensive short-term programs during summer and winter breaks. These programs offer cultural immersion, skill development, and networking opportunities.',
+    overview: 'Create direct engagement with schools, counselors, and recruitment networks through curated B2B events and institutional delegations.',
     services: [
       {
-        title: 'Program Selection',
-        description: 'Wide range of 2-8 week programs across diverse fields and locations.'
+        title: 'Institution Showcases',
+        description: 'City-based events to present programs and value proposition.'
       },
       {
-        title: 'Accommodation Arrangements',
-        description: 'Accommodation in university dormitories or host families.'
+        title: 'Counselor Workshops',
+        description: 'Focused sessions for training and relationship strengthening.'
       },
       {
-        title: 'Visa Assistance',
-        description: 'Short-term visa documentation and processing support.'
+        title: 'Delegation Planning',
+        description: 'End-to-end planning for regional visits and institutional meetings.'
       },
       {
-        title: 'Cultural Activities',
-        description: 'Excursions and cultural activities integrated into the program.'
+        title: 'B2B Conference Support',
+        description: 'Participation strategy and execution at key industry events.'
       },
       {
-        title: 'Certificate of Completion',
-        description: 'Recognized certificates upon successful program completion.'
+        title: 'Post-Event Follow Through',
+        description: 'Lead capture, partner follow-up, and conversion handover support.'
       },
     ],
     requirements: [
-      { title: 'Age Requirement', description: 'Minimum 18 years of age.' },
-      { title: 'Language Skills', description: 'Basic to intermediate English proficiency.' },
-      { title: 'Enrollment', description: 'Currently enrolled in a recognized institution (preferred).' },
+      { title: 'Event Objectives', description: 'Clear targets by geography and stakeholder type.' },
+      { title: 'Speaker Availability', description: 'Institution representation for sessions and meetings.' },
+      { title: 'Program Priorities', description: 'Defined portfolio focus for outreach events.' },
     ],
     documents: [
-      'Passport',
-      'Enrollment certificate',
-      'Academic records',
-      'Medical insurance',
-      'Travel insurance',
-      'Emergency contact information'
+      'Event calendar and priority locations',
+      'Presentation deck and brochures',
+      'Speaker notes and FAQs',
+      'Lead capture and follow-up workflow',
+      'Reporting template for event outcomes'
     ],
-    countries: ['USA', 'UK', 'Canada', 'Germany', 'Spain', 'France', 'Australia', 'Japan']
+    countries: ['India', 'UAE', 'Nepal', 'Sri Lanka', 'Bangladesh', 'Europe']
   }
 };
 
 export default function WhatWeOfferPage() {
   const [activeTab, setActiveTab] = useState('fulltime-degree');
-  const currentProgram = programsData[activeTab];
+  const [apiProgramMap, setApiProgramMap] = useState({});
+
+  const parseCountries = (value) =>
+    String(value || '')
+      .split(/[,|;/]/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+  const mergedPrograms = useMemo(() => {
+    const defaultColors = [
+      'from-blue-500 to-blue-600',
+      'from-purple-500 to-purple-600',
+      'from-green-500 to-green-600',
+      'from-orange-500 to-orange-600',
+      'from-pink-500 to-pink-600',
+    ];
+    const defaultIcons = [BookOpen, Zap, Award, Globe, Users];
+
+    const merged = { ...programsData };
+
+    Object.entries(apiProgramMap).forEach(([slug, offering], index) => {
+      const fallback = merged[slug];
+      const generated = {
+        name: offering.title || `Program ${index + 1}`,
+        description: offering.description || 'Explore this service track with structured execution support from our team.',
+        color: defaultColors[index % defaultColors.length],
+        icon: defaultIcons[index % defaultIcons.length],
+        overview:
+          offering.description || 'Detailed program information will be added soon.',
+        services: [
+          {
+            title: 'Expert Guidance',
+            description:
+              'Our team aligns your institution goals, market priorities, and delivery process.',
+          },
+        ],
+        requirements: [
+          {
+            title: 'Eligibility Review',
+            description: 'Requirements vary by institution policy and target market.',
+          },
+        ],
+        documents: ['Institution Brief', 'Program Matrix', 'Partner SOP'],
+        countries: parseCountries(offering.countries),
+      };
+
+      merged[slug] = {
+        ...(fallback || generated),
+        ...(offering.title ? { name: offering.title } : {}),
+        ...(offering.description ? { overview: offering.description } : {}),
+        ...(parseCountries(offering.countries).length > 0
+          ? { countries: parseCountries(offering.countries) }
+          : {}),
+      };
+    });
+
+    return merged;
+  }, [apiProgramMap]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadOfferings = async () => {
+      try {
+        const data = await getOfferings({ signal: controller.signal });
+        const offerings = Array.isArray(data) ? data : [];
+
+        if (offerings.length === 0) {
+          return;
+        }
+
+        const mapped = offerings.reduce((acc, item) => {
+          const slug = String(item.slug || '').trim();
+          if (!slug) return acc;
+          acc[slug] = item;
+          return acc;
+        }, {});
+
+        if (Object.keys(mapped).length > 0) {
+          setApiProgramMap(mapped);
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
+    };
+
+    loadOfferings();
+
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    if (mergedPrograms[activeTab]) return;
+    const firstProgram = Object.keys(mergedPrograms)[0];
+    if (firstProgram) {
+      setActiveTab(firstProgram);
+    }
+  }, [activeTab, mergedPrograms]);
+
+  const currentProgram = mergedPrograms[activeTab] || programsData['fulltime-degree'];
   const CurrentIcon = currentProgram.icon;
 
   return (
@@ -251,14 +348,14 @@ export default function WhatWeOfferPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
-            Explore our comprehensive range of educational programs designed to shape your future
+            Explore our institution-first service tracks built to strengthen market presence and conversion quality
           </motion.p>
         </div>
 
         {/* Tabs Navigation */}
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-wrap gap-2 justify-center md:justify-start md:gap-3 mb-12">
-            {Object.entries(programsData).map(([key, program]) => (
+            {Object.entries(mergedPrograms).map(([key, program]) => (
               <motion.button
                 key={key}
                 whileHover={{ scale: 1.05 }}
@@ -400,15 +497,15 @@ export default function WhatWeOfferPage() {
       <section className="py-16 px-4 bg-muted/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose Our Programs?</h2>
-            <p className="text-lg text-muted-foreground">We provide comprehensive support at every step of your educational journey</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Partner With Us?</h2>
+            <p className="text-lg text-muted-foreground">We provide full-cycle partnership support from strategy to measurable outcomes</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 title: 'Expert Guidance',
-                description: 'Our experienced consultants provide personalized guidance tailored to your goals.',
+                description: 'Our experienced consultants align strategy, channels, and delivery with your institution goals.',
                 icon: Users
               },
               {
@@ -418,7 +515,7 @@ export default function WhatWeOfferPage() {
               },
               {
                 title: 'Complete Support',
-                description: 'From application to visa processing and settlement, we are with you every step.',
+                description: 'From demand generation to application conversion, we support every stage of the partnership lifecycle.',
                 icon: CheckCircle
               }
             ].map((benefit, idx) => {
@@ -444,13 +541,13 @@ export default function WhatWeOfferPage() {
       {/* CTA Section */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Ready to Start Your Journey?</h2>
-          <p className="text-lg text-muted-foreground mb-8">Get in touch with our expert consultants to explore the program that's right for you.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Ready to Scale Your Institutional Reach?</h2>
+          <p className="text-lg text-muted-foreground mb-8">Connect with our team to design a partnership model aligned to your growth priorities.</p>
           <Link
-            to="/#contact"
+            to="/collaborate"
             className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Get Started Today
+            Start the Partnership
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

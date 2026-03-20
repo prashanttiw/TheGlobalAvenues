@@ -97,13 +97,13 @@ export default function PortfolioPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4 animate-glow">
-              🎓 Our University Partners
+              Our Partner Institutions
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
-              3000+ Students Successfully Placed
+              Global Institutions We Represent
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Explore our prestigious university partners across the globe offering world-class educational opportunities
+              Explore universities and institutions we support with market representation, channel partnerships, and enrollment growth.
             </p>
           </motion.div>
 
@@ -119,7 +119,7 @@ export default function PortfolioPage() {
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search by university, country, program..."
+                placeholder="Search by institution, country, or focus area..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 border border-border rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
@@ -187,7 +187,7 @@ export default function PortfolioPage() {
                     <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
                       <motion.img
                         src={portfolio.image}
-                        alt={portfolio.studentName}
+                        alt={portfolio.partnerName || portfolio.title}
                         loading="lazy"
                         decoding="async"
                         className="w-full h-full object-cover"
@@ -222,7 +222,7 @@ export default function PortfolioPage() {
                       <div className="grid grid-cols-3 gap-3 mb-4 pb-4 border-b border-border/50">
                         <div className="text-center">
                           <div className="text-lg font-bold text-primary">{portfolio.studentsPlaced}+</div>
-                          <div className="text-xs text-muted-foreground">Students</div>
+                          <div className="text-xs text-muted-foreground">Applications</div>
                         </div>
                         <div className="text-center">
                           <div className="text-lg font-bold text-primary">{portfolio.programs}</div>
@@ -254,7 +254,7 @@ export default function PortfolioPage() {
               animate={{ opacity: 1, y: 0 }}
             >
               <Search className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-              <h3 className="text-2xl font-bold text-foreground mb-2">No stories found</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-2">No institutions found</h3>
               <p className="text-muted-foreground max-w-md mx-auto">
                 Try adjusting your search criteria or filters to find what you're looking for
               </p>

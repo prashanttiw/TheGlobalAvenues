@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useTheme from '../../hooks/useTheme';
+import { useSettings } from '../../context/SettingsContext';
+import { useHomeContent } from '../../context/HomeContentContext';
 
-const statCards = [
-  { value: '31+', label: 'University Partners' },
-  { value: '10K+', label: 'Students Guided' },
-  { value: '95%', label: 'Visa Success Rate' },
-];
 const HERO_VIDEO_DEBUG_KEY = 'tga-hero-video-debug';
 
 const shouldDebugHeroVideo = () => {
@@ -47,6 +44,12 @@ const getVideoSources = (tier = '720') => {
   };
 };
 
+const getSafeInternalPath = (value, fallback) => {
+  if (typeof value !== 'string') return fallback;
+  const trimmed = value.trim();
+  return trimmed.startsWith('/') ? trimmed : fallback;
+};
+
 const countUp = (el, target, duration = 1500) => {
   let start = 0;
   const isPercent = String(target).includes('%');
@@ -67,6 +70,8 @@ const countUp = (el, target, duration = 1500) => {
 
 export default function HeroSection() {
   const { isDark } = useTheme();
+  const { siteConfig } = useSettings();
+  const { homeContent } = useHomeContent();
   const sectionRef = useRef(null);
   const mediaRef = useRef(null);
   const videoRef = useRef(null);
@@ -305,6 +310,22 @@ export default function HeroSection() {
   };
 
   const heroOpacity = prefersReducedMotion ? 1 : 0;
+  const heroSlide = homeContent.hero[0];
+  const statCards = [
+    { value: siteConfig.stats.partnerUniversities, label: 'University Partners' },
+    { value: siteConfig.stats.studentsRecruited, label: 'Applications Managed' },
+    { value: siteConfig.stats.visaSuccessRate, label: 'Offer Conversion Success' },
+  ];
+  const heroBadge = heroSlide?.badge || "\u{1F30D} India's Trusted Global Education Partner";
+  const heroTitleLine1 = heroSlide?.titleLine1 || 'Expand Your University.';
+  const heroTitleLine2 = heroSlide?.titleLine2 || 'Strengthen Your Enrolment Pipeline.';
+  const heroDescription =
+    heroSlide?.description ||
+    'We help universities build visibility in India, activate high-quality recruitment channels, and convert demand into sustained enrolment growth.';
+  const primaryCtaLabel = heroSlide?.primaryCtaLabel || 'Partner With Us';
+  const primaryCtaUrl = getSafeInternalPath(heroSlide?.primaryCtaUrl, '/collaborate');
+  const secondaryCtaLabel = heroSlide?.secondaryCtaLabel || 'View Our Network';
+  const secondaryCtaUrl = getSafeInternalPath(heroSlide?.secondaryCtaUrl, '/about');
 
   return (
     <section
@@ -391,8 +412,17 @@ export default function HeroSection() {
         className="absolute inset-0"
         style={{
           background: isDark
-            ? 'linear-gradient(to right, rgba(13,10,26,0.58) 0%, rgba(13,10,26,0.36) 60%, rgba(13,10,26,0.12) 100%)'
-            : 'linear-gradient(to right, rgba(20,15,42,0.58) 0%, rgba(20,15,42,0.34) 46%, rgba(20,15,42,0.1) 78%, rgba(20,15,42,0) 100%)',
+            ? 'linear-gradient(106deg, rgba(8,6,20,0.84) 0%, rgba(10,8,24,0.56) 52%, rgba(10,8,24,0.2) 100%)'
+            : 'linear-gradient(106deg, rgba(12,9,28,0.78) 0%, rgba(15,12,34,0.54) 52%, rgba(15,12,34,0.2) 100%)',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{
+          background: isDark
+            ? 'radial-gradient(ellipse 85% 65% at 24% 44%, rgba(83,64,176,0.22) 0%, rgba(83,64,176,0.08) 42%, transparent 74%)'
+            : 'radial-gradient(ellipse 85% 65% at 24% 44%, rgba(83,64,176,0.18) 0%, rgba(83,64,176,0.08) 42%, transparent 74%)',
         }}
       />
 
@@ -424,16 +454,16 @@ export default function HeroSection() {
           className="mx-auto w-full max-w-7xl"
           style={{ willChange: 'transform, opacity' }}
         >
-          <div className="max-w-3xl">
+          <div className="relative max-w-3xl">
             <span
-              className="inline-flex rounded-full border border-brand-orange/60 bg-[#140F2A]/30 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#FF7A3D] sm:text-xs dark:border-brand-orange/30 dark:bg-brand-orange/15 dark:text-brand-orange"
+              className="relative inline-flex rounded-full border border-white/30 bg-[#150F2D]/45 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#FFD0B3] sm:text-xs dark:border-white/20 dark:bg-[#140F2A]/55 dark:text-[#FFC29A]"
               style={{ animation: heroAnimation('fadeDown', 500, 0), opacity: heroOpacity }}
             >
-              {'\u{1F30D}'} India's Trusted Global Education Partner
+              {heroBadge}
             </span>
 
             <h1
-              className="mt-6 font-heading text-[36px] font-bold leading-[1.1] text-white sm:text-[44px] lg:text-[60px]"
+              className="relative mt-6 font-heading text-[36px] font-bold leading-[1.08] text-white sm:text-[44px] lg:text-[60px]"
               style={{
                 textShadow: isDark
                   ? '0 6px 24px rgba(13,10,26,0.45)'
@@ -441,42 +471,42 @@ export default function HeroSection() {
               }}
             >
               <span className="block" style={{ animation: heroAnimation('fadeUp', 700, 100), opacity: heroOpacity }}>
-                Your Dream University.
+                {heroTitleLine1}
               </span>
-              <span className="block" style={{ animation: heroAnimation('fadeUp', 700, 200), opacity: heroOpacity }}>
-                Our Proven Pathway.
+              <span
+                className="block bg-[linear-gradient(95deg,#FFFFFF_0%,#FFE7D8_55%,#FFB57F_100%)] bg-clip-text text-transparent"
+                style={{ animation: heroAnimation('fadeUp', 700, 200), opacity: heroOpacity }}
+              >
+                {heroTitleLine2}
               </span>
             </h1>
 
             <p
-              className={`mt-6 max-w-lg text-base leading-7 sm:text-[18px] ${
-                isDark ? 'text-white/70' : 'text-white/88'
-              }`}
+              className="relative mt-6 max-w-xl text-base leading-7 text-white/90 sm:text-[18px]"
               style={{
                 animation: heroAnimation('fadeUp', 600, 300),
                 opacity: heroOpacity,
-                textShadow: isDark ? 'none' : '0 3px 16px rgba(6,4,16,0.38)',
+                textShadow: '0 3px 16px rgba(6,4,16,0.38)',
               }}
             >
-              We connect ambitious Indian students with world-class universities across 9
-              countries {'\u2014'} from application to visa, every step guided.
+              {heroDescription}
             </p>
 
             <div
-              className="mt-8 flex flex-col gap-4 sm:flex-row"
+              className="relative mt-8 flex flex-col gap-4 sm:flex-row"
               style={{ animation: heroAnimation('fadeUp', 600, 400), opacity: heroOpacity }}
             >
               <Link
-                to="/collaborate"
-                className="rounded-xl bg-brand-orange px-6 py-4 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(232,82,26,0.4)]"
+                to={primaryCtaUrl}
+                className="rounded-xl bg-[linear-gradient(95deg,#E8521A_0%,#FF7A3D_100%)] px-6 py-4 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(232,82,26,0.42)]"
               >
-                Start Your Journey
+                {primaryCtaLabel}
               </Link>
               <Link
-                to="/about"
-                className="rounded-xl border border-white/45 bg-white/14 px-6 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 ease-out hover:bg-white/22 dark:border-white/30 dark:bg-white/5 dark:hover:bg-white/10"
+                to={secondaryCtaUrl}
+                className="rounded-xl border border-white/45 bg-white/18 px-6 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 ease-out hover:bg-white/25 dark:border-white/30 dark:bg-white/8 dark:hover:bg-white/14"
               >
-                Watch Our Story
+                {secondaryCtaLabel}
               </Link>
             </div>
           </div>

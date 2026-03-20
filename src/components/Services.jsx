@@ -506,7 +506,7 @@ const ServiceCardModal = ({ isOpen, onClose, service }) => {
               Close
             </button>
             <a
-              href="/contact"
+              href="/collaborate"
               className="inline-flex items-center justify-center rounded-full border border-primary/30 px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:border-primary hover:bg-primary/10 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
             >
               Talk to Us

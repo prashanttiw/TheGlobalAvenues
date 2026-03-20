@@ -7,33 +7,33 @@ const slides = [
     id: 1,
     image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&h=800&fit=crop&q=80',
     title: 'Global University Network',
-    description: 'Connect with over 500+ prestigious universities across 50+ countries worldwide.',
+    description: 'Access a proven partner ecosystem spanning institutions, agent channels, and strategic stakeholders across key markets.',
     icon: Globe2,
     chip: 'Global Reach',
   },
   {
     id: 2,
     image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop&q=80',
-    title: 'Expert Student Support',
-    description: 'Dedicated mentors guiding you through every step of your international education journey.',
+    title: 'Dedicated Partner Success',
+    description: 'A focused account team aligns with your enrollment goals, brand strategy, and regional priorities.',
     icon: GraduationCap,
-    chip: 'Mentor-Led',
+    chip: 'Partner-Led',
   },
   {
     id: 3,
     image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=800&fit=crop&q=80',
-    title: 'Diverse Learning Programs',
-    description: 'Explore thousands of academic programs tailored to your goals and aspirations.',
+    title: 'Market Intelligence',
+    description: 'Leverage actionable insights on demand trends, channel performance, and competitive positioning.',
     icon: BookOpenCheck,
-    chip: 'Program Depth',
+    chip: 'Data Driven',
   },
   {
     id: 4,
     image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=800&fit=crop&q=80',
-    title: 'Career Pathways',
-    description: 'Transform your future with world-class education and career opportunities.',
+    title: 'Sustainable Enrollment Growth',
+    description: 'Scale quality applications and build long-term institutional visibility in South Asia.',
     icon: Rocket,
-    chip: 'Career Outcomes',
+    chip: 'Growth Outcomes',
   },
 ];
 
@@ -106,7 +106,7 @@ export default function ImageCarousel() {
             Why <span className="section-title-classic-accent">Choose Us</span>
           </h2>
           <p className="section-subtitle-classic">
-            Explore the key aspects that make us your perfect education partner
+            Explore the capabilities that make us a reliable B2B growth partner for global universities
           </p>
         </div>
 

@@ -143,6 +143,21 @@ const buildSiteConfig = (settings) => {
   if (countriesCovered) config.stats.countriesCovered = countriesCovered;
   if (visaSuccessRate) config.stats.visaSuccessRate = visaSuccessRate;
 
+  const existingTeams = Array.isArray(config.collaborateTeams) ? config.collaborateTeams : [];
+  const fallbackPhone = config.contact.phone?.[0] || '';
+  const fallbackEmail = config.contact.email?.general || '';
+  const teamBlueprint = [
+    { title: 'General Enquiries', phone: config.contact.phone?.[0], email: config.contact.email?.general },
+    { title: 'Admissions Support', phone: config.contact.phone?.[1], email: config.contact.email?.admissions },
+    { title: 'Partnerships', phone: config.contact.phone?.[2], email: config.contact.email?.partnerships },
+  ];
+
+  config.collaborateTeams = teamBlueprint.map((team, index) => ({
+    title: team.title || existingTeams[index]?.title || `Team ${index + 1}`,
+    phone: team.phone || existingTeams[index]?.phone || fallbackPhone,
+    email: team.email || existingTeams[index]?.email || fallbackEmail,
+  }));
+
   return config;
 };
 

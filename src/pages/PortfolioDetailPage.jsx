@@ -12,7 +12,6 @@ export default function PortfolioDetailPage() {
   const [portfolio, setPortfolio] = useState(null);
   const [allPortfolios, setAllPortfolios] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const mapUniversityToPortfolio = (data) => {
     if (!data || !data.university) return null;
@@ -72,19 +71,19 @@ export default function PortfolioDetailPage() {
 
     const loadData = async () => {
       try {
-        setErrorMessage('');
+        const localData = await getPortfolioById(id);
+        const detailSlug = localData?.slug || id;
         let apiPortfolio = null;
 
         try {
-          const apiData = await getUniversityDetail(id, { signal: controller.signal });
+          const apiData = await getUniversityDetail(detailSlug, { signal: controller.signal });
           apiPortfolio = mapUniversityToPortfolio(apiData);
         } catch (error) {
           if (error.name !== 'AbortError') {
-            setErrorMessage(error.message || 'Unable to load university data');
+            apiPortfolio = null;
           }
         }
 
-        const localData = await getPortfolioById(id);
         const merged = mergePortfolioData(localData, apiPortfolio);
 
         if (isActive) {
@@ -145,7 +144,6 @@ export default function PortfolioDetailPage() {
     return (
       <div className="pt-16 min-h-screen flex flex-col items-center justify-center">
         <h1 className="text-4xl font-bold mb-4">Portfolio Not Found</h1>
-        {errorMessage && <p className="mb-4 text-muted-foreground">{errorMessage}</p>}
         <Link to="/portfolio" className="text-primary hover:text-secondary">
           Back to Portfolio
         </Link>
@@ -207,7 +205,7 @@ export default function PortfolioDetailPage() {
             <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 h-96 sm:h-[500px]">
               <motion.img
                 src={portfolio.image}
-                alt={portfolio.studentName || portfolio.title}
+                alt={portfolio.partnerName || portfolio.title}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"
@@ -256,13 +254,13 @@ export default function PortfolioDetailPage() {
 
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-3">
-              {/* Students Placed */}
+              {/* Applications Managed */}
               <motion.div
                 className="bg-primary/10 border border-primary/20 rounded-xl p-4"
                 whileHover={{ translateY: -2 }}
               >
                 <Users className="w-5 h-5 text-primary mb-2" />
-                <p className="text-muted-foreground text-xs font-medium">Students Placed</p>
+                <p className="text-muted-foreground text-xs font-medium">Applications Managed</p>
                 <p className="text-xl font-bold text-foreground">
                   {metrics.studentsPlaced ? `${metrics.studentsPlaced}+` : '—'}
                 </p>
@@ -280,25 +278,25 @@ export default function PortfolioDetailPage() {
                 </p>
               </motion.div>
 
-              {/* Success Rate */}
+              {/* Conversion Rate */}
               <motion.div
                 className="bg-accent/10 border border-accent/20 rounded-xl p-4"
                 whileHover={{ translateY: -2 }}
               >
                 <Star className="w-5 h-5 text-accent mb-2" />
-                <p className="text-muted-foreground text-xs font-medium">Success Rate</p>
+                <p className="text-muted-foreground text-xs font-medium">Conversion Rate</p>
                 <p className="text-xl font-bold text-foreground">
                   {metrics.successRate ? `${metrics.successRate}%` : '—'}
                 </p>
               </motion.div>
 
-              {/* Visa Success */}
+              {/* Offer Conversion */}
               <motion.div
                 className="bg-green-500/10 border border-green-500/20 rounded-xl p-4"
                 whileHover={{ translateY: -2 }}
               >
                 <Zap className="w-5 h-5 text-green-500 mb-2" />
-                <p className="text-muted-foreground text-xs font-medium">Visa Success</p>
+                <p className="text-muted-foreground text-xs font-medium">Offer Conversion</p>
                 <p className="text-xl font-bold text-foreground">
                   {metrics.visaSuccessRate ? `${metrics.visaSuccessRate}%` : '—'}
                 </p>
@@ -433,7 +431,7 @@ export default function PortfolioDetailPage() {
             viewport={{ once: true }}
             variants={containerVariants}
           >
-            <h3 className="text-2xl font-bold text-foreground mb-8">Student Experiences</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-8">Partner Insights</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {portfolio.details.studentTestimonials.map((testimonial, index) => (
                 <motion.div
@@ -478,14 +476,16 @@ export default function PortfolioDetailPage() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Apply to {portfolio.title}?</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Partner with {portfolio.title}?</h3>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Join {portfolio.studentsPlaced}+ students who have successfully enrolled at {portfolio.title}. With our expert guidance and support, your dream is within reach.
+            Partner with us to strengthen your visibility and recruitment outcomes for institutions like {portfolio.title} across key markets.
           </p>
           <motion.button
             className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-secondary transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/collaborate')}
+            type="button"
           >
             Connect with Our Advisors
           </motion.button>

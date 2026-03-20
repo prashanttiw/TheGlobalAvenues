@@ -34,10 +34,10 @@ export function Contact() {
             Get In Touch
           </div>
           <h2 className="section-title-classic mb-4">
-            Ready to Start <span className="section-title-classic-accent">Your Journey?</span>
+            Ready to Build <span className="section-title-classic-accent">Your Market Presence?</span>
           </h2>
           <p className="section-subtitle-classic">
-            Contact us today and let&apos;s discuss how we can help you achieve your international education goals.
+            Contact us to discuss institution representation, recruitment channel strategy, and enrollment growth goals.
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export function Contact() {
                   required
                   rows="5"
                   className="w-full resize-none rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all placeholder:text-slate-500 focus:border-brand-purple/40 focus:outline-none focus:ring-1 focus:ring-brand-purple/40 dark:border-white/10 dark:bg-white/10 dark:text-white dark:placeholder:text-white/60"
-                  placeholder="I want guidance for studying abroad in Europe."
+                  placeholder="We want to expand our university presence in India."
                 />
               </div>
 
@@ -105,7 +105,7 @@ export function Contact() {
 
               {submitted && (
                 <div className="animate-fade-in-up rounded-lg bg-green-100 p-4 text-center font-medium text-green-800">
-                  Message sent successfully. We&apos;ll get back to you soon.
+                  Message sent successfully. Our partnerships team will contact you soon.
                 </div>
               )}
             </form>

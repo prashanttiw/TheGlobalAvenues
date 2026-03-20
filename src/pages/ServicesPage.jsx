@@ -5,51 +5,51 @@ export default function ServicesPage() {
   const services = [
     {
       icon: Target,
-      title: 'University Selection',
-      description: 'Get expert guidance on choosing the right universities based on your profile, goals, and preferences.',
-      features: ['Profile Assessment', 'University Ranking Analysis', 'Requirement Matching', 'Timeline Planning'],
+      title: 'Market Entry Strategy',
+      description: 'Position your institution in the right markets with data-backed planning and execution roadmaps.',
+      features: ['Market Assessment', 'Competitor Benchmarking', 'Channel Mapping', 'Launch Timeline'],
     },
     {
       icon: FileText,
-      title: 'Application Support',
-      description: 'Comprehensive assistance with application forms, essays, and documentation.',
-      features: ['Essay Coaching', 'Application Review', 'Document Preparation', 'Deadline Management'],
+      title: 'Admissions Operations',
+      description: 'Streamline your admission pipeline with structured documentation and process governance support.',
+      features: ['Application Workflow Design', 'SOP Templates', 'Documentation Standards', 'SLA Management'],
     },
     {
       icon: BookOpen,
-      title: 'Test Preparation',
-      description: 'Specialized coaching for standardized tests with proven strategies and techniques.',
-      features: ['GMAT Coaching', 'GRE Coaching', 'IELTS Coaching', 'SAT/ACT Preparation'],
+      title: 'Brand Enablement',
+      description: 'Deliver consistent institution messaging across counselor, agent, and event channels.',
+      features: ['Brand Playbooks', 'Campaign Assets', 'Regional Messaging', 'Positioning Workshops'],
     },
     {
       icon: Users,
-      title: 'Interview Coaching',
-      description: 'Mock interviews and personalized coaching to ace your university interviews.',
-      features: ['Mock Interviews', 'Confidence Building', 'Scenario Practice', 'Feedback Sessions'],
+      title: 'Recruitment Partner Network',
+      description: 'Expand your reach through vetted counselors and agency channels aligned to your goals.',
+      features: ['Partner Onboarding', 'Quality Filtering', 'Performance Reviews', 'Network Expansion'],
     },
     {
       icon: Briefcase,
-      title: 'Career Counseling',
-      description: 'Guidance on career paths, internships, and post-graduation opportunities.',
-      features: ['Career Mapping', 'Internship Guidance', 'Professional Networking', 'Job Placement'],
+      title: 'Regional Representation',
+      description: 'Build sustained institutional visibility in India through on-ground representation support.',
+      features: ['In-Market Presence', 'Institution Briefings', 'Stakeholder Meetings', 'Pipeline Oversight'],
     },
     {
       icon: Zap,
-      title: 'Visa Assistance',
-      description: 'Complete support with visa applications and documentation requirements.',
-      features: ['Document Checklist', 'Application Support', 'Interview Prep', 'Travel Planning'],
+      title: 'Compliance Support',
+      description: 'Maintain process consistency, reporting discipline, and ethical recruitment standards.',
+      features: ['Compliance Checklists', 'Policy Alignment', 'Risk Controls', 'Documentation Audits'],
     },
     {
       icon: BarChart3,
-      title: 'Financial Planning',
-      description: 'Assistance with scholarship searches and financial aid options.',
-      features: ['Scholarship Search', 'Funding Options', 'Financial Aid Guidance', 'Cost Planning'],
+      title: 'Performance Analytics',
+      description: 'Track demand, conversion, and channel quality through practical reporting dashboards.',
+      features: ['Lead Source Insights', 'Conversion Metrics', 'Country-Wise Trends', 'Action Dashboards'],
     },
     {
       icon: CheckCircle,
-      title: 'Post-Admission Support',
-      description: 'Ongoing support even after admission to ensure smooth transition.',
-      features: ['Housing Assistance', 'Pre-Departure Guidance', 'Alumni Network', 'Continuous Support'],
+      title: 'Partnership Success Management',
+      description: 'Continuous engagement to optimize outcomes and scale long-term collaboration value.',
+      features: ['Quarterly Reviews', 'Growth Planning', 'Operational Support', 'Continuous Optimization'],
     },
   ];
 
@@ -90,7 +90,7 @@ export default function ServicesPage() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Comprehensive education consulting services designed to guide you through every step of your international education journey.
+            Comprehensive B2B services designed to help universities build market presence, strengthen recruitment quality, and scale international enrollment.
           </motion.p>
         </div>
       </motion.section>
@@ -163,7 +163,7 @@ export default function ServicesPage() {
           >
             <h2 className="text-4xl font-bold mb-4">How We Work</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              A structured approach to ensure your success at every step
+              A structured operating model built for institutional growth
             </p>
           </motion.div>
 
@@ -175,10 +175,10 @@ export default function ServicesPage() {
             viewport={{ once: true }}
           >
             {[
-              { step: 1, title: 'Assessment', description: 'Evaluate your profile and goals' },
-              { step: 2, title: 'Planning', description: 'Create personalized roadmap' },
-              { step: 3, title: 'Execution', description: 'Support throughout the process' },
-              { step: 4, title: 'Success', description: 'Achieve your dream university' },
+              { step: 1, title: 'Discovery', description: 'Align institutional goals and market priorities' },
+              { step: 2, title: 'Strategy', description: 'Design a regional growth roadmap' },
+              { step: 3, title: 'Execution', description: 'Activate channels and optimize campaigns' },
+              { step: 4, title: 'Scale', description: 'Expand impact with measurable outcomes' },
             ].map((item, index) => (
               <motion.div
                 key={index}

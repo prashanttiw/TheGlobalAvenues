@@ -8,8 +8,8 @@ export const SITE_CONFIG = {
     name: 'The Global Avenues',
     shortName: 'TGA',
     description:
-      'Your trusted partner for international student recruitment and global education opportunities.',
-    tagline: 'Unlock Your Potential With The Global Avenues',
+      'A growing team supporting international university representation, strategic market development, and enrollment operations.',
+    tagline: 'Build Sustainable Enrolment With The Global Avenues',
     year: new Date().getFullYear(),
     logo: {
       lightSrc: '/logo-light.png',
@@ -44,10 +44,10 @@ export const SITE_CONFIG = {
   },
 
   stats: {
-    studentsRecruited: '3000+',
-    partnerUniversities: '210+',
-    countriesCovered: '50+',
-    visaSuccessRate: '98%',
+    studentsRecruited: '600+',
+    partnerUniversities: '40+',
+    countriesCovered: '12+',
+    visaSuccessRate: '84%',
   },
 
   navigation: {
@@ -74,10 +74,10 @@ export const SITE_CONFIG = {
       { label: 'Universities', path: '/universities' },
     ],
     Services: [
-      { label: 'Explore Pathways', path: '/services' },
-      { label: 'Student Guidance', path: '/services' },
-      { label: 'University Recruitment', path: '/services' },
-      { label: 'Visa Assistance', path: '/services' },
+      { label: 'Market Entry Strategy', path: '/services' },
+      { label: 'Channel Partnerships', path: '/services' },
+      { label: 'Admissions Operations', path: '/services' },
+      { label: 'Compliance Support', path: '/services' },
     ],
     Resources: [
       { label: 'Blog', path: '/news-blog' },
@@ -88,17 +88,17 @@ export const SITE_CONFIG = {
 
   collaborateTeams: [
     {
-      title: 'General Enquiries',
+      title: 'Institutional Partnerships',
       phone: '+91 11 4680 1133',
       email: 'connect@theglobalavenues.com',
     },
     {
-      title: 'Admissions Support',
+      title: 'Recruitment Operations',
       phone: '+91 93198 31133',
       email: 'admissions@theglobalavenues.com',
     },
     {
-      title: 'Partnerships',
+      title: 'Market Expansion',
       phone: '+91 97178 01133',
       email: 'partnerships@theglobalavenues.com',
     },

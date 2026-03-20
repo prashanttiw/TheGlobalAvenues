@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronLeft, ChevronRight, Landmark, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { portfolioData } from '../data/portfolioData';
+import { getFeaturedPortfolios } from '../services/portfolioService';
 
 export default function PortfolioDisplay({ limit = 10 }) {
   const [portfolios, setPortfolios] = useState([]);
@@ -11,8 +11,31 @@ export default function PortfolioDisplay({ limit = 10 }) {
   const [itemsPerRow, setItemsPerRow] = useState(5);
 
   useEffect(() => {
-    setPortfolios(portfolioData.slice(0, limit));
-    setIsLoading(false);
+    let isMounted = true;
+
+    const loadFeatured = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getFeaturedPortfolios(limit);
+        if (isMounted) {
+          setPortfolios(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setPortfolios([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadFeatured();
+
+    return () => {
+      isMounted = false;
+    };
   }, [limit]);
 
   // Set items per row based on screen size

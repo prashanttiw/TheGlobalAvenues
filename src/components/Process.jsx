@@ -1,42 +1,42 @@
 import { GraduationCap, DollarSign, Plane, Passport, CheckCircle, BookOpen } from 'lucide-react'
 
 export default function Process() {
-  const steps = [
+const steps = [
     {
       number: '01',
       icon: GraduationCap,
-      title: 'Choose University',
-      description: 'Access our network of 350+ degree programs at reputed partner universities worldwide.'
+      title: 'Define Priorities',
+      description: 'Align institutional goals, priority markets, and intake targets.'
     },
     {
       number: '02',
       icon: DollarSign,
-      title: 'Financial Guidance',
-      description: 'Receive comprehensive guidance on funding requirements and cost of living analysis.'
+      title: 'Build Strategy',
+      description: 'Set campaign budgets, channel mix, and measurable performance milestones.'
     },
     {
       number: '03',
       icon: Passport,
-      title: 'Visa Process',
-      description: 'Professional visa interview preparation and complete documentation support.'
+      title: 'Enable Channels',
+      description: 'Train counselor and agent networks with updated program and policy guidance.'
     },
     {
       number: '04',
       icon: CheckCircle,
-      title: 'Fast Acceptance',
-      description: 'Streamlined application process with acceptance within 72 hours.'
+      title: 'Run Operations',
+      description: 'Manage application quality, admissions coordination, and conversion follow-through.'
     },
     {
       number: '05',
       icon: BookOpen,
-      title: 'Pre-Departure',
-      description: 'Comprehensive briefing and orientation for smooth transition to your destination.'
+      title: 'Review Performance',
+      description: 'Track outcomes by market and optimize for stronger conversion quality.'
     },
     {
       number: '06',
       icon: Plane,
-      title: 'Arrival Support',
-      description: 'On-arrival assistance, accommodation guidance, and ongoing student support services.'
+      title: 'Scale Impact',
+      description: 'Expand successful playbooks across additional markets and recruitment cycles.'
     },
   ]
 
@@ -45,9 +45,9 @@ export default function Process() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="section-heading">End-to-End Student Journey</h2>
+          <h2 className="section-heading">End-to-End Partnership Delivery</h2>
           <p className="section-subheading max-w-2xl mx-auto">
-            We support you at every step from university selection to arrival and beyond.
+            We support institutions at every step from market planning to sustainable enrollment growth.
           </p>
         </div>
 
@@ -87,9 +87,9 @@ export default function Process() {
         {/* CTA Section */}
         <div className="mt-16 text-center">
           <p className="text-lg text-muted-foreground mb-6">
-            Ready to start your international education journey?
+            Ready to launch your institutional growth roadmap?
           </p>
-          <button className="btn-primary">Begin Your Journey</button>
+          <button className="btn-primary">Start Collaboration</button>
         </div>
       </div>
     </section>

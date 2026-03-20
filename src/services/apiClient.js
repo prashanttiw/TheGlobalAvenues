@@ -25,6 +25,26 @@ export const buildApiUrl = (route, slug) => {
   return `${normalized}/${routePath}`;
 };
 
+export const buildApiQueryUrl = (route, params = {}) => {
+  if (!route) {
+    throw new Error('Route is required');
+  }
+
+  const queryParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null || String(value).trim() === '') return;
+    queryParams.append(key, String(value));
+  });
+  const queryString = queryParams.toString();
+
+  if (API_BASE_URL.includes('?route=')) {
+    return queryString ? `${API_BASE_URL}${route}&${queryString}` : `${API_BASE_URL}${route}`;
+  }
+
+  const normalized = API_BASE_URL.replace(/\/+$/, '');
+  return queryString ? `${normalized}/${route}?${queryString}` : `${normalized}/${route}`;
+};
+
 export const resolveMediaUrl = (path) => {
   if (!path) return '';
   if (/^https?:\/\//i.test(path)) return path;
@@ -41,6 +61,10 @@ export async function fetchJson(url, options = {}) {
 
   if (!response.ok) {
     throw new Error(`Request failed (${response.status})`);
+  }
+
+  if (payload === null) {
+    throw new Error('Invalid API response');
   }
 
   if (payload && payload.status === false) {

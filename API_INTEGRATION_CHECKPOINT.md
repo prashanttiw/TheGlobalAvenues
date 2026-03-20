@@ -2,60 +2,76 @@
 
 Last updated: March 20, 2026
 
-## Current Status
+## Completed In This Phase
 
-- We paused integration intentionally.
-- `settings` route is already analyzed and documented in `API_ROUTE_FIELD_MAPPING.md`.
-- Live verified endpoint:
-  - `https://admin.theglobalavenues.com/public/api?route=settings`
-- Verified returned fields:
-  - `id, site_name, logo, favicon, email, phone, address, facebook, linkedin, instagram, twitter, updated_at`
-
-## What Is Already Safe
-
-- Frontend has fallback defaults in `src/config.js` if API values are empty/missing.
-- Settings mapping logic is in `src/context/SettingsContext.jsx`.
-- No runtime-breaking dependency on settings API completeness.
-
-## Resume Plan (Do This Next Time)
-
-Follow this exact order:
-
-1. `settings` final confirm + backend clean values
-2. `gallery`
-3. `blog` list + `blog&post=...` detail
-4. `offerings`
+Routes integrated with fallback-safe frontend mapping:
+1. `gallery`
+2. `home`
+3. `blog` (list + detail)
+4. `offerings` (list + detail)
 5. `portfolio`
-6. `testimonials`
-7. remaining APIs
+6. `university` (list + detail)
+7. `settings`
+8. `testimonials`
 
-## FileZilla Files To Open First (When Resuming)
+## What Changed (Code)
 
-1. `public/api/index.php`
-2. `public/api/SettingsApi.php`
-3. `public/api/GalleryApi.php`
-4. `public/api/BlogApi.php`
-5. `public/api/OfferingApi.php`
-6. `public/api/PortfolioApi.php`
-7. `public/api/TestimonialApi.php`
-8. `public/api/response.php`
-9. `public/api/header.php`
-10. `public/api/cache.php`
+1. API layer:
+- `src/services/apiClient.js` (query route support + non-JSON safety)
+- `src/services/contentApi.js` (all route helpers including blog query detail and university list)
 
-## Quick Resume Commands
+2. Route consumers updated:
+- `src/pages/GalleryPage.jsx`
+- `src/pages/NewsVlogPage.jsx`
+- `src/pages/NewsDetailPage.jsx`
+- `src/pages/WhatWeOfferPage.jsx`
+- `src/pages/EducationProgramPage.jsx`
+- `src/services/portfolioService.js`
+- `src/components/PortfolioDisplay.jsx`
+- `src/pages/UniversitiesPage.jsx`
+- `src/components/Header.jsx`
+- `src/pages/PortfolioDetailPage.jsx`
+- `src/components/Testimonials.jsx`
+- `src/context/SettingsContext.jsx`
+- `src/components/home/HeroSection.jsx`
+- `src/components/Services.jsx`
+- `src/context/HomeContentContext.jsx`
+- `src/App.jsx`
+- `src/components/Footer.jsx`
+
+3. Documentation refreshed:
+- `API_ROUTE_FIELD_MAPPING.md`
+- `API_INTEGRATION_GUIDE.md`
+- `API_INTEGRATION_CHECKPOINT.md`
+
+## Live Backend Notes (Important)
+
+- `offerings` list endpoint is currently broken server-side due SQL column mismatch (`duration`).
+- Frontend is protected with fallback content, so UI does not break.
+- `home`, `blog`, `portfolio`, `university`, `testimonials` currently return empty arrays in production, but fallback behavior is active.
+
+## Verification Standard
+
+Run before push:
+
+```bash
+npm run lint
+npm run build
+```
+
+Optional live route check:
 
 ```powershell
 curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=settings"
+curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=home"
 curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=gallery"
 curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=blog"
-curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=blog&post=test"
 curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=offerings"
 curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=portfolio"
+curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=university"
 curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=testimonials"
 ```
 
-## Paste This When You Return
+## Resume Prompt
 
-Use this message to restart instantly:
-
-`Resume API integration from API_INTEGRATION_CHECKPOINT.md. Continue from gallery route, keep fallback-safe mapping, and update API_ROUTE_FIELD_MAPPING.md after each route.`
+`Resume from API_INTEGRATION_CHECKPOINT.md. Start with backend fixes for offerings/portfolio routes, then integrate remaining APIs (home, partners, and any new routes) with fallback-safe frontend mapping and update all API docs.`
