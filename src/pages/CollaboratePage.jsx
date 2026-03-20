@@ -55,8 +55,8 @@ export default function CollaboratePage() {
   const highlightChips = useMemo(
     () => [
       `${siteConfig.stats.partnerUniversities} University Links`,
-      `${siteConfig.stats.studentsRecruited} Student Journeys`,
-      `${siteConfig.stats.visaSuccessRate} Visa Success`,
+      `${siteConfig.stats.studentsRecruited} Applications Managed`,
+      `${siteConfig.stats.visaSuccessRate} Conversion Performance`,
     ],
     [siteConfig.stats]
   );
@@ -79,7 +79,7 @@ export default function CollaboratePage() {
         icon: Users,
         title: 'Execution & Growth',
         description:
-          'We activate campaigns, manage student pipelines, and optimize continuously for stronger outcomes.',
+          'We activate campaigns, manage institution pipelines, and optimize continuously for stronger enrollment outcomes.',
       },
     ],
     []
@@ -137,7 +137,7 @@ export default function CollaboratePage() {
             </span>
           </h1>
           <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Reach our collaboration desk to discuss student recruitment, market expansion, admissions support, and
+            Reach our collaboration desk to discuss university representation, market expansion, admissions operations, and
             long-term institutional growth across India and beyond.
           </p>
         </div>

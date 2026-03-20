@@ -31,15 +31,6 @@ export default function HomePage() {
       <Suspense fallback={<SectionSkeleton height="h-24" />}>
         <UniversityTrustBar />
       </Suspense>
-      <div ref={carouselRef}>
-        {carouselVisible ? (
-          <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-            <ImageCarousel />
-          </Suspense>
-        ) : (
-          <SectionSkeleton height="h-[500px]" />
-        )}
-      </div>
       <div ref={servicesRef}>
         {servicesVisible ? (
           <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
@@ -47,6 +38,15 @@ export default function HomePage() {
           </Suspense>
         ) : (
           <SectionSkeleton height="h-[600px]" />
+        )}
+      </div>
+      <div ref={carouselRef}>
+        {carouselVisible ? (
+          <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
+            <ImageCarousel />
+          </Suspense>
+        ) : (
+          <SectionSkeleton height="h-[500px]" />
         )}
       </div>
       <div ref={portfolioRef}>

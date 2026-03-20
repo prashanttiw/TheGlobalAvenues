@@ -155,9 +155,9 @@ export default function EducationSpotlight() {
                     <div className="min-w-0">
                       <p className="text-xs sm:text-sm font-semibold text-white">Limited Time Offer</p>
                       <p className="text-xs text-white/80 leading-snug">Applications closing soon. Secure your spot today!</p>
-                      <a href="#contact" className="text-xs text-white/90 hover:text-white font-medium mt-1.5 sm:mt-2 inline-flex items-center gap-1 group">
+                      <Link to="/collaborate" className="text-xs text-white/90 hover:text-white font-medium mt-1.5 sm:mt-2 inline-flex items-center gap-1 group">
                         Learn more <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

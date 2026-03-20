@@ -51,7 +51,7 @@ export function Hero() {
       <img
         src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
         className="absolute inset-0 w-full h-full object-cover"
-        alt="Students"
+        alt="University partnership meeting"
         loading="lazy"
         decoding="async"
       />
@@ -69,7 +69,7 @@ export function Hero() {
         >
           {/* Heading */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Unlock Your Potential With
+            Scale Your Global Reach With
             <span className="block text-blue-300 text-5xl sm:text-6xl lg:text-7xl mt-2">
               {siteConfig.company.name.toUpperCase()}
             </span>
@@ -88,7 +88,7 @@ export function Hero() {
             to="/services"
             className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg"
           >
-            Explore Pathways
+            Explore Services
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -103,7 +103,7 @@ export function Hero() {
     <h3 className="text-3xl font-bold">
       <CountUpNumber target={studentsPlaced} />+
     </h3>
-    <p className="text-gray-200 mt-1">Students Placed</p>
+    <p className="text-gray-200 mt-1">Applications Managed</p>
   </div>
 
   {/* Card 2 */}
@@ -121,7 +121,7 @@ export function Hero() {
     <h3 className="text-3xl font-bold">
       <CountUpNumber target={visaSuccessRate} />%
     </h3>
-    <p className="text-gray-200 mt-1">Success Rate</p>
+    <p className="text-gray-200 mt-1">Conversion Success</p>
   </div>
 
 </div>

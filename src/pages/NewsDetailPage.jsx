@@ -4,8 +4,45 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Eye, MessageCircle, Share2, User } from 'lucide-react';
 import { getBlogDetail } from '../services/contentApi';
 import { resolveMediaUrl } from '../services/apiClient';
+import { newsItems as fallbackNewsItems } from '../data/newsData';
 
 const getCardImage = (item) => item.thumbnail || item.image;
+const normalizeText = (value) =>
+  String(value || '')
+    .replace(/<[^>]*>/g, '')
+    .trim();
+
+const mapFallbackPost = (item) => ({
+  id: item.id,
+  slug: item.slug || String(item.id),
+  type: item.type || 'blog',
+  title: item.title || 'Untitled',
+  excerpt: normalizeText(item.excerpt || item.summary || ''),
+  content: normalizeText(item.content || item.body || item.description || item.excerpt || ''),
+  image: item.image || item.thumbnail || '',
+  author: item.author || 'The Global Avenues',
+  date: item.date || '',
+  readTime: item.readTime || '5 min read',
+  category: item.category || 'General',
+  views: item.views ? Number(item.views) : 0,
+  videoUrl: item.videoUrl || '',
+});
+
+const findFallbackPostBySlugOrId = (id) =>
+  fallbackNewsItems.find((item) => item.slug === id || String(item.id) === String(id));
+
+const getFallbackRelated = (source) =>
+  fallbackNewsItems
+    .filter((item) => item.id !== source?.id && item.category === source?.category)
+    .slice(0, 4)
+    .map((item) => ({
+      id: item.id,
+      slug: item.slug || String(item.id),
+      title: item.title,
+      category: item.category || 'General',
+      date: item.date || null,
+      image: item.image || item.thumbnail || '',
+    }));
 
 export default function NewsDetailPage() {
   const { id } = useParams();
@@ -14,12 +51,7 @@ export default function NewsDetailPage() {
   const [newsItem, setNewsItem] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const normalizeText = (value) =>
-    String(value || '')
-      .replace(/<[^>]*>/g, '')
-      .trim();
+  const [errorMessage, setErrorMessage] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -28,7 +60,8 @@ export default function NewsDetailPage() {
 
     const loadPost = async () => {
       setIsLoading(true);
-      setErrorMessage('');
+      setErrorMessage(false);
+      const fallbackBySlugOrId = findFallbackPostBySlugOrId(id);
 
       try {
         const data = await getBlogDetail(id, { signal: controller.signal });
@@ -36,8 +69,14 @@ export default function NewsDetailPage() {
         const related = data?.related || [];
 
         if (!post) {
-          setNewsItem(null);
-          setRelatedArticles([]);
+          if (fallbackBySlugOrId) {
+            const fallbackPost = mapFallbackPost(fallbackBySlugOrId);
+            setNewsItem(fallbackPost);
+            setRelatedArticles(getFallbackRelated(fallbackBySlugOrId));
+          } else {
+            setNewsItem(null);
+            setRelatedArticles([]);
+          }
           return;
         }
 
@@ -54,6 +93,7 @@ export default function NewsDetailPage() {
           readTime: post.read_time || '5 min read',
           category: post.category || 'General',
           views: post.views ? Number(post.views) : 0,
+          videoUrl: post.video_url || post.videoUrl || '',
         };
 
         const mappedRelated = related.map((item) => ({
@@ -69,7 +109,13 @@ export default function NewsDetailPage() {
         setRelatedArticles(mappedRelated);
       } catch (error) {
         if (error.name !== 'AbortError') {
-          setErrorMessage(error.message || 'Unable to load article');
+          if (fallbackBySlugOrId) {
+            const fallbackPost = mapFallbackPost(fallbackBySlugOrId);
+            setNewsItem(fallbackPost);
+            setRelatedArticles(getFallbackRelated(fallbackBySlugOrId));
+          } else {
+            setErrorMessage(true);
+          }
         }
       } finally {
         setIsLoading(false);
@@ -99,7 +145,11 @@ export default function NewsDetailPage() {
         <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ duration: 0.4 }}>
           <h1 className="mb-4 text-4xl font-bold">{isLoading ? 'Loading...' : 'Article Not Found'}</h1>
           <p className="mb-8 text-muted-foreground">
-            {errorMessage || (isLoading ? 'Fetching the latest article.' : 'The article you\'re looking for doesn\'t exist.')}
+            {isLoading
+              ? 'Fetching the latest article.'
+              : errorMessage
+                ? 'This article is unavailable right now.'
+                : 'The article you\'re looking for doesn\'t exist.'}
           </p>
           <button
             onClick={() => navigate('/news-blog')}

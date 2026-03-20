@@ -62,7 +62,7 @@ export function Footer() {
   const { siteConfig } = useSettings();
   const links = Object.entries(siteConfig.footerLinks);
   const [firstLinkGroup, secondLinkGroup, thirdLinkGroup] = links;
-  const footerLogoSrc = siteConfig.company.logo.darkSrc || siteConfig.company.logo.lightSrc;
+  const footerLogoSrc = '/logo-footer-white-transparent.png';
   const socialIcons = ['facebook', 'twitter', 'instagram', 'linkedin'];
   const partnerLogos = [
     { src: '/21.jpg', top: '8%', left: '4%', rotate: '-12deg', size: 'h-32 w-32', hotspot: 'h-72 w-72' },
@@ -166,7 +166,7 @@ export function Footer() {
               alt={siteConfig.company.logo.alt}
               loading="lazy"
               decoding="async"
-              className="h-10 w-auto"
+              className="h-11 w-auto"
             />
             <p className="mt-3 max-w-[220px] text-sm leading-relaxed text-white/60 sm:max-w-[260px]">
               {siteConfig.company.description}
@@ -174,15 +174,34 @@ export function Footer() {
 
             {socialIcons.length > 0 && (
               <div className="mt-5 flex justify-center gap-3 sm:justify-start">
-                {socialIcons.map((key) => (
-                  <span
-                    key={key}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/60 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 hover:border-brand-orange hover:bg-brand-orange hover:text-white active:-translate-y-0.5 active:scale-110 active:border-brand-orange active:bg-brand-orange active:text-white"
-                    aria-hidden="true"
-                  >
-                    {SOCIAL_ICON_PATHS[key]}
-                  </span>
-                ))}
+                {socialIcons.map((key) => {
+                  const socialUrl = siteConfig.social?.[key];
+
+                  if (socialUrl) {
+                    return (
+                      <a
+                        key={key}
+                        href={socialUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/60 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 hover:border-brand-orange hover:bg-brand-orange hover:text-white active:-translate-y-0.5 active:scale-110 active:border-brand-orange active:bg-brand-orange active:text-white"
+                        aria-label={`Visit our ${key} page`}
+                      >
+                        {SOCIAL_ICON_PATHS[key]}
+                      </a>
+                    );
+                  }
+
+                  return (
+                    <span
+                      key={key}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/60 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 hover:border-brand-orange hover:bg-brand-orange hover:text-white active:-translate-y-0.5 active:scale-110 active:border-brand-orange active:bg-brand-orange active:text-white"
+                      aria-hidden="true"
+                    >
+                      {SOCIAL_ICON_PATHS[key]}
+                    </span>
+                  );
+                })}
               </div>
             )}
           </div>

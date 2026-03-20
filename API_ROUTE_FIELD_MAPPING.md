@@ -1,235 +1,317 @@
-# API Route and Field Mapping (Frontend <-> PHP API)
+# API Route Field Mapping
 
-Last updated: March 20, 2026  
-Focus now: **Step 1 - `settings` API only** (as requested)
+Last updated: March 20, 2026
+Scope completed in this phase:
+1. GalleryApi
+2. HomeApi
+3. BlogApi (list + detail)
+4. OfferingApi (list + detail with safe fallback)
+5. PortfolioApi (list)
+6. UniversityApi (list + detail)
+7. SettingsApi
+8. TestimonialApi
+
+Base endpoint:
+`https://admin.theglobalavenues.com/public/api?route=`
 
 ---
 
-## 1) Live `settings` API response (verified)
+## 1) Central API Client Layer
+
+Primary files:
+- `src/services/apiClient.js`
+- `src/services/contentApi.js`
+
+Key behavior:
+- Builds route URLs for both styles:
+  - path style: `?route=university/slug`
+  - query style: `?route=blog&post=slug`
+- Throws on invalid/non-JSON payloads (important when PHP returns fatal HTML)
+- Keeps all pages fallback-safe via page-level local data defaults
+
+---
+
+## 2) Route-by-Route Mapping
+
+### A) `gallery`
 
 Endpoint:
+- `GET ?route=gallery`
 
-`https://admin.theglobalavenues.com/public/api?route=settings`
+Backend source (FileZilla):
+- `GalleryApi.php`
 
-Live response snapshot:
+Frontend service + consumers:
+- `src/services/contentApi.js` -> `getGallery()`
+- `src/pages/GalleryPage.jsx`
 
-```json
-{
-  "status": true,
-  "message": "Success",
-  "data": {
-    "id": 1,
-    "site_name": "The Global Avenues",
-    "logo": "",
-    "favicon": "",
-    "email": "",
-    "phone": "",
-    "address": "",
-    "facebook": "",
-    "linkedin": "",
-    "instagram": "",
-    "twitter": "",
-    "updated_at": "2026-03-15 18:42:36"
-  }
-}
-```
+Field mapping:
+- `category` -> `categoryLabel`
+- `category` -> normalized `categoryKey`
+- `images[].image` -> `item.image` (via `resolveMediaUrl`)
+- `images[].caption` -> `item.title`
 
-Exact keys currently returned by backend:
-
-- `id`
-- `site_name`
-- `logo`
-- `favicon`
-- `email`
-- `phone`
-- `address`
-- `facebook`
-- `linkedin`
-- `instagram`
-- `twitter`
-- `updated_at`
+Fallback behavior:
+- Empty/fail response -> uses `FALLBACK_GALLERY_RESPONSE`
+- Invalid entries filtered
+- Duplicate image URLs per category deduped
+- UI still renders cards silently with fallback content
 
 ---
 
-## 2) How to get fields quickly (for future checks)
+### B) `home`
 
-### Browser
+Endpoint:
+- `GET ?route=home`
 
-Open:
+Backend source:
+- `HomeApi.php`
 
-`https://admin.theglobalavenues.com/public/api?route=settings`
+Frontend service + consumers:
+- `src/services/contentApi.js` -> `getHomeContent()`
+- `src/context/HomeContentContext.jsx`
+- `src/components/home/HeroSection.jsx`
+- `src/components/Services.jsx`
 
-### Terminal (Windows PowerShell)
+Field mapping:
+- `hero[]` -> hero badge/title lines/description/cta labels+urls (when provided)
+- `why_choose[]` -> end-to-end support cards on homepage
+- `solutions[]` -> service cards on homepage
 
-```powershell
-curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=settings"
-```
-
-### Quick field-only view
-
-```powershell
-$r = curl.exe -sS -L "https://admin.theglobalavenues.com/public/api?route=settings" | ConvertFrom-Json
-$r.data | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name
-```
+Fallback behavior:
+- Empty/fail response -> existing hardcoded homepage content remains active
+- No API/fallback warning messages are shown to users
 
 ---
 
-## 3) Frontend files that consume `settings`
+### C) `blog` list + detail
 
-Main fetch + mapping layer:
+Endpoints:
+- `GET ?route=blog`
+- `GET ?route=blog&post=<slug>` (confirmed from `BlogApi.php`)
 
+Backend source:
+- `BlogApi.php`
+
+Frontend service + consumers:
+- `src/services/contentApi.js`
+  - `getBlogList()`
+  - `getBlogDetail(slug)` (tries query style first)
+- `src/pages/NewsVlogPage.jsx`
+- `src/pages/NewsDetailPage.jsx`
+
+Field mapping (list):
+- `id` -> `id`
+- `slug` -> `slug`
+- `title` -> `title`
+- `featured_image` -> `image/thumbnail`
+- `author` -> `author`
+- `created_at` -> `date`
+- `read_time` -> `readTime`
+- `category` -> `category`
+
+Field mapping (detail):
+- `data.post.*` -> detail article model
+- `data.related[]` -> related cards
+
+Fallback behavior:
+- If list empty/fail -> uses `src/data/newsData.js`
+- If detail missing/fail -> fallback post by slug/id from `newsData`
+
+---
+
+### D) `offerings` list + detail
+
+Endpoints:
+- `GET ?route=offerings`
+- `GET ?route=offerings/<slug>`
+
+Backend source:
+- `OfferingApi.php`
+
+Frontend service + consumers:
+- `src/services/contentApi.js`
+  - `getOfferings()`
+  - `getOfferingDetail(slug)`
+- `src/pages/WhatWeOfferPage.jsx`
+- `src/pages/EducationProgramPage.jsx`
+
+Field mapping (list):
+- `slug` -> program key for tabs
+- `title` -> program name
+- `description` -> overview
+- `countries` -> parsed countries chips/list
+
+Field mapping (detail):
+- `offering.duration` -> duration blocks
+- `offering.partner_universities` -> institutions metric
+- `offering.students_enrolled` -> students metric
+- `programs[]` -> per-level enrich when available
+
+Fallback behavior:
+- If list/detail empty or fail -> static local datasets remain active
+
+Live backend issue (confirmed March 20, 2026):
+- `?route=offerings` currently returns PHP fatal:
+  - unknown DB column `duration` in list query
+- Frontend remains stable because local fallback content is retained
+
+---
+
+### E) `portfolio` list
+
+Endpoint:
+- `GET ?route=portfolio`
+
+Backend source:
+- `PortfolioApi.php`
+
+Frontend service + consumers:
+- `src/services/contentApi.js` -> `getPortfolioList()`
+- `src/services/portfolioService.js` (CMS + local merge)
+- Consumers:
+  - `src/pages/PortfolioPage.jsx`
+  - `src/components/PortfolioDisplay.jsx`
+  - `src/components/Header.jsx`
+  - `src/pages/UniversitiesPage.jsx`
+
+Field mapping (list):
+- `name/title` -> `title`
+- `slug` -> `slug`
+- `logo/image/featured_image` -> `image`
+- `country` -> `country`
+- Optional stats fields -> `studentsPlaced`, `programs`, `successRate`
+
+Fallback behavior:
+- If API empty/fail -> uses `src/data/portfolioData.js`
+- If API has partial fields -> merges over local base by slug
+
+---
+
+### F) `university` list + detail
+
+Endpoints:
+- `GET ?route=university`
+- `GET ?route=university/<slug>`
+
+Backend source:
+- `UniversityApi.php`
+
+Frontend service + consumers:
+- `src/services/contentApi.js`
+  - `getUniversityList()`
+  - `getUniversityDetail(slug)`
+- `src/pages/UniversitiesPage.jsx` (list + merge overlay)
+- `src/pages/PortfolioDetailPage.jsx` (detail enrichment)
+
+Field mapping (detail):
+- `university.name` -> institution title
+- `university.logo` -> hero image
+- `university.country/city` -> location
+- `university.description` -> about block
+- `specializations[].title` -> specialization tags
+- `benefits[].title` -> highlight cards
+- `programs[]` -> program counts/details
+- `experiences[]` -> student testimonials cards
+
+Fallback behavior:
+- If detail route fails -> local portfolio detail remains rendered
+- If list route empty -> page shows portfolio fallback list silently
+
+---
+
+### G) `settings`
+
+Endpoint:
+- `GET ?route=settings`
+
+Backend source:
+- `SettingsApi.php`
+
+Frontend service + consumers:
 - `src/services/contentApi.js` -> `getSettings()`
-- `src/context/SettingsContext.jsx` -> fetch + transform + fallback merge
-- `src/config.js` -> default fallback values (`SITE_CONFIG`)
+- `src/context/SettingsContext.jsx` -> `buildSiteConfig()`
 
-UI files using mapped `siteConfig`:
+Global propagation targets now reading settings-derived config:
+- `src/components/Header.jsx` (logo, nav labels)
+- `src/components/Footer.jsx` (email/phone/address + social links when provided)
+- `src/components/home/HeroSection.jsx` (stats cards)
+- `src/pages/AboutPage.jsx` (stats section)
+- `src/pages/CollaboratePage.jsx` (email/phone/address/team cards/WhatsApp)
+- `src/pages/UniversitiesPage.jsx` (top stats)
 
-- `src/components/Header.jsx`
-- `src/components/Footer.jsx`
-- `src/pages/AboutPage.jsx`
-- `src/pages/CollaboratePage.jsx`
-- `src/pages/UniversitiesPage.jsx`
+Field mapping examples:
+- `site_name` -> `siteConfig.company.name`
+- `logo / logo_light / logo_dark` -> `siteConfig.company.logo.*`
+- `email` -> `siteConfig.contact.email.general`
+- `phone` -> `siteConfig.contact.phone[]`
+- `address/city/state/country/zipcode` -> `siteConfig.contact.address`
+- `facebook/linkedin/instagram/twitter/whatsapp` -> `siteConfig.social.*`
 
----
-
-## 4) What frontend can map from settings (accepted aliases)
-
-From `src/context/SettingsContext.jsx`:
-
-- Company name: `site_name`, `company_name`, `name`
-- Tagline: `tagline`, `site_tagline`, `slogan`
-- Description: `description`, `site_description`, `about`
-- Light logo: `logo_light`, `logo`, `site_logo`, `logo_white`
-- Dark logo: `logo_dark`, `logo_dark_mode`, `logo_black`
-- Phones: `phones`, `phone`, `contact_phone`, `mobile`
-- General email: `email`, `contact_email`, `general_email`, `site_email`
-- Admissions email: `admissions_email`, `admission_email`
-- Partnerships email: `partnerships_email`, `partners_email`
-- Address line: `address`, `address_line1`, `street`, `office_address`
-- Address meta: `city`, `state`, `country`, `zipcode`, `zip`, `postal_code`
-- Social:
-  - `facebook`, `facebook_url`
-  - `linkedin`, `linkedin_url`
-  - `youtube`, `youtube_url`
-  - `instagram`, `instagram_url`
-  - `twitter`, `twitter_url`, `x`, `x_url`
-  - `whatsapp`, `whatsapp_url`
-- Stats:
-  - `students_recruited`, `students`, `students_placed`
-  - `partner_universities`, `universities`
-  - `countries_covered`, `countries`
-  - `visa_success_rate`, `visa_success`
+Fallback behavior:
+- Empty API fields do not override non-empty defaults from `src/config.js`
 
 ---
 
-## 5) Current `settings` field -> frontend mapping status
+### H) `testimonials`
 
-| API Field | Frontend Reads? | Mapped To | Notes |
-|---|---|---|---|
-| `id` | No | - | informational only |
-| `site_name` | Yes | `siteConfig.company.name` | active |
-| `logo` | Yes | `siteConfig.company.logo.lightSrc` | active |
-| `favicon` | No | - | not wired in frontend yet |
-| `email` | Yes | `siteConfig.contact.email.general` | active |
-| `phone` | Yes | `siteConfig.contact.phone` | active |
-| `address` | Yes | `siteConfig.contact.address.street` | active |
-| `facebook` | Yes | `siteConfig.social.facebook` | stored; currently not rendered as clickable link in footer |
-| `linkedin` | Yes | `siteConfig.social.linkedin` | stored; currently not rendered as clickable link in footer |
-| `instagram` | Yes | `siteConfig.social.instagram` | stored; currently not rendered as clickable link in footer |
-| `twitter` | Yes | `siteConfig.social.twitter` | stored; currently not rendered as clickable link in footer |
-| `updated_at` | No | - | informational only |
+Endpoint:
+- `GET ?route=testimonials`
 
----
+Backend source:
+- `TestimonialApi.php`
 
-## 6) Where mapped values appear in UI
+Frontend service + consumers:
+- `src/services/contentApi.js` -> `getTestimonials()`
+- `src/components/Testimonials.jsx`
 
-### Header (`src/components/Header.jsx`)
+Field mapping:
+- `name` -> `name`
+- `designation/location/city` -> `location`
+- `message/review/content` -> `content`
+- `photo` -> avatar image
+- `rating` -> stars (clamped 1..5)
 
-- `siteConfig.company.logo.lightSrc`
-- `siteConfig.company.logo.darkSrc`
-- `siteConfig.navigation.*` (from local config; not from settings API)
-
-### Footer (`src/components/Footer.jsx`)
-
-- `siteConfig.company.name`
-- `siteConfig.company.description`
-- `siteConfig.company.logo.*`
-- `siteConfig.contact.email.general`
-- `siteConfig.contact.phone[0]`
-- `siteConfig.contact.address`
-
-### About (`src/pages/AboutPage.jsx`)
-
-- `siteConfig.stats.partnerUniversities`
-- `siteConfig.stats.countriesCovered`
-- `siteConfig.stats.studentsRecruited`
-
-### Collaborate (`src/pages/CollaboratePage.jsx`)
-
-- `siteConfig.contact.phone`
-- `siteConfig.contact.email.general`
-- `siteConfig.contact.address`
-- `siteConfig.stats.*`
-- `siteConfig.social.whatsapp`
-
-### Universities (`src/pages/UniversitiesPage.jsx`)
-
-- `siteConfig.stats.partnerUniversities`
-- `siteConfig.stats.studentsRecruited`
-- `siteConfig.stats.visaSuccessRate`
+Fallback behavior:
+- Empty/fail response -> uses local fallback testimonials array
 
 ---
 
-## 7) Fallback behavior (very important)
+## 3) Current Live API Snapshot Status (March 20, 2026)
 
-If `settings` API fails OR any field is empty:
-
-1. App keeps defaults from `src/config.js` (`SITE_CONFIG`)
-2. Empty strings from API are ignored by mapper
-3. Only valid non-empty values override defaults
-4. UI remains stable (no blank content crash)
-
----
-
-## 8) What to open in FileZilla for `settings` route
-
-Start with these backend files:
-
-1. `public/api/index.php` (or route entry file handling `route=settings`)
-2. `public/api/SettingsApi.php` (or `public/api/controllers/SettingsApi.php`)
-3. `public/api/config.php`
-4. `public/api/header.php`
-5. `public/api/response.php`
-6. `public/api/cache.php`
-
-Check these points inside `SettingsApi.php`:
-
-- SQL query field list (`SELECT ... FROM settings`)
-- response shape uses `ApiResponse::success($data)` style
-- ensure field names match frontend mapper aliases above
-- avoid returning empty strings for critical fields when DB has data
+- `settings`: success
+- `home`: success (currently all arrays empty)
+- `gallery`: success
+- `blog`: success (currently empty list)
+- `blog&post=test`: "Post not found" (expected)
+- `offerings`: backend SQL fatal (known issue)
+- `offerings/test`: "Offering not found" (route pattern works)
+- `portfolio`: success (currently empty list)
+- `university`: success (currently empty list)
+- `testimonials`: success (currently empty list)
 
 ---
 
-## 9) Integration order we will follow next
+## 4) Quick Verify Commands
 
-As discussed, we will proceed in this order:
+```powershell
+$urls=@(
+  'https://admin.theglobalavenues.com/public/api?route=gallery',
+  'https://admin.theglobalavenues.com/public/api?route=home',
+  'https://admin.theglobalavenues.com/public/api?route=blog',
+  'https://admin.theglobalavenues.com/public/api?route=blog&post=test',
+  'https://admin.theglobalavenues.com/public/api?route=offerings',
+  'https://admin.theglobalavenues.com/public/api?route=portfolio',
+  'https://admin.theglobalavenues.com/public/api?route=university',
+  'https://admin.theglobalavenues.com/public/api?route=settings',
+  'https://admin.theglobalavenues.com/public/api?route=testimonials'
+)
+foreach($u in $urls){ "`n=== $u ==="; curl.exe -sS -L --max-time 45 "$u" }
+```
 
-1. `settings` (current)
-2. `gallery`
-3. `blog` + `blog&post=...`
-4. `offerings`
-5. `portfolio`
-6. `testimonials`
-7. then remaining APIs
+And frontend validation:
 
----
-
-## 10) Immediate next action for you
-
-From FileZilla, open `SettingsApi.php` and share:
-
-- SQL `SELECT` part
-- final response block (where `$data` is returned)
-
-Then I will give you exact backend edits (if needed) and exact frontend field replacement map line-by-line.
+```bash
+npm run lint
+npm run build
+```

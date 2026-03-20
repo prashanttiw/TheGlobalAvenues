@@ -6,51 +6,51 @@ import { resolveMediaUrl } from '../services/apiClient';
 
 const fallbackTestimonials = [
   {
-    name: 'Vardha Kharbanda',
-    location: 'New York',
+    name: 'Regional Partnerships Lead',
+    location: 'Europe',
     photo: 'https://i.pravatar.cc/160?img=47',
     content:
-      'A truly professional team who extended support and trusted me throughout. I would like to express sincere gratitude to the whole team for all the support.',
+      'The Global Avenues delivered a clear South Asia entry strategy with reliable weekly reporting and excellent execution.',
     rating: 5,
   },
   {
-    name: 'Pratibha Mittal',
-    location: 'California',
+    name: 'International Office Director',
+    location: 'United Kingdom',
     photo: 'https://i.pravatar.cc/160?img=32',
     content:
-      "I am pleased with the service I've received. Their professionalism and ability exceeded my expectations. The team showed commendable customer service.",
+      'Their team understands our institutional priorities and consistently sends well-qualified applications aligned to our programs.',
     rating: 5,
   },
   {
-    name: 'Anuj Garg',
-    location: 'Indiana',
+    name: 'Enrollment Manager',
+    location: 'France',
     photo: 'https://i.pravatar.cc/160?img=15',
     content:
-      'My experience with them was extremely nice. They have a very friendly environment where I got to learn a lot.',
+      'Communication, market insight, and on-ground support have been outstanding across every campaign cycle.',
     rating: 5,
   },
   {
-    name: 'Vibha Kokiloo',
-    location: 'Dubai',
+    name: 'Global Recruitment Head',
+    location: 'Germany',
     photo: 'https://i.pravatar.cc/160?img=5',
     content:
-      'Amazing team and great services! I would definitely recommend you to my friends who want to study abroad.',
+      'A dependable representation partner for India with strong counselor relationships and measurable outcomes.',
     rating: 5,
   },
   {
-    name: 'Rajat Chohda',
+    name: 'Institutional Partnerships Team',
     location: 'Netherlands',
     photo: 'https://i.pravatar.cc/160?img=68',
     content:
-      'Just loved the way they work. If you are looking for genuine consultants, please visit them.',
+      'From market activation to applicant conversion, the process has been transparent, structured, and scalable.',
     rating: 5,
   },
   {
-    name: 'Waseem Akram',
-    location: 'France',
+    name: 'Country Manager',
+    location: 'Middle East',
     photo: 'https://i.pravatar.cc/160?img=11',
     content:
-      'Wonderful experience with The Global Avenues. Highly professional and best consulting for students who want to study in Europe. Very grateful!',
+      'A high-trust B2B partner with proven regional understanding and strong institutional alignment.',
     rating: 5,
   },
 ].map((item, index) => ({
@@ -98,8 +98,8 @@ const normalizeTestimonials = (rawTestimonials = []) =>
 
       return {
         id: firstValue(item, ['id', 'slug']) || `${name || 'testimonial'}-${index}`,
-        name: name || 'Student',
-        location: location || 'Global Student',
+        name: name || 'Partner Representative',
+        location: location || 'Global Partner Network',
         content,
         rating: clampRating(firstValue(item, ['rating', 'stars'])),
         photo: photo ? resolveMediaUrl(photo) : '',
@@ -191,7 +191,6 @@ export function Testimonials() {
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [testimonials, setTestimonials] = useState(fallbackTestimonials);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUsingFallback, setIsUsingFallback] = useState(false);
 
   const totalTestimonials = testimonials.length;
   const activeDotIndex = isSliding ? nextIndex : currentIndex;
@@ -233,7 +232,6 @@ export function Testimonials() {
 
     const loadTestimonials = async () => {
       setIsLoading(true);
-      setIsUsingFallback(false);
 
       try {
         const data = await getTestimonials({ signal: controller.signal });
@@ -255,7 +253,6 @@ export function Testimonials() {
           setNextIndex(0);
           setNextLayoutKey(initialLayout);
           setIsSliding(false);
-          setIsUsingFallback(true);
         }
       } catch (error) {
         if (error.name !== 'AbortError') {
@@ -266,7 +263,6 @@ export function Testimonials() {
           setNextIndex(0);
           setNextLayoutKey(initialLayout);
           setIsSliding(false);
-          setIsUsingFallback(true);
         }
       } finally {
         setIsLoading(false);
@@ -391,10 +387,10 @@ export function Testimonials() {
             Testimonials
           </div>
           <h2 className="section-title-classic mb-4">
-            What Students Say <span className="section-title-classic-accent">About Us</span>
+            What Institutions Say <span className="section-title-classic-accent">About Us</span>
           </h2>
           <p className="section-subtitle-classic">
-            Trusted voices from students and families we have guided across international admissions.
+            Trusted feedback from university partners and recruitment stakeholders we support across markets.
           </p>
         </div>
 
@@ -445,12 +441,6 @@ export function Testimonials() {
                   {activeDotIndex + 1} / {testimonials.length}
                 </p>
               </div>
-            )}
-
-            {isUsingFallback && (
-              <p className="mt-5 text-center text-sm text-muted-foreground">
-                Showing offline testimonials while API is unavailable.
-              </p>
             )}
           </div>
         )}

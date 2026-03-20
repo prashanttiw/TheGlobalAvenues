@@ -66,7 +66,7 @@ export default function Navigation() {
     { name: 'Services', href: '/services' },
     { name: 'Portfolio', href: '/portfolio' },
     { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Contact', href: '/collaborate' },
   ]
 
   const educationPrograms = [
@@ -149,7 +149,9 @@ export default function Navigation() {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <button className="btn-secondary">Connect Now</button>
+            <Link to="/collaborate" className="btn-secondary">
+              Connect Now
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -211,7 +213,9 @@ export default function Navigation() {
               )}
             </div>
             
-            <button className="w-full btn-secondary mt-4">Connect Now</button>
+            <Link to="/collaborate" className="w-full btn-secondary mt-4 block text-center">
+              Connect Now
+            </Link>
           </div>
         )}
       </div>

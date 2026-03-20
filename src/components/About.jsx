@@ -1,30 +1,31 @@
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const offerings = [
   {
-    title: 'Choosing University/School',
-    description: '350+ degree programs conducted in English from reputed partner universities.',
+    title: 'Institution Positioning',
+    description: 'Structured positioning support across 350+ degree pathways from reputed partner universities.',
   },
   {
-    title: 'Financial Support',
-    description: 'Guidance on fund requirements and cost of living at your study destination.',
+    title: 'Market Feasibility',
+    description: 'Guidance on investment planning, pricing expectations, and market-entry viability.',
   },
   {
-    title: 'Immigration/Arrival Support',
-    description: 'Full assistance with embassy guidelines, accommodation, and practicalities.',
+    title: 'Policy Readiness',
+    description: 'Support with policy-sensitive requirements, documentation standards, and partner compliance.',
   },
   {
-    title: 'Visa Process',
-    description: 'Complete support with visa application, interview preparation, and documentation.',
+    title: 'Admissions Alignment',
+    description: 'Complete support aligning admissions workflows, SLAs, and conversion operations.',
   },
   {
-    title: 'Acceptance within 72hrs',
-    description: 'Simple and fast application process ensuring you do not miss enrollment deadlines.',
+    title: 'Fast Turnaround',
+    description: 'Efficient process governance to keep decision cycles on time and intake-ready.',
   },
   {
-    title: 'Pre Departure Briefing',
-    description: 'Key information and checklist to ensure smooth transition to your study destination.',
+    title: 'Partner Launch Planning',
+    description: 'Execution checklist to ensure smooth rollout across channels and regional stakeholders.',
   },
 ];
 
@@ -71,22 +72,22 @@ export function About() {
               About Us
             </div>
             <h2 className="text-4xl font-bold leading-tight text-foreground lg:text-5xl">
-              Leading Student Recruitment Experts in South Asia
+              Leading University Partnership Experts in South Asia
             </h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
               The Global Avenues leverages its strong presence in South Asia and deep expertise in localized
-              outreach to help you achieve your international student enrollment goals. We collaborate with
+              outreach to help institutions achieve international enrollment goals. We collaborate with
               higher education institutions, schools, and education service providers to create customized
-              plans that enhance brand recognition and attract top-tier students.
+              plans that enhance brand recognition and attract right-fit applicants.
             </p>
             <div className="pt-4">
-              <a
-                href="#contact"
+              <Link
+                to="/collaborate"
                 className="inline-flex items-center gap-2 rounded-lg bg-secondary px-6 py-3 font-semibold text-secondary-foreground transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
-                Start Your Journey
+                Start Your Partnership
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -99,7 +100,7 @@ export function About() {
                   {
                     color: 'text-primary',
                     title: 'Comprehensive Support',
-                    description: 'From university selection to post-arrival assistance',
+                    description: 'From market-entry planning to intake performance tracking',
                   },
                   {
                     color: 'text-secondary',
@@ -109,7 +110,7 @@ export function About() {
                   {
                     color: 'text-accent',
                     title: 'Fast Processing',
-                    description: 'Acceptance within 72 hours of application',
+                    description: 'Rapid turnaround for high-priority partner requirements',
                   },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-4">
@@ -126,7 +127,7 @@ export function About() {
         </div>
 
         <div>
-          <h3 className="mb-8 text-center text-3xl font-bold text-foreground">Our Step-by-Step Support</h3>
+          <h3 className="mb-8 text-center text-3xl font-bold text-foreground">Our Step-by-Step Delivery Model</h3>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {offerings.map((offering, index) => (
               <OfferingCard key={offering.title} offering={offering} index={index} />

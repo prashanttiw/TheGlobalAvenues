@@ -1,256 +1,235 @@
-// Portfolio Service - Backend Ready Architecture
-// This service layer allows easy migration to API calls in the future
-// Change API_BASE_URL and USE_MOCK_DATA to switch between mock data and real backend
-
 import {
   portfolioData,
-  getPortfolioById as getMockPortfolioById,
-  getPortfolioBySlug as getMockPortfolioBySlug,
-  categories,
+  getPortfolioById as getLocalPortfolioById,
+  getPortfolioBySlug as getLocalPortfolioBySlug,
+  categories as localCategories,
 } from '../data/portfolioData';
+import { getPortfolioList } from './contentApi';
+import { resolveMediaUrl } from './apiClient';
 
-// API Configuration - Change this to your backend URL when ready
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-const USE_MOCK_DATA = true; // Set to false when backend is ready
+const cmsPortfolioCache = {
+  loaded: false,
+  data: [],
+};
 
-/**
- * Get featured portfolios (used on home page)
- * @param {number} limit - Number of portfolios to fetch
- * @returns {Promise<Array>}
- */
+const numericOrDefault = (value, fallback = 0) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+const pickText = (item, keys, fallback = '') => {
+  for (const key of keys) {
+    const value = item?.[key];
+    if (value !== undefined && value !== null && String(value).trim() !== '') {
+      return String(value).trim();
+    }
+  }
+  return fallback;
+};
+
+const mapCmsPortfolio = (item, index) => {
+  const title = pickText(item, ['name', 'title'], `University ${index + 1}`);
+  const slug = pickText(item, ['slug'], '').toLowerCase();
+  const country = pickText(item, ['country'], 'Global');
+  const description = pickText(
+    item,
+    ['description', 'summary', 'short_description'],
+    `Explore ${title} and discover global education opportunities.`
+  );
+
+  return {
+    id: item.id || `cms-${index + 1}`,
+    slug: slug || `university-${index + 1}`,
+    title,
+    category: pickText(item, ['category'], 'Partner University'),
+    country,
+    image: resolveMediaUrl(pickText(item, ['logo', 'image', 'featured_image'])),
+    studentsPlaced: numericOrDefault(item.students_enrolled || item.students_placed, 0),
+    programs: numericOrDefault(item.program_count || item.programs, 0),
+    successRate: numericOrDefault(item.success_rate || item.visa_success_rate, 95),
+    achievement: pickText(item, ['achievement'], 'Verified Partner'),
+    description,
+    details: {
+      location: [item.city, country].filter(Boolean).join(', ') || country,
+      ranking: pickText(item, ['ranking'], 'Partner Institution'),
+      specializations: [],
+      visaSuccessRate: numericOrDefault(item.visa_success_rate, 0),
+      avgTuition: pickText(item, ['avg_tuition', 'tuition_fee'], ''),
+      scholarshipAvailable: Boolean(item.scholarship_available),
+      studentTestimonials: [],
+    },
+    highlights: [],
+  };
+};
+
+const mergePortfolioData = (basePortfolio, overridePortfolio) => {
+  if (!basePortfolio) return overridePortfolio;
+  if (!overridePortfolio) return basePortfolio;
+
+  return {
+    ...basePortfolio,
+    ...overridePortfolio,
+    image: overridePortfolio.image || basePortfolio.image,
+    description: overridePortfolio.description || basePortfolio.description,
+    category: overridePortfolio.category || basePortfolio.category,
+    details: {
+      ...(basePortfolio.details || {}),
+      ...(overridePortfolio.details || {}),
+    },
+    highlights:
+      overridePortfolio.highlights && overridePortfolio.highlights.length > 0
+        ? overridePortfolio.highlights
+        : basePortfolio.highlights,
+  };
+};
+
+const fetchCmsPortfolios = async () => {
+  if (cmsPortfolioCache.loaded) {
+    return cmsPortfolioCache.data;
+  }
+
+  try {
+    const data = await getPortfolioList();
+    const mapped = (Array.isArray(data) ? data : [])
+      .map(mapCmsPortfolio)
+      .filter((item) => item.slug && item.title);
+
+    cmsPortfolioCache.loaded = true;
+    cmsPortfolioCache.data = mapped;
+    return mapped;
+  } catch (error) {
+    cmsPortfolioCache.loaded = true;
+    cmsPortfolioCache.data = [];
+    return [];
+  }
+};
+
+const getUnifiedPortfolios = async () => {
+  const cmsPortfolios = await fetchCmsPortfolios();
+
+  if (cmsPortfolios.length === 0) {
+    return portfolioData;
+  }
+
+  const localBySlug = new Map(portfolioData.map((item) => [item.slug, item]));
+  const merged = cmsPortfolios.map((cmsItem) =>
+    mergePortfolioData(localBySlug.get(cmsItem.slug), cmsItem)
+  );
+
+  const existingSlugs = new Set(merged.map((item) => item.slug));
+  const remainingLocal = portfolioData.filter((item) => !existingSlugs.has(item.slug));
+
+  return [...merged, ...remainingLocal];
+};
+
 export const getFeaturedPortfolios = async (limit = 6) => {
-  try {
-    if (USE_MOCK_DATA) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(portfolioData.slice(0, limit));
-        }, 300);
-      });
-    }
-
-    const response = await fetch(`${API_BASE_URL}/portfolios/featured?limit=${limit}`);
-    if (!response.ok) throw new Error('Failed to fetch featured portfolios');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching featured portfolios:', error);
-    return portfolioData.slice(0, limit);
-  }
+  const portfolios = await getUnifiedPortfolios();
+  return portfolios.slice(0, limit);
 };
 
-/**
- * Get all portfolios with optional filters
- * @param {Object} filters - Filter options (category, country, etc.)
- * @param {number} page - Pagination page
- * @param {number} pageSize - Items per page
- * @returns {Promise<Object>}
- */
 export const getPortfolios = async (filters = {}, page = 1, pageSize = 12) => {
-  try {
-    if (USE_MOCK_DATA) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          let filtered = portfolioData;
-          if (filters.category && filters.category !== 'All') {
-            filtered = filtered.filter(p => p.category === filters.category);
-          }
-          const start = (page - 1) * pageSize;
-          const end = start + pageSize;
-          resolve({
-            data: filtered.slice(start, end),
-            total: filtered.length,
-            page,
-            pageSize,
-            totalPages: Math.ceil(filtered.length / pageSize)
-          });
-        }, 300);
-      });
-    }
+  const portfolios = await getUnifiedPortfolios();
+  let filtered = portfolios;
 
-    const queryParams = new URLSearchParams();
-    queryParams.append('page', page);
-    queryParams.append('pageSize', pageSize);
-    Object.keys(filters).forEach(key => {
-      if (filters[key]) queryParams.append(key, filters[key]);
-    });
-
-    const response = await fetch(`${API_BASE_URL}/portfolios?${queryParams}`);
-    if (!response.ok) throw new Error('Failed to fetch portfolios');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching portfolios:', error);
-    return {
-      data: portfolioData,
-      total: portfolioData.length,
-      page,
-      pageSize,
-      totalPages: Math.ceil(portfolioData.length / pageSize)
-    };
+  if (filters.category && filters.category !== 'All') {
+    filtered = filtered.filter((item) => item.category === filters.category);
   }
+
+  if (filters.country && filters.country !== 'All') {
+    filtered = filtered.filter((item) => item.country === filters.country);
+  }
+
+  if (filters.search && String(filters.search).trim()) {
+    const query = String(filters.search).toLowerCase();
+    filtered = filtered.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) ||
+        item.country.toLowerCase().includes(query) ||
+        String(item.description || '')
+          .toLowerCase()
+          .includes(query)
+    );
+  }
+
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+
+  return {
+    data: filtered.slice(start, end),
+    total: filtered.length,
+    page,
+    pageSize,
+    totalPages: Math.ceil(filtered.length / pageSize),
+  };
 };
 
-/**
- * Get portfolio detail by ID
- * @param {number|string} id - Portfolio ID
- * @returns {Promise<Object>}
- */
 export const getPortfolioById = async (id) => {
-  try {
-    if (USE_MOCK_DATA) {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          const numericId = Number.parseInt(id, 10);
-          const portfolio = Number.isNaN(numericId)
-            ? getMockPortfolioBySlug(id)
-            : getMockPortfolioById(numericId);
-          if (portfolio) {
-            resolve(portfolio);
-          } else {
-            reject(new Error('Portfolio not found'));
-          }
-        }, 300);
-      });
-    }
+  const unified = await getUnifiedPortfolios();
+  const numericId = Number.parseInt(id, 10);
 
-    const response = await fetch(`${API_BASE_URL}/portfolios/${id}`);
-    if (!response.ok) throw new Error('Portfolio not found');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching portfolio detail:', error);
-    const numericId = Number.parseInt(id, 10);
-    const portfolio = Number.isNaN(numericId)
-      ? getMockPortfolioBySlug(id)
-      : getMockPortfolioById(numericId);
-    if (!portfolio) throw error;
-    return portfolio;
-  }
+  const found = Number.isNaN(numericId)
+    ? unified.find((item) => item.slug === id)
+    : unified.find((item) => Number(item.id) === numericId || item.slug === String(id));
+
+  if (found) return found;
+
+  const localFallback = Number.isNaN(numericId) ? getLocalPortfolioBySlug(id) : getLocalPortfolioById(id);
+  if (localFallback) return localFallback;
+
+  throw new Error('Portfolio not found');
 };
 
-export const getPortfolioBySlug = async (slug) => {
-  return getPortfolioById(slug);
-};
+export const getPortfolioBySlug = async (slug) => getPortfolioById(slug);
 
-/**
- * Get portfolios by category
- * @param {string} category - Category name
- * @returns {Promise<Array>}
- */
 export const getPortfoliosByCategory = async (category) => {
-  try {
-    if (USE_MOCK_DATA) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(portfolioData.filter(p => p.category === category));
-        }, 300);
-      });
-    }
-
-    const response = await fetch(`${API_BASE_URL}/portfolios/category/${category}`);
-    if (!response.ok) throw new Error('Failed to fetch portfolios by category');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching portfolios by category:', error);
-    return portfolioData.filter(p => p.category === category);
-  }
+  const unified = await getUnifiedPortfolios();
+  if (!category || category === 'All') return unified;
+  return unified.filter((item) => item.category === category);
 };
 
-/**
- * Search portfolios
- * @param {string} query - Search query
- * @returns {Promise<Array>}
- */
 export const searchPortfolios = async (query) => {
-  try {
-    if (USE_MOCK_DATA) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const results = portfolioData.filter(p =>
-            p.title.toLowerCase().includes(query.toLowerCase()) ||
-            p.country.toLowerCase().includes(query.toLowerCase()) ||
-            p.description.toLowerCase().includes(query.toLowerCase())
-          );
-          resolve(results);
-        }, 300);
-      });
-    }
+  const unified = await getUnifiedPortfolios();
+  const searchTerm = String(query || '').trim().toLowerCase();
+  if (!searchTerm) return unified;
 
-    const response = await fetch(`${API_BASE_URL}/portfolios/search?q=${encodeURIComponent(query)}`);
-    if (!response.ok) throw new Error('Search failed');
-    return await response.json();
-  } catch (error) {
-    console.error('Error searching portfolios:', error);
-    return portfolioData.filter(p =>
-      p.title.toLowerCase().includes(query.toLowerCase()) ||
-      p.country.toLowerCase().includes(query.toLowerCase())
-    );
-  }
+  return unified.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchTerm) ||
+      item.country.toLowerCase().includes(searchTerm) ||
+      String(item.description || '')
+        .toLowerCase()
+        .includes(searchTerm)
+  );
 };
 
-/**
- * Get portfolio filters/categories
- * @returns {Promise<Array>}
- */
 export const getCategories = async () => {
-  try {
-    if (USE_MOCK_DATA) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(categories);
-        }, 200);
-      });
-    }
-
-    const response = await fetch(`${API_BASE_URL}/portfolios/filters`);
-    if (!response.ok) throw new Error('Failed to fetch filters');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching filters:', error);
-    return categories;
-  }
+  const unified = await getUnifiedPortfolios();
+  const dynamicCategories = Array.from(
+    new Set(unified.map((item) => item.category).filter(Boolean))
+  );
+  const mergedCategories = ['All', ...dynamicCategories];
+  const localOnly = localCategories.filter((item) => !mergedCategories.includes(item));
+  return [...mergedCategories, ...localOnly];
 };
 
-/**
- * Get portfolio statistics
- * @returns {Promise<Object>}
- */
 export const getPortfolioStats = async () => {
-  try {
-    if (USE_MOCK_DATA) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const totalStudents = portfolioData.reduce((sum, p) => sum + p.studentsPlaced, 0);
-          const totalPrograms = portfolioData.reduce((sum, p) => sum + p.programs, 0);
-          const avgSuccess = Math.round(
-            portfolioData.reduce((sum, p) => sum + p.successRate, 0) / portfolioData.length
-          );
-          resolve({
-            totalUniversities: portfolioData.length,
-            totalStudents,
-            totalPrograms,
-            avgSuccessRate: avgSuccess,
-            countries: [...new Set(portfolioData.map(p => p.country))]
-          });
-        }, 300);
-      });
-    }
+  const unified = await getUnifiedPortfolios();
+  const totalStudents = unified.reduce((sum, item) => sum + numericOrDefault(item.studentsPlaced), 0);
+  const totalPrograms = unified.reduce((sum, item) => sum + numericOrDefault(item.programs), 0);
+  const avgSuccessRate =
+    unified.length > 0
+      ? Math.round(
+          unified.reduce((sum, item) => sum + numericOrDefault(item.successRate), 0) / unified.length
+        )
+      : 0;
 
-    const response = await fetch(`${API_BASE_URL}/portfolios/stats`);
-    if (!response.ok) throw new Error('Failed to fetch stats');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching stats:', error);
-    const totalStudents = portfolioData.reduce((sum, p) => sum + p.studentsPlaced, 0);
-    const totalPrograms = portfolioData.reduce((sum, p) => sum + p.programs, 0);
-    const avgSuccess = Math.round(
-      portfolioData.reduce((sum, p) => sum + p.successRate, 0) / portfolioData.length
-    );
-    return {
-      totalUniversities: portfolioData.length,
-      totalStudents,
-      totalPrograms,
-      avgSuccessRate: avgSuccess,
-      countries: [...new Set(portfolioData.map(p => p.country))]
-    };
-  }
+  return {
+    totalUniversities: unified.length,
+    totalStudents,
+    totalPrograms,
+    avgSuccessRate,
+    countries: Array.from(new Set(unified.map((item) => item.country).filter(Boolean))),
+  };
 };
 
 export default {
@@ -261,5 +240,5 @@ export default {
   getPortfoliosByCategory,
   searchPortfolios,
   getCategories,
-  getPortfolioStats
+  getPortfolioStats,
 };

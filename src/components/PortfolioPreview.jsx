@@ -86,13 +86,13 @@ export function PortfolioPreview() {
         >
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-primary/10 rounded-full">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold text-primary">Success Stories</span>
+            <span className="text-sm font-semibold text-primary">Partner Highlights</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-foreground">
-            Student Success Stories
+            Institution Success Stories
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover how our students have achieved their dreams at world-class universities around the globe
+            Discover how our partner institutions scale market presence and conversion performance worldwide
           </p>
         </motion.div>
 
@@ -125,7 +125,7 @@ export function PortfolioPreview() {
                 >
                   <img
                     src={portfolio.image}
-                    alt={portfolio.studentName || portfolio.title}
+                    alt={portfolio.partnerName || portfolio.title}
                     loading="lazy"
                     decoding="async"
                     className="w-full h-full object-cover"
@@ -154,7 +154,7 @@ export function PortfolioPreview() {
                     whileHover={{ opacity: 0.8 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <h3 className="text-xl font-bold text-white mb-2">{portfolio.studentName}</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">{portfolio.partnerName || portfolio.title}</h3>
                     <p className="text-accent font-semibold mb-1">{portfolio.university}</p>
                     <p className="text-white/80 text-sm">{portfolio.program}</p>
                   </motion.div>
@@ -183,7 +183,7 @@ export function PortfolioPreview() {
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             <span className="relative flex items-center gap-2">
-              Explore All Success Stories
+              Explore All Partner Stories
               <motion.span
                 className="inline-block"
                 whileHover={{ x: 5 }}

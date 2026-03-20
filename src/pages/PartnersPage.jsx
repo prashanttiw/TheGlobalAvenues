@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Users, Award, Building2, Globe, CheckCircle } from 'lucide-react';
 import { industryPartners, schoolCounsellors, educationAgents, universities } from '../data/partnersData';
 
@@ -10,24 +11,23 @@ export default function PartnersPage() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-    }
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   const tabVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
-        {/* Hero Section */}
         <motion.div
           className="text-center mb-16"
           initial={{ y: 20, opacity: 0 }}
@@ -35,17 +35,15 @@ export default function PartnersPage() {
           transition={{ duration: 0.6 }}
         >
           <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
-            🤝 Strategic Collaborations
+            Strategic Collaborations
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-4">
-            Our Partnership Ecosystem
-          </h1>
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-4">Our Partnership Ecosystem</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Collaborate with The Global Avenues and access a network of 210+ universities, industry experts, and education professionals worldwide
+            Collaborate with The Global Avenues and access a network of 210+ universities, industry leaders,
+            and recruitment partners worldwide.
           </p>
         </motion.div>
 
-        {/* Tab Navigation */}
         <motion.div
           className="flex flex-wrap justify-center gap-3 mb-16"
           initial={{ y: 20, opacity: 0 }}
@@ -55,7 +53,7 @@ export default function PartnersPage() {
           {[
             { id: 'universities', label: 'Universities', icon: Globe },
             { id: 'industry', label: 'Industry Partners', icon: Building2 },
-            { id: 'counsellors', label: 'School Counsellors', icon: Users },
+            { id: 'counsellors', label: 'Counselor Networks', icon: Users },
             { id: 'agents', label: 'Education Agents', icon: Award },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -76,17 +74,9 @@ export default function PartnersPage() {
           })}
         </motion.div>
 
-        {/* Content Sections */}
-        <motion.div
-          key={activeTab}
-          variants={tabVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Universities Tab */}
+        <motion.div key={activeTab} variants={tabVariants} initial="hidden" animate="visible">
           {activeTab === 'universities' && (
             <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-12">
-              {/* Stats */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {universities.stats.map((stat, index) => (
                   <motion.div
@@ -101,7 +91,6 @@ export default function PartnersPage() {
                 ))}
               </div>
 
-              {/* Regions Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {universities.regions.map((region, index) => (
                   <motion.div
@@ -126,10 +115,9 @@ export default function PartnersPage() {
             </motion.div>
           )}
 
-          {/* Industry Partners Tab */}
           {activeTab === 'industry' && (
             <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {industryPartners.partners.map((partner, index) => (
+              {industryPartners.partners.map((partner) => (
                 <motion.div
                   key={partner.id}
                   className="bg-background border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-all group"
@@ -159,21 +147,21 @@ export default function PartnersPage() {
             </motion.div>
           )}
 
-          {/* School Counsellors Tab */}
           {activeTab === 'counsellors' && (
             <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
               <motion.p className="text-lg text-muted-foreground text-center mb-12" variants={itemVariants}>
-                We are focused on attracting top talent from South Asia through strategic partnerships and collaborations with education counselors.
+                We work with counselor networks across South Asia to align recruitment quality, compliance,
+                and conversion outcomes.
               </motion.p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {schoolCounsellors.services.map((service, index) => (
+                {schoolCounsellors.services.map((service) => (
                   <motion.div
                     key={service.id}
                     className="bg-gradient-to-br from-primary/5 to-secondary/5 border border-border rounded-xl p-6 hover:border-primary/50 transition-all hover:shadow-lg"
                     variants={itemVariants}
                     whileHover={{ translateY: -4 }}
                   >
-                    <div className="text-4xl mb-4">{service.icon}</div>
+                    <div className="text-2xl font-semibold tracking-wide text-primary mb-4">{service.icon}</div>
                     <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
                     <p className="text-muted-foreground">{service.description}</p>
                   </motion.div>
@@ -182,14 +170,14 @@ export default function PartnersPage() {
             </motion.div>
           )}
 
-          {/* Education Agents Tab */}
           {activeTab === 'agents' && (
             <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
               <motion.p className="text-lg text-muted-foreground text-center mb-12" variants={itemVariants}>
-                Join our network of successful education agents and access comprehensive support, competitive commissions, and exclusive opportunities.
+                Join our network of high-performing education agents and access structured support,
+                competitive commissions, and institutional opportunities.
               </motion.p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {educationAgents.benefits.map((benefit, index) => (
+                {educationAgents.benefits.map((benefit) => (
                   <motion.div
                     key={benefit.id}
                     className="bg-background border border-border rounded-xl p-6 hover:border-primary/50 transition-all hover:shadow-lg flex gap-4"
@@ -207,17 +195,21 @@ export default function PartnersPage() {
                 ))}
               </div>
 
-              {/* CTA Section */}
               <motion.div
                 className="mt-12 bg-gradient-to-r from-primary to-secondary text-white rounded-xl p-8 md:p-12 text-center"
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
               >
                 <h3 className="text-3xl font-bold mb-4">Ready to Partner With Us?</h3>
-                <p className="text-lg text-white/90 mb-6">Join our growing network of education agents and expand your business opportunities globally.</p>
-                <button className="px-8 py-3 bg-white text-primary font-bold rounded-lg hover:bg-gray-100 transition-colors">
+                <p className="text-lg text-white/90 mb-6">
+                  Join our growing partner ecosystem and scale institutional outcomes across global markets.
+                </p>
+                <Link
+                  to="/collaborate"
+                  className="inline-flex items-center justify-center px-8 py-3 bg-white text-primary font-bold rounded-lg hover:bg-gray-100 transition-colors"
+                >
                   Get in Touch
-                </button>
+                </Link>
               </motion.div>
             </motion.div>
           )}

@@ -121,7 +121,7 @@ export default function AboutPage() {
         icon: Target,
         title: 'Our Mission',
         description:
-          'Uphold integrity, transparency, motivation, and unwavering dedication, ensuring open communication and tailored services for every student.',
+          'Uphold integrity, transparency, and execution excellence while delivering tailored growth strategies for every institution partner.',
       },
       {
         icon: Globe,
@@ -131,9 +131,9 @@ export default function AboutPage() {
       },
       {
         icon: Heart,
-        title: 'Student Centric',
+        title: 'Partner Centric',
         description:
-          'Every decision guided by student success and long-term impact in the global education landscape.',
+          'Every decision is guided by institutional success and sustainable impact in the global education landscape.',
       },
       {
         icon: Shield,
@@ -157,25 +157,25 @@ export default function AboutPage() {
         name: 'Deepshikha Chauhan',
         role: 'International Recruitment Head',
         image: '/team/deepshikha-chauhan.jpg',
-        bio: 'Strategic recruitment expert overseeing international student placements and university partnerships',
+        bio: 'Strategic recruitment expert overseeing institutional partnerships and high-impact enrollment campaigns',
       },
       {
         name: 'Bhawna',
         role: 'International Recruitment',
         image: '/team/bhawna.jpg',
-        bio: 'Dedicated recruitment specialist focused on student counseling and placement success',
+        bio: 'Dedicated recruitment specialist focused on institutional outreach, conversion quality, and partner success',
       },
       {
         name: 'Shabana Azmi',
         role: 'International Recruitment',
         image: '/team/shabana-azmi.jpg',
-        bio: 'Experienced recruitment professional with strong focus on student mobility and university relations',
+        bio: 'Experienced recruitment professional with strong focus on international market mobility and university relations',
       },
       {
         name: 'Vaamika Sinha',
         role: 'International Recruitment',
         image: '/team/vaamika-sinha.jpg',
-        bio: 'Passionate recruitment specialist committed to bridging educational opportunities for students',
+        bio: 'Passionate recruitment specialist committed to bridging educational opportunities for institutions and regional stakeholders',
       },
       {
         name: 'Naman Sharma',
@@ -187,13 +187,13 @@ export default function AboutPage() {
         name: 'Ambar Johar',
         role: 'Admissions Coordinator',
         image: '/team/ambar-johar.jpg',
-        bio: 'Efficient coordinator ensuring smooth application processing and student onboarding',
+        bio: 'Efficient coordinator ensuring smooth application processing and institutional onboarding workflows',
       },
       {
         name: 'Suraj Kumar Soni',
         role: 'Admissions Coordinator',
         image: '/team/suraj-kumar-soni.jpg',
-        bio: 'Dedicated professional managing admissions workflows and student documentation',
+        bio: 'Dedicated professional managing admissions workflows, documentation quality, and partner compliance',
       },
     ],
     []
@@ -204,7 +204,7 @@ export default function AboutPage() {
       { number: siteConfig.stats.partnerUniversities, label: 'Partner Universities' },
       { number: siteConfig.stats.countriesCovered, label: 'Countries Covered' },
       { number: '15+', label: 'Active Channel Partners' },
-      { number: siteConfig.stats.studentsRecruited, label: 'Students Recruited' },
+      { number: siteConfig.stats.studentsRecruited, label: 'Applications Managed' },
     ],
     [siteConfig]
   );
@@ -236,15 +236,15 @@ export default function AboutPage() {
             building their brand from the ground up and positioning them as recognized names in the region.
           </p>
           <p className="mt-4 text-base text-muted-foreground">
-            Our core mission is to create impactful collaborations that connect Indian institutions, students, and
-            parents with leading global education opportunities. We facilitate student admissions, foster university
-            partnerships, and drive student mobility with a strong emphasis on transparency, innovation, and long-term
+            Our core mission is to create impactful collaborations that connect global institutions with trusted
+            networks in India. We facilitate institutional partnerships, admissions operations, and recruitment
+            visibility with a strong emphasis on transparency, innovation, and long-term
             impact.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
             <span className="rounded-full border border-border/60 bg-white/70 px-4 py-2">ICEF Accredited</span>
             <span className="rounded-full border border-border/60 bg-white/70 px-4 py-2">Global University Network</span>
-            <span className="rounded-full border border-border/60 bg-white/70 px-4 py-2">Student First</span>
+            <span className="rounded-full border border-border/60 bg-white/70 px-4 py-2">Partner First</span>
           </div>
         </div>
       </section>
@@ -275,7 +275,7 @@ export default function AboutPage() {
               Building pathways that connect ambition with opportunity.
             </h2>
             <p className="mt-5 text-base text-muted-foreground">
-              We act as a strategic bridge between universities and the Indian student community, bringing tailored
+              We act as a strategic bridge between universities and the Indian market ecosystem, bringing tailored
               market intelligence, recruitment expertise, and cultural insight to every partnership.
             </p>
             <p className="mt-4 text-base text-muted-foreground">
@@ -297,7 +297,7 @@ export default function AboutPage() {
               {[
                 'Localized market entry strategy and brand positioning',
                 'Recruitment pipeline management with transparent reporting',
-                'Student counseling journeys backed by experienced advisors',
+                'Application conversion journeys backed by experienced advisors',
                 'Long-term partnership support with measurable outcomes',
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3">
@@ -341,7 +341,7 @@ export default function AboutPage() {
                 <div className="section-kicker-classic mb-4 inline-flex">Leadership & Team</div>
                 <h2 className="text-3xl font-bold text-foreground sm:text-4xl">Meet the experts behind the mission</h2>
                 <p className="mt-4 text-base text-muted-foreground">
-                  Expert professionals dedicated to guiding students and partners with care and precision.
+                  Expert professionals dedicated to supporting institutions and partners with care and precision.
                 </p>
               </div>
 
@@ -408,13 +408,11 @@ export default function AboutPage() {
                   </p>
                   <p>
                     This recognition affirms that The Global Avenues has been thoroughly screened and accredited for
-                    its quality work, professional approach, and strong ethical standards in recruiting international
-                    students.
+                    its quality work, professional approach, and strong ethical standards in international recruitment.
                   </p>
                   <p>
-                    It reinforces our credibility and commitment to excellence in guiding students towards global
-                    opportunities. With this accreditation, we continue to strengthen trust among our partners,
-                    students, and the wider education community.
+                    It reinforces our credibility and commitment to excellence in building institutional opportunities.
+                    With this accreditation, we continue to strengthen trust among our partners and the wider education community.
                   </p>
                 </div>
               </div>
@@ -439,7 +437,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                   <p className="mt-6 text-sm text-muted-foreground">
-                    NET24 connects educational institutions with reputable student recruitment agencies through its
+                    NET24 connects educational institutions with reputable recruitment agencies through its
                     advanced online platform (NET24Apply) and a series of impactful B2B events, including conferences
                     and workshops.
                   </p>
@@ -472,7 +470,7 @@ export default function AboutPage() {
                 {[
                   { icon: Zap, label: 'Operational Excellence' },
                   { icon: Shield, label: 'Ethical Practices' },
-                  { icon: Heart, label: 'Student Success' },
+                  { icon: Heart, label: 'Partner Success' },
                 ].map((item) => {
                   const Icon = item.icon;
                   return (

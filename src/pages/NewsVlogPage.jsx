@@ -4,8 +4,45 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Calendar, Flame, Play, User } from 'lucide-react';
 import { getBlogList } from '../services/contentApi';
 import { resolveMediaUrl } from '../services/apiClient';
+import { newsItems as fallbackNewsItems } from '../data/newsData';
 
 const getCardImage = (item) => item.thumbnail || item.image;
+
+const normalizeText = (value) =>
+  String(value || '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const mapBlogItem = (item) => ({
+  id: item.id,
+  slug: item.slug || String(item.id),
+  type: 'blog',
+  title: item.title || 'Untitled',
+  excerpt: normalizeText(item.excerpt || item.summary || 'Read the full story and insights from our team.'),
+  image: resolveMediaUrl(item.featured_image || item.image || item.thumbnail),
+  thumbnail: resolveMediaUrl(item.featured_image || item.thumbnail || item.image),
+  author: item.author || 'The Global Avenues',
+  date: item.created_at || item.date || '',
+  readTime: item.read_time || item.readTime || '5 min read',
+  category: item.category || 'General',
+  views: item.views ? Number(item.views) : 0,
+});
+
+const mapFallbackItem = (item) => ({
+  id: item.id,
+  slug: item.slug || String(item.id),
+  type: item.type || 'blog',
+  title: item.title || 'Untitled',
+  excerpt: normalizeText(item.excerpt || item.summary || ''),
+  image: item.image || item.thumbnail || '',
+  thumbnail: item.thumbnail || item.image || '',
+  author: item.author || 'The Global Avenues',
+  date: item.date || '',
+  readTime: item.readTime || '5 min read',
+  category: item.category || 'General',
+  views: item.views ? Number(item.views) : 0,
+});
 
 export default function NewsVlogPage() {
   const navigate = useNavigate();
@@ -14,41 +51,40 @@ export default function NewsVlogPage() {
   const [newsItems, setNewsItems] = useState([]);
   const [categories, setCategories] = useState(['all']);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const controller = new AbortController();
 
     const loadBlog = async () => {
       setIsLoading(true);
-      setErrorMessage('');
 
       try {
         const data = await getBlogList({ signal: controller.signal });
-        const mapped = (data || []).map((item) => ({
-          id: item.id,
-          slug: item.slug || String(item.id),
-          type: 'blog',
-          title: item.title,
-          excerpt: item.excerpt || item.summary || 'Read the full story and insights from our team.',
-          image: resolveMediaUrl(item.featured_image),
-          thumbnail: resolveMediaUrl(item.featured_image),
-          author: item.author || 'The Global Avenues',
-          date: item.created_at,
-          readTime: item.read_time || '5 min read',
-          category: item.category || 'General',
-          views: item.views ? Number(item.views) : 0,
-        }));
+        const mapped = (Array.isArray(data) ? data : []).map(mapBlogItem).filter((item) => item.title);
 
         const uniqueCategories = Array.from(
           new Set(mapped.map((item) => item.category).filter(Boolean))
         );
 
-        setNewsItems(mapped);
-        setCategories(['all', ...uniqueCategories]);
+        if (mapped.length > 0) {
+          setNewsItems(mapped);
+          setCategories(['all', ...uniqueCategories]);
+        } else {
+          const fallbackMapped = fallbackNewsItems.map(mapFallbackItem);
+          const fallbackCategories = Array.from(
+            new Set(fallbackMapped.map((item) => item.category).filter(Boolean))
+          );
+          setNewsItems(fallbackMapped);
+          setCategories(['all', ...fallbackCategories]);
+        }
       } catch (error) {
         if (error.name !== 'AbortError') {
-          setErrorMessage(error.message || 'Unable to load news and blog content');
+          const fallbackMapped = fallbackNewsItems.map(mapFallbackItem);
+          const fallbackCategories = Array.from(
+            new Set(fallbackMapped.map((item) => item.category).filter(Boolean))
+          );
+          setNewsItems(fallbackMapped);
+          setCategories(['all', ...fallbackCategories]);
         }
       } finally {
         setIsLoading(false);
@@ -106,7 +142,7 @@ export default function NewsVlogPage() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Stay updated with the latest news, success stories, and expert guidance from The Global Avenues.
+            Stay updated with the latest partnership news, market insights, and strategic updates from The Global Avenues.
           </motion.p>
         </div>
       </motion.section>
@@ -265,20 +301,7 @@ export default function NewsVlogPage() {
             </motion.div>
           )}
 
-          {!isLoading && errorMessage && (
-            <motion.div
-              className="py-20 text-center"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <p className="mb-2 text-2xl font-bold text-muted-foreground">Unable to load content</p>
-              <p className="text-muted-foreground">{errorMessage}</p>
-            </motion.div>
-          )}
-
-          {!isLoading && !errorMessage && (
+          {!isLoading && (
             <>
               {filteredItems.length > 0 ? (
                 <motion.div
@@ -363,7 +386,7 @@ export default function NewsVlogPage() {
           >
             <h2 className="mb-4 text-4xl font-bold">Stay Updated</h2>
             <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
-              Subscribe to our newsletter for the latest news, expert tips, and success stories from students around the world.
+              Subscribe for partnership announcements, market intelligence, and international recruitment updates.
             </p>
             <button className="group mx-auto flex items-center gap-2 rounded-lg bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all duration-300 hover:scale-105 hover:bg-secondary" type="button">
               Subscribe Now

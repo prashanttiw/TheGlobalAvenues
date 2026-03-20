@@ -4,56 +4,88 @@ import { Play, X } from 'lucide-react';
 import { getGallery } from '../services/contentApi';
 import { resolveMediaUrl } from '../services/apiClient';
 
+const FALLBACK_GALLERY_RESPONSE = [
+  {
+    category: 'Highlights',
+    images: [
+      { image: '/videos/hero-poster.jpg', caption: 'Institution Partnership Highlights' },
+      { image: '/videos/hero-poster.jpg', caption: 'Delegations and Industry Events' },
+      { image: '/videos/hero-poster.jpg', caption: 'Global University Network' },
+    ],
+  },
+];
+
+const normalizeCategoryKey = (label) =>
+  String(label || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const buildGalleryModel = (rawData) => {
+  const items = [];
+  const uniqueCategories = new Map();
+  const seenImages = new Set();
+
+  (Array.isArray(rawData) ? rawData : []).forEach((categoryBlock, blockIndex) => {
+    const label = categoryBlock?.category || `Category ${blockIndex + 1}`;
+    const key = normalizeCategoryKey(label) || `category-${blockIndex + 1}`;
+
+    if (!uniqueCategories.has(key)) {
+      uniqueCategories.set(key, { key, label });
+    }
+
+    (Array.isArray(categoryBlock?.images) ? categoryBlock.images : []).forEach((imageItem, imageIndex) => {
+      const image = resolveMediaUrl(imageItem?.image);
+      if (!image || seenImages.has(`${key}:${image}`)) return;
+      seenImages.add(`${key}:${image}`);
+
+      items.push({
+        id: `${key}-${imageIndex}`,
+        type: 'image',
+        title: imageItem?.caption || label,
+        image,
+        categoryKey: key,
+        categoryLabel: label,
+      });
+    });
+  });
+
+  return {
+    items,
+    categories: [{ key: 'all', label: 'All' }, ...Array.from(uniqueCategories.values())],
+  };
+};
+
 export default function GalleryPage() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [filterType, setFilterType] = useState('all');
   const [galleryItems, setGalleryItems] = useState([]);
   const [categories, setCategories] = useState([{ key: 'all', label: 'All' }]);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const normalizeCategoryKey = (label) =>
-    label
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
 
   useEffect(() => {
     const controller = new AbortController();
 
     const loadGallery = async () => {
       setIsLoading(true);
-      setErrorMessage('');
 
       try {
         const data = await getGallery({ signal: controller.signal });
-        const items = [];
-        const uniqueCategories = new Map();
+        const mapped = buildGalleryModel(data);
 
-        (data || []).forEach((categoryBlock, blockIndex) => {
-          const label = categoryBlock.category || `Category ${blockIndex + 1}`;
-          const key = normalizeCategoryKey(label) || `category-${blockIndex + 1}`;
-          if (!uniqueCategories.has(key)) {
-            uniqueCategories.set(key, { key, label });
-          }
-
-          (categoryBlock.images || []).forEach((imageItem, imageIndex) => {
-            items.push({
-              id: `${key}-${imageIndex}`,
-              type: 'image',
-              title: imageItem.caption || label,
-              image: resolveMediaUrl(imageItem.image),
-              categoryKey: key,
-              categoryLabel: label,
-            });
-          });
-        });
-
-        setGalleryItems(items);
-        setCategories([{ key: 'all', label: 'All' }, ...Array.from(uniqueCategories.values())]);
+        if (mapped.items.length > 0) {
+          setGalleryItems(mapped.items);
+          setCategories(mapped.categories);
+        } else {
+          const fallbackMapped = buildGalleryModel(FALLBACK_GALLERY_RESPONSE);
+          setGalleryItems(fallbackMapped.items);
+          setCategories(fallbackMapped.categories);
+        }
       } catch (error) {
         if (error.name !== 'AbortError') {
-          setErrorMessage(error.message || 'Unable to load gallery');
+          const fallbackMapped = buildGalleryModel(FALLBACK_GALLERY_RESPONSE);
+          setGalleryItems(fallbackMapped.items);
+          setCategories(fallbackMapped.categories);
         }
       } finally {
         setIsLoading(false);
@@ -97,7 +129,7 @@ export default function GalleryPage() {
             Our Gallery
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Explore moments from our events, partnerships, and student success stories
+            Explore moments from our events, partnerships, and institutional collaborations
           </p>
         </motion.div>
 
@@ -139,19 +171,8 @@ export default function GalleryPage() {
           </motion.div>
         )}
 
-        {!isLoading && errorMessage && (
-          <motion.div
-            className="text-center py-12"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="text-muted-foreground text-lg">{errorMessage}</p>
-          </motion.div>
-        )}
-
         {/* Gallery Grid */}
-        {!isLoading && !errorMessage && (
+        {!isLoading && (
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             variants={containerVariants}
@@ -209,7 +230,7 @@ export default function GalleryPage() {
         )}
 
         {/* Empty State */}
-        {!isLoading && !errorMessage && filteredItems.length === 0 && (
+        {!isLoading && filteredItems.length === 0 && (
           <motion.div
             className="text-center py-12"
             initial={{ opacity: 0 }}
@@ -252,7 +273,7 @@ export default function GalleryPage() {
             </button>
             <div className="mt-4 text-center">
               <h3 className="text-xl font-bold text-white mb-1">{selectedImage.title}</h3>
-              <p className="text-gray-300 capitalize">{selectedImage.category}</p>
+              <p className="text-gray-300 capitalize">{selectedImage.categoryLabel}</p>
             </div>
           </motion.div>
         </motion.div>

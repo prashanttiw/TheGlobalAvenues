@@ -17,13 +17,13 @@ export default function PortfolioSection() {
           className="text-center mb-12 sm:mb-16"
         >
           <div className="section-kicker-classic mb-3 sm:mb-4">
-            Featured Opportunities
+            Featured Institutions
           </div>
           <h2 className="section-title-classic mb-3 sm:mb-4">
             Our Featured <span className="section-title-classic-accent">Portfolio</span>
           </h2>
           <p className="section-subtitle-classic px-2">
-            Discover top universities and educational institutions we partner with. Each offers unique opportunities for global education and career advancement.
+            Explore universities and institutions in our active partnership network, each backed by localized growth strategy and recruitment support.
           </p>
         </div>
 
@@ -48,7 +48,7 @@ export default function PortfolioSection() {
             <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <p className="text-xs sm:text-sm lg:text-base text-muted-foreground mt-3 sm:mt-4">
-            Browse our complete portfolio of 100+ partner institutions worldwide
+            Browse our expanding portfolio of partner institutions worldwide
           </p>
         </div>
       </div>
