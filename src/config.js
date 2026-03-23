@@ -58,7 +58,7 @@ export const SITE_CONFIG = {
       { label: 'Gallery', path: '/gallery' },
     ],
     offerings: [
-      { label: 'All Programs', path: '/what-we-offer' },
+      { label: 'All Services', path: '/what-we-offer' },
       ...educationPrograms.map((program) => ({
         label: program.name,
         path: buildProgramPath(program.id),

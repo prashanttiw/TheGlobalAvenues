@@ -1,7 +1,18 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Trophy, Target, Users, Star, Globe, Zap, ChevronRight } from 'lucide-react';
+import {
+  MapPin,
+  Trophy,
+  Star,
+  Globe,
+  ChevronRight,
+  Mail,
+  ExternalLink,
+  CalendarDays,
+  Clock3,
+  FileText,
+} from 'lucide-react';
 import { getPortfolioById, getPortfolios } from '../services/portfolioService';
 import { getUniversityDetail } from '../services/contentApi';
 import { resolveMediaUrl } from '../services/apiClient';
@@ -33,22 +44,41 @@ export default function PortfolioDetailPage() {
       photo: item.photo ? resolveMediaUrl(item.photo) : '',
     }));
 
-    return {
+    const mappedDetails = {
+      location: [university.city, university.country].filter(Boolean).join(', '),
+    };
+
+    if (specializations.length > 0) {
+      mappedDetails.specializations = specializations;
+    }
+
+    if (programs.length > 0) {
+      mappedDetails.programs = programs;
+    }
+
+    if (experiences.length > 0) {
+      mappedDetails.studentTestimonials = experiences;
+    }
+
+    const mapped = {
       id: university.id,
       slug: university.slug,
       title: university.name,
       country: university.country,
       image: resolveMediaUrl(university.logo),
+      logo: resolveMediaUrl(university.logo),
+      contact: university.email || university.contact_email || '',
+      website: university.website || university.link || '',
       description: university.description,
       programs: programs.length || undefined,
-      details: {
-        location: [university.city, university.country].filter(Boolean).join(', '),
-        specializations,
-        programs,
-        studentTestimonials: experiences,
-      },
-      highlights,
+      details: mappedDetails,
     };
+
+    if (highlights.length > 0) {
+      mapped.highlights = highlights;
+    }
+
+    return mapped;
   };
 
   const mergePortfolioData = (base, override) => {
@@ -58,6 +88,7 @@ export default function PortfolioDetailPage() {
       ...base,
       ...override,
       image: override.image || base.image,
+      logo: override.logo || base.logo,
       highlights: override.highlights && override.highlights.length > 0 ? override.highlights : base.highlights,
       details: {
         ...(base.details || {}),
@@ -110,28 +141,6 @@ export default function PortfolioDetailPage() {
       controller.abort();
     };
   }, [id]);
-
-  const metrics = useMemo(() => {
-    if (!portfolio) {
-      return {
-        studentsPlaced: null,
-        programs: null,
-        successRate: null,
-        visaSuccessRate: null,
-      };
-    }
-
-    const programCount =
-      portfolio.programs ??
-      (Array.isArray(portfolio.details?.programs) ? portfolio.details.programs.length : undefined);
-
-    return {
-      studentsPlaced: portfolio.studentsPlaced,
-      programs: programCount,
-      successRate: portfolio.successRate,
-      visaSuccessRate: portfolio.details?.visaSuccessRate,
-    };
-  }, [portfolio]);
 
   if (isLoading) {
     return (
@@ -207,15 +216,34 @@ export default function PortfolioDetailPage() {
                 transition={{ duration: 0.6 }}
               />
 
+              {portfolio.logo && (
+                <motion.div
+                  className="absolute top-6 right-6 rounded-xl border border-white/35 bg-white/95 p-2 shadow-lg"
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: 0.15 }}
+                >
+                  <img
+                    src={portfolio.logo}
+                    alt={`${portfolio.title} logo`}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-10 w-auto max-w-[8.5rem] object-contain"
+                  />
+                </motion.div>
+              )}
+
               {/* Achievement Badge */}
-              <motion.div
-                className="absolute top-6 left-6 px-4 py-2 bg-primary/95 text-primary-foreground rounded-lg font-bold"
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                {portfolio.achievement}
-              </motion.div>
+              {portfolio.achievement && (
+                <motion.div
+                  className="absolute top-6 left-6 px-4 py-2 bg-primary/95 text-primary-foreground rounded-lg font-bold"
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  {portfolio.achievement}
+                </motion.div>
+              )}
 
               {/* Country Badge */}
               <motion.div
@@ -245,56 +273,33 @@ export default function PortfolioDetailPage() {
               </div>
             </div>
 
-            {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 gap-3">
-              {/* Applications Managed */}
+            {(portfolio.website || portfolio.contact) && (
               <motion.div
-                className="bg-primary/10 border border-primary/20 rounded-xl p-4"
+                className="bg-muted/40 border border-border/50 rounded-xl p-4 space-y-3"
                 whileHover={{ translateY: -2 }}
               >
-                <Users className="w-5 h-5 text-primary mb-2" />
-                <p className="text-muted-foreground text-xs font-medium">Applications Managed</p>
-                <p className="text-xl font-bold text-foreground">
-                  {metrics.studentsPlaced ? `${metrics.studentsPlaced}+` : '—'}
-                </p>
+                {portfolio.contact && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Mail className="w-4 h-4 text-primary" />
+                    <span className="font-medium">Email:</span>
+                    <a href={`mailto:${portfolio.contact}`} className="text-primary hover:underline">
+                      {portfolio.contact}
+                    </a>
+                  </div>
+                )}
+                {portfolio.website && (
+                  <a
+                    href={portfolio.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-secondary transition-colors"
+                  >
+                    Visit Official Website
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                )}
               </motion.div>
-
-              {/* Programs */}
-              <motion.div
-                className="bg-secondary/10 border border-secondary/20 rounded-xl p-4"
-                whileHover={{ translateY: -2 }}
-              >
-                <Target className="w-5 h-5 text-secondary mb-2" />
-                <p className="text-muted-foreground text-xs font-medium">Programs</p>
-                <p className="text-xl font-bold text-foreground">
-                  {metrics.programs ?? '—'}
-                </p>
-              </motion.div>
-
-              {/* Conversion Rate */}
-              <motion.div
-                className="bg-accent/10 border border-accent/20 rounded-xl p-4"
-                whileHover={{ translateY: -2 }}
-              >
-                <Star className="w-5 h-5 text-accent mb-2" />
-                <p className="text-muted-foreground text-xs font-medium">Conversion Rate</p>
-                <p className="text-xl font-bold text-foreground">
-                  {metrics.successRate ? `${metrics.successRate}%` : '—'}
-                </p>
-              </motion.div>
-
-              {/* Offer Conversion */}
-              <motion.div
-                className="bg-green-500/10 border border-green-500/20 rounded-xl p-4"
-                whileHover={{ translateY: -2 }}
-              >
-                <Zap className="w-5 h-5 text-green-500 mb-2" />
-                <p className="text-muted-foreground text-xs font-medium">Offer Conversion</p>
-                <p className="text-xl font-bold text-foreground">
-                  {metrics.visaSuccessRate ? `${metrics.visaSuccessRate}%` : '—'}
-                </p>
-              </motion.div>
-            </div>
+            )}
 
             {/* Location & Ranking */}
             <motion.div
@@ -351,10 +356,55 @@ export default function PortfolioDetailPage() {
               <div className="space-y-2 text-muted-foreground">
                 <p><span className="font-semibold">Average Tuition:</span> {portfolio.details?.avgTuition}</p>
                 <p><span className="font-semibold">Scholarships:</span> {portfolio.details?.scholarshipAvailable ? 'Available' : 'Not Available'}</p>
+                {portfolio.details?.intakeWindows && (
+                  <p className="flex items-start gap-2">
+                    <CalendarDays className="w-4 h-4 mt-0.5 text-primary" />
+                    <span><span className="font-semibold">Intakes:</span> {portfolio.details.intakeWindows}</span>
+                  </p>
+                )}
+                {portfolio.details?.programDuration && (
+                  <p className="flex items-start gap-2">
+                    <Clock3 className="w-4 h-4 mt-0.5 text-primary" />
+                    <span><span className="font-semibold">Typical Duration:</span> {portfolio.details.programDuration}</span>
+                  </p>
+                )}
+                {Array.isArray(portfolio.details?.campusLocations) &&
+                  portfolio.details.campusLocations.length > 0 && (
+                    <p>
+                      <span className="font-semibold">Campus:</span>{' '}
+                      {portfolio.details.campusLocations.join(', ')}
+                    </p>
+                  )}
               </div>
             </div>
           </div>
         </motion.div>
+
+        {Array.isArray(portfolio.details?.documentsRequired) &&
+          portfolio.details.documentsRequired.length > 0 && (
+            <motion.div
+              className="bg-muted/20 border border-border/50 rounded-2xl p-8 mb-16"
+              variants={itemVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-bold text-foreground mb-5 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-primary" />
+                Admission Documents Snapshot
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {portfolio.details.documentsRequired.map((doc) => (
+                  <div
+                    key={doc}
+                    className="rounded-lg border border-border/50 bg-background/70 px-4 py-3 text-sm text-muted-foreground"
+                  >
+                    {doc}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
         {/* Highlights Section */}
         {portfolio.highlights && portfolio.highlights.length > 0 && (

@@ -5,27 +5,31 @@ export const portfolioData = [
     slug: 'fh-kufstein-tirol',
     category: 'University of Applied Sciences',
     country: 'Austria',
-    image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop',
+    image: '/universities/fh-kufstein-tirol-hero.jpg',
+    logo: '/universities/fh-kufstein-tirol-logo.png',
     studentsPlaced: 3000,
-    programs: 12,
+    programs: 6,
     successRate: 95,
-    description: 'Leading institution in Austria offering internationally recognized degree programs with innovation, sustainability, and global business practices.',
+    description: 'Austria-based applied sciences university with focused programs in AI, data science, sustainability, business, and event management.',
     details: {
       founded: 1997,
       location: 'Kufstein, Tirol',
       ranking: 'Top 50 in Austria',
       specializations: [
-        'International Business Management',
-        'Facility Management & Real Estate',
-        'Energy & Sustainability Management',
-        'Drone Engineering & AI',
-        'Digital Marketing',
-        'Sports, Culture & Event Management',
-        'Smart Products & AI',
-        'Data Science & Analytics'
+        'BSc in Drone Engineering and AI-based Innovation',
+        'MSc in Data Science and Intelligence Analytics',
+        'MSc in Energy and Sustainability Management',
+        'MA in International Business Studies',
+        'MSc in Smart Products and AI-driven Development',
+        'MA in Sports, Culture and Event Management'
       ],
       visaSuccessRate: 98,
-      avgTuition: '€363.36/semester',
+      avgTuition: 'Approx. EUR 700-EUR 800/year',
+      intakeWindows: 'September',
+      programDuration: '2-3 years',
+      campusLocations: ['Kufstein, Tirol'],
+      eligibility:
+        'For bachelor pathways: around 70%+ in Higher Secondary with English and Mathematics. For master pathways: typically 65%+ in graduation (60% may be considered with relevant work profile).',
       scholarshipAvailable: true,
       partnerUniversities: 210,
       studentTestimonials: [
@@ -56,12 +60,12 @@ export const portfolioData = [
     packages: [
       {
         name: 'All-Inclusive Package',
-        price: '€9,950/semester',
+        price: 'EUR 9,950/semester',
         includes: ['Tuition Fee', 'German Language Course', 'Student Residence', 'Rental Bike', 'Climate Ticket', 'Food Credits']
       }
     ],
     contact: 'fh-kufstein@theglobalavenues.com',
-    website: 'https://theglobalavenues.com/fh-kufstein-tirol/'
+    website: 'https://www.fh-kufstein.ac.at/en/Home'
   },
   {
     id: 2,
@@ -69,27 +73,37 @@ export const portfolioData = [
     slug: 'mjm-graphic-design',
     category: 'Design & Creative',
     country: 'France',
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=500&fit=crop',
+    image: '/universities/mjm-graphic-design-hero.jpg',
+    logo: '/universities/mjm-graphic-design-logo.ico',
     studentsPlaced: 2500,
-    programs: 8,
+    programs: 5,
     successRate: 97,
-    description: 'School of creative professions since 1979 with campuses across France, training future professionals in design, digital, and creative fields.',
+    description: 'Creative design school in France with bachelor and master options in graphic, interior, fashion, and audiovisual design fields.',
     details: {
       founded: 1979,
       location: 'Paris, Bordeaux, Lille, Marseille, Nantes, Reims, Rennes, Strasbourg, Toulouse',
       ranking: 'QUALIOPI Certified',
       specializations: [
-        'Graphic Design',
-        'Digital Design',
-        'Web Design',
-        'UX/UI Design',
-        'Animation',
-        'Creative Direction',
-        'Branding',
-        'Art Direction'
+        'Bachelor in Graphic Design',
+        'Bachelor in Interior Architecture',
+        'Bachelor in Fashion Design',
+        'Master in Audio Visual Art Direction',
+        'International Master in Sustainable Interior Architecture and Project Management'
       ],
       visaSuccessRate: 96,
-      avgTuition: '€8,000-€12,000/year',
+      avgTuition: 'Approx. EUR 11,000-EUR 11,500/year',
+      intakeWindows: 'September, February',
+      programDuration: '3-4 years (bachelor), 1-2 years (master)',
+      campusLocations: ['Paris', 'Bordeaux', 'Lille', 'Marseille', 'Nantes', 'Reims', 'Rennes', 'Strasbourg', 'Toulouse'],
+      documentsRequired: [
+        'Academic transcripts',
+        'Passport',
+        'CV',
+        'B2 English level (MOI accepted)',
+        'Artistic portfolio (mandatory for master, optional for bachelor)'
+      ],
+      eligibility:
+        'Designed for creative-track applicants; portfolio quality and language readiness are key for selection.',
       scholarshipAvailable: true,
       staffQuality: 'All courses taught by working professionals',
       practicalFocus: '70% Practice, 30% Theory',
@@ -113,59 +127,7 @@ export const portfolioData = [
       '100% Visio Campus option available'
     ],
     contact: 'south.asia@mjm-design.com',
-    website: 'https://theglobalavenues.com/mjm-graphic-design/'
-  },
-  {
-    id: 3,
-    title: 'Estonian Entrepreneurship University',
-    slug: 'estonian-entrepreneurship-university',
-    category: 'University of Applied Sciences',
-    country: 'Estonia',
-    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=500&fit=crop',
-    studentsPlaced: 2200,
-    programs: 10,
-    successRate: 94,
-    description: 'Estonia\'s largest private institution delivering knowledge and skills for creative business fields. Located in Ülemiste City, the largest corporate campus in the Baltics.',
-    details: {
-      founded: 2000,
-      location: 'Tallinn, Ülemiste City',
-      ranking: 'Top institution in Baltics',
-      specializations: [
-        'Business Administration',
-        'Information Technology',
-        'Creative Business',
-        'Digital Marketing',
-        'Entrepreneurship',
-        'Software Development',
-        'Product Design',
-        'E-Commerce'
-      ],
-      visaSuccessRate: 94,
-      avgTuition: '€8,000-€11,000/year',
-      scholarshipAvailable: true,
-      studentDiversity: 30,
-      graduates: 6450,
-      studentTestimonials: [
-        {
-          name: 'Rohit Patel',
-          program: 'IT & Business',
-          quote: 'Best tech hub in Europe. Ülemiste City is incredible for networking with startups.',
-          location: 'Ahmedabad'
-        }
-      ]
-    },
-    longDescription: 'Estonian Entrepreneurship University of Applied Sciences (EUAS) is Estonia\'s largest private institution, strategically located in Ülemiste City. With students from 30+ countries, they deliver practical knowledge and entrepreneurial skills needed by global employers.',
-    highlights: [
-      'Located in Europe\'s largest tech hub - Ülemiste City',
-      '30+ nationalities represented',
-      'Strong startup & innovation ecosystem',
-      'Applied higher education focus',
-      'Master\'s degree programs in English',
-      'Internship opportunities in tech companies',
-      'Post-study work visa available'
-    ],
-    contact: 'south-asia@eek.ee',
-    website: 'https://theglobalavenues.com/estonian-entrepreneurship-university-of-applied-sciences/'
+    website: 'https://www.mjm-design.com/en'
   },
   {
     id: 4,
@@ -173,27 +135,37 @@ export const portfolioData = [
     slug: 'icn-business-school',
     category: 'Business School',
     country: 'France',
-    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=500&fit=crop',
+    image: '/universities/icn-business-school-hero.png',
+    logo: '/universities/icn-business-school-logo.svg',
     studentsPlaced: 2800,
-    programs: 15,
+    programs: 12,
     successRate: 96,
-    description: 'Prestigious institution since 1905 with unique #ArtTechnologyManagement philosophy. AACSB, EQUIS, and CEFDG accredited.',
+    description: 'Multi-campus business school with bachelor and master pathways across management, finance, marketing, audit, and supply chain.',
     details: {
       founded: 1905,
-      location: 'Nancy, France (Multiple Locations)',
-      ranking: 'AACSB, EQUIS, CEFDG Accredited',
+      location: 'Nancy, Paris, Berlin',
+      ranking: 'Multi-campus business school with international pathways',
       specializations: [
-        'Business Administration',
-        'MBA Programs',
-        'Finance',
-        'Entrepreneurship',
-        'Digital Business',
-        'International Business',
-        'Sustainability Management',
-        'Strategic Management'
+        'Bachelor in Management (BIM)',
+        'International Bachelor in Business Administration (BBA)',
+        'Master in Management (Grand Ecole Program)',
+        'MSc International Audit',
+        'MSc International Business Development',
+        'MSc Luxury and Design Management',
+        'MSc Supply Chain Management and Purchasing',
+        'MSc Marketing and Product Innovation',
+        'MSc Corporate Finance',
+        'MSc Finance and Risk Management',
+        'MSc Brand and Marketing Management',
+        'MIEX MSc in International Management'
       ],
       visaSuccessRate: 97,
-      avgTuition: '€12,000-€18,000/year',
+      avgTuition: 'Approx. EUR 9,000-EUR 14,000/year',
+      intakeWindows: 'September, January',
+      programDuration: '1-4 years depending program and entry level',
+      campusLocations: ['Paris', 'Nancy', 'Berlin'],
+      eligibility:
+        'Age guidance from sheet: bachelor up to about 25 years, MiM up to about 28 years, 2-year MSc up to about 30 years, and selected direct M2 options up to about 34 years.',
       scholarshipAvailable: true,
       accreditations: ['AACSB', 'EQUIS', 'CEFDG'],
       philosophy: '#ArtTechnologyManagement',
@@ -217,7 +189,7 @@ export const portfolioData = [
       'Career-focused curriculum with industry experts'
     ],
     contact: 'icn@theglobalavenues.com',
-    website: 'https://theglobalavenues.com/icn-creative-business-school/'
+    website: 'https://www.icn-artem.com/en/'
   },
   {
     id: 5,
@@ -225,27 +197,36 @@ export const portfolioData = [
     slug: 'mesoyios-college',
     category: 'Higher Education Institution',
     country: 'Cyprus',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=500&fit=crop',
+    image: '/universities/mesoyios-college-hero.webp',
+    logo: '/universities/mesoyios-college-logo.webp',
     studentsPlaced: 2100,
-    programs: 9,
+    programs: 5,
     successRate: 93,
-    description: 'Leading educational institution in Cyprus offering comprehensive programs with industry-focused curriculum and excellent career outcomes.',
+    description: 'Cyprus-based college offering hospitality and business pathways at bachelor, higher diploma, diploma, and foundation levels.',
     details: {
       founded: 1980,
       location: 'Limassol, Cyprus',
       ranking: 'Top Institution in Cyprus',
       specializations: [
+        'Hotel, Casino and Resort Management',
         'Business Administration',
-        'Hospitality Management',
-        'Tourism Studies',
-        'Marketing',
-        'Accounting & Finance',
-        'Event Management',
-        'Human Resource Management',
-        'International Trade'
+        'Higher Diploma in Hotel Management',
+        'Diploma in Hospitality Operations Management',
+        'Foundation in English Language'
       ],
       visaSuccessRate: 92,
-      avgTuition: '€8,500-€11,000/year',
+      avgTuition: 'Approx. EUR 4,700-EUR 7,000/year',
+      intakeWindows: 'February, September (foundation tracks also run in June)',
+      programDuration: '2-4 years depending pathway',
+      campusLocations: ['Limassol'],
+      documentsRequired: [
+        'Passport copy',
+        'Updated resume',
+        'Academic documents',
+        'English proficiency evidence (or MOI where accepted)'
+      ],
+      eligibility:
+        'Typically around 50%+ in previous studies, with gap years reviewed case-by-case and first-year fee prepayment requirement.',
       scholarshipAvailable: true,
       studentTestimonials: [
         {
@@ -266,8 +247,8 @@ export const portfolioData = [
       'Internship opportunities',
       'Beautiful Mediterranean location'
     ],
-    contact: 'admissions@mesoyios.ac.cy',
-    website: 'https://theglobalavenues.com/mesoyios-college-limassol/'
+    contact: 'southasia@mesoyios.ac.cy',
+    website: 'https://www.mesoyios.ac.cy/'
   },
   {
     id: 6,
@@ -275,27 +256,37 @@ export const portfolioData = [
     slug: 'cefam-international-school',
     category: 'Business School',
     country: 'France',
-    image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop',
+    image: '/universities/cefam-international-school-hero.webp',
+    logo: '/universities/cefam-international-school-logo.svg',
     studentsPlaced: 3200,
-    programs: 14,
+    programs: 5,
     successRate: 96,
-    description: 'Founded in 1986, CEFAM offers American liberal arts education in English with dual degrees from French and US universities.',
+    description: 'France-based business school with pathways to USA and Canada and focused options in international organization and business tracks.',
     details: {
       founded: 1986,
       location: 'Lyon, France',
       ranking: 'AACSB Member',
       specializations: [
-        'Business Management',
-        'International Management',
-        'Finance',
-        'Marketing',
-        'Entrepreneurship',
-        'Global Business',
-        'Strategic Management',
-        'MBA Programs'
+        'Master of International Organisation (Entry Year 1)',
+        'Master of International Organisation (Entry Year 4)',
+        'American Bachelor of Arts in International Relations',
+        'Bachelor Pathway to USA and Canada',
+        'Master Pathway to USA and Canada'
       ],
       visaSuccessRate: 97,
-      avgTuition: '€10,000-€15,000/year',
+      avgTuition: 'Approx. EUR 9,500-EUR 13,500/year',
+      intakeWindows: 'September, February',
+      programDuration: '2-4 years depending entry level',
+      campusLocations: ['Lyon'],
+      documentsRequired: [
+        'Cover letter',
+        'Passport or ID copy',
+        'Academic qualifications',
+        'Resume or CV',
+        'MOI or English proficiency'
+      ],
+      eligibility:
+        'Selection is profile-based with pathway options to partner institutions in USA and Canada.',
       scholarshipAvailable: true,
       dualDegrees: '100% of students earn dual degrees',
       studentsNationalities: 32,
@@ -322,7 +313,7 @@ export const portfolioData = [
       '93% placement rate for post-graduate students'
     ],
     contact: 'southasia.cefam@gmail.com',
-    website: 'https://theglobalavenues.com/cefam-international-school-of-management/'
+    website: 'https://www.cefam.fr/en/'
   },
   {
     id: 7,
@@ -330,29 +321,41 @@ export const portfolioData = [
     slug: 'kes-college-nicosia',
     category: 'Higher Education Institution',
     country: 'Cyprus',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=500&fit=crop',
+    image: '/universities/kes-college-nicosia-hero.jpg',
+    logo: '/universities/kes-college-nicosia-logo.png',
     studentsPlaced: 2500,
-    programs: 11,
+    programs: 10,
     successRate: 94,
-    description: 'Private higher education institution since 1971 offering career-oriented programs with strong industry connections in Cyprus.',
+    description: 'Private college in Nicosia offering culinary, business, hotel, logistics, fitness, office administration, and foundation pathways.',
     details: {
       founded: 1971,
       location: 'Nicosia, Cyprus',
       ranking: 'Leading Institution in Cyprus',
       specializations: [
-        'Business Management',
-        'Hospitality Management',
-        'Culinary Arts',
-        'Hotel Management',
-        'Logistics',
-        'Office Management',
-        'Medical Representative',
-        'Tourism Management',
-        'Health & Beauty',
-        'Journalism'
+        'BA Culinary Arts Management',
+        'BA Business Management',
+        'Higher Diploma in Hotel Management',
+        'Higher Diploma in Logistics and Supply Chain Management',
+        'Diploma in Medical Representative',
+        'Diploma in Personal Trainer and Group Fitness Coach',
+        'Diploma in Office Management Administrator',
+        'Diploma in Logistics',
+        'Diploma in Culinary Arts, Bakery and Pastry',
+        'Foundation in English Language'
       ],
       visaSuccessRate: 91,
-      avgTuition: '€7,500-€10,500/year',
+      avgTuition: 'Approx. EUR 2,200-EUR 6,000/year',
+      intakeWindows: 'February, September (foundation intakes also include June)',
+      programDuration: '2-4 years depending pathway',
+      campusLocations: ['Nicosia'],
+      documentsRequired: [
+        'Passport copy',
+        'Updated resume',
+        'Academic documents',
+        'English proficiency evidence (or MOI where accepted)'
+      ],
+      eligibility:
+        'Commonly around 50%+ academic profile, with study gaps accepted where justified and first-year tuition prepayment.',
       scholarshipAvailable: true,
       yearsInOperation: 54,
       accreditation: 'PITE - Cyprus Ministry of Education',
@@ -376,7 +379,7 @@ export const portfolioData = [
       'Student support services for international students'
     ],
     contact: 'sub-asia1@kes.ac.cy',
-    website: 'https://theglobalavenues.com/kes-college-nicosia-cyprus/'
+    website: 'https://www.kescollege.ac.cy/en/'
   },
   {
     id: 8,
@@ -384,27 +387,42 @@ export const portfolioData = [
     slug: 'international-american-university',
     category: 'American University',
     country: 'USA',
-    image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=500&fit=crop',
+    image: '/universities/international-american-university-hero.webp',
+    logo: '/universities/international-american-university-logo.png',
     studentsPlaced: 1800,
-    programs: 12,
+    programs: 8,
     successRate: 92,
-    description: 'Quality education at affordable price. IAU harnesses current business practices with professional industry expertise.',
+    description: 'US university in Los Angeles with associate, bachelor, master, and doctorate business pathways and multiple annual intakes.',
     details: {
       founded: 1990,
       location: 'Los Angeles, USA',
       ranking: 'WASC Accredited',
       specializations: [
-        'Business Administration',
-        'Marketing',
-        'Finance & Accounting',
-        'Management',
-        'Entrepreneurship',
-        'Information Technology',
-        'General Education',
-        'Health Services Administration'
+        'Associate of Science in Business Administration',
+        'Bachelor of Business Administration',
+        'BBA in Accounting',
+        'Master of Business Administration',
+        'MBA in Business Analytics (STEM)',
+        'MBA in Management Information System (STEM)',
+        'Doctor of Business Administration',
+        'Doctor of Management'
       ],
       visaSuccessRate: 88,
-      avgTuition: '$15,000-$20,000/year',
+      avgTuition: 'Approx. USD 7,000-USD 8,500/year',
+      intakeWindows:
+        'Spring Session 1, Spring Session 2, Summer Session 1, Summer Session 2, Fall Session 1, Fall Session 2',
+      programDuration: '2.5-5 years (undergraduate), 2 years (MBA), 3-4 years (doctorate)',
+      campusLocations: ['Los Angeles, California'],
+      documentsRequired: [
+        'Photograph with white background',
+        'Passport copy',
+        'Updated resume',
+        'Academic documents',
+        'Bank certificate around USD 24,000',
+        'Affidavit of support and sponsor ID (if sponsored)'
+      ],
+      eligibility:
+        'Usually around 50%+ in last qualification with gap years considered if justified. Doctorate applications need SOP and two LORs.',
       scholarshipAvailable: true,
       departments: 'School of Business, School of General Education',
       curriculumFocus: 'Current business practices + classroom learning',
@@ -429,61 +447,174 @@ export const portfolioData = [
       'Career-focused programs'
     ],
     contact: 'in1studyusa@iaula.edu',
-    website: 'https://theglobalavenues.com/international-american-university/'
+    website: 'https://iaula.edu/'
   },
   {
-    id: 9,
-    title: 'EIT InnoEnergy',
-    slug: 'eit-innoenergy',
-    category: 'Professional Training',
-    country: 'Europe',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=500&fit=crop',
-    studentsPlaced: 67000,
-    programs: 80,
-    successRate: 98,
-    description: "Europe's leading destination for cutting-edge training in sustainable energy and green skills development.",
+    id: 10,
+    title: 'University of Nicosia',
+    slug: 'university-of-nicosia',
+    category: 'Higher Education Institution',
+    country: 'Cyprus',
+    image: '/universities/university-of-nicosia-hero.jpg',
+    logo: '/universities/university-of-nicosia-logo.png',
+    studentsPlaced: 2400,
+    programs: 14,
+    successRate: 94,
+    description: 'Well-known university in Cyprus offering career-ready programs in business, technology, health sciences, and social sciences.',
     details: {
-      founded: 2010,
-      location: 'Multiple locations across Europe',
-      ranking: 'Europe Leading Training Provider',
+      founded: 1980,
+      location: 'Nicosia, Cyprus',
+      ranking: 'Recognized private university in Cyprus',
       specializations: [
-        'Battery Technology',
-        'Solar Photovoltaics (PV)',
-        'Green Hydrogen',
-        'Energy Storage',
-        'Renewable Energy',
-        'Sustainable Energy Management',
-        'Smart Grid Technology',
-        'Environmental Sustainability'
+        'Business Administration',
+        'Computer Science',
+        'Data Science',
+        'Digital Marketing',
+        'Public Health',
+        'Psychology',
+        'International Relations',
+        'Finance'
       ],
-      visaSuccessRate: 98,
-      trainers: 40,
-      trainingLanguages: 10,
-      courses: 80,
-      certificates: 29,
-      learningJourneys: 70,
-      workersTrainedUpskilled: 67000,
+      visaSuccessRate: 92,
+      avgTuition: 'Approx. EUR 8,000-EUR 13,000/year',
+      intakeWindows: 'February, May, September',
+      programDuration: 'Varies by program and level',
+      campusLocations: ['Nicosia'],
+      eligibility:
+        'Sheet includes institution and intake data; final course-level eligibility depends on selected program pathway.',
+      scholarshipAvailable: true,
       studentTestimonials: [
         {
-          name: 'Arjun Patel',
-          program: 'Green Hydrogen Certification',
-          quote: 'World-class training in sustainable energy with industry experts. Perfect for future-ready skills.',
-          location: 'Bangalore'
+          name: 'Ritika Menon',
+          program: 'MSc Data Science',
+          quote: 'Good international campus environment and practical academics with helpful student support.',
+          location: 'Kochi'
         }
       ]
     },
-    longDescription: 'EIT InnoEnergy is Europe\'s leading destination for cutting-edge training in sustainable energy. They provide professionals and businesses worldwide with knowledge and skills required to develop a net-zero economy. With 67,000+ workers trained and upskilled globally.',
+    longDescription: 'University of Nicosia is one of the established private universities in Cyprus and attracts students from different regions. It offers undergraduate and postgraduate pathways across business, technology, health, and social disciplines with an employability-focused approach.',
     highlights: [
-      '67,000+ professionals trained globally',
-      '80+ comprehensive courses and programs',
-      '40+ industry experts as trainers',
-      'Training available in 10 languages',
-      '29 industry-recognized certificates',
-      'Focus on battery, solar, and green hydrogen',
-      'Source-Train-Hire services available'
+      'Wide range of undergraduate and postgraduate programs',
+      'Industry-linked curriculum and practical learning',
+      'International student community',
+      'Strong student support and academic advising',
+      'Flexible progression pathways for global students',
+      'Modern learning infrastructure',
+      'English-taught program options'
     ],
-    contact: 'southasia@eitinnnoenergy.eu',
-    website: 'https://theglobalavenues.com/eit-innoenergy/'
+    contact: 'cyprus@theglobalavenues.com',
+    website: 'https://www.unic.ac.cy/'
+  },
+  {
+    id: 11,
+    title: 'Epitech',
+    slug: 'epitech',
+    category: 'Technology Institute',
+    country: 'France',
+    image: '/universities/epitech-hero.png',
+    logo: '/universities/epitech-logo.svg',
+    studentsPlaced: 2600,
+    programs: 1,
+    successRate: 95,
+    description: 'France-based technology school offering a focused Master in IT track with project-led learning and strong coding fundamentals.',
+    details: {
+      founded: 1999,
+      location: 'Paris and multiple campuses in France',
+      ranking: 'Recognized digital and coding school in France',
+      specializations: [
+        'Master in IT (2-Year Track)'
+      ],
+      visaSuccessRate: 93,
+      avgTuition: 'Approx. EUR 13,000-EUR 14,000/year',
+      intakeWindows: 'September',
+      programDuration: '2 years',
+      campusLocations: ['Paris'],
+      documentsRequired: [
+        'English-translated transcripts',
+        'Motivation letter',
+        'English proficiency proof (B2 level)',
+        'Individual motivation interview',
+        'English and logic screening test'
+      ],
+      eligibility:
+        'Applicants are expected to have prior computer science or IT exposure, ideally at least one year of programming background.',
+      scholarshipAvailable: true,
+      studentTestimonials: [
+        {
+          name: 'Yash Verma',
+          program: 'Computer Science',
+          quote: 'Hands-on projects and coding culture helped me build a strong technical portfolio.',
+          location: 'Lucknow'
+        }
+      ]
+    },
+    longDescription: 'Epitech is known for a project-driven learning model designed to build practical technical skills. Students work on real-world challenges in software, data, and digital product areas, which supports faster job readiness in international tech markets.',
+    highlights: [
+      'Project-based learning model',
+      'Strong focus on employable tech skills',
+      'Programs aligned with digital industry needs',
+      'Collaborative learning and peer coding culture',
+      'Multiple campuses across France',
+      'Innovation and startup-oriented environment',
+      'English track options for international applicants'
+    ],
+    contact: 'epitech.tga@gmail.com',
+    website: 'https://international.epitech.eu/'
+  },
+  {
+    id: 12,
+    title: "IFH - Institut Francais de l'Hotellerie",
+    slug: 'ifh-institut-francais-de-l-hotellerie',
+    category: 'Hospitality School',
+    country: 'France',
+    image: '/universities/ifh-institut-francais-de-l-hotellerie-hero.jpg',
+    studentsPlaced: 1700,
+    programs: 9,
+    successRate: 93,
+    description: 'Hospitality-focused institution in France preparing students for hotel, culinary, and service management roles with practical training.',
+    details: {
+      founded: 2012,
+      location: 'Paris, France',
+      ranking: 'Hospitality-focused training and degree pathways',
+      specializations: [
+        'Hotel Management',
+        'Hospitality Operations',
+        'Culinary and Food Service',
+        'Restaurant Management',
+        'Customer Experience',
+        'Tourism Services',
+        'Hospitality Sales',
+        'Front Office Management'
+      ],
+      visaSuccessRate: 91,
+      avgTuition: 'Approx. EUR 8,000-EUR 12,000/year',
+      intakeWindows: 'February, September',
+      programDuration: '1-3 years depending pathway',
+      campusLocations: ['Paris'],
+      eligibility:
+        'Country sheet provides intake-level direction; exact admission criteria vary by selected hospitality track.',
+      scholarshipAvailable: true,
+      studentTestimonials: [
+        {
+          name: 'Aman Khatri',
+          program: 'Hospitality Management',
+          quote: 'Strong practical exposure and professional training helped me prepare for international hospitality roles.',
+          location: 'Delhi'
+        }
+      ]
+    },
+    longDescription: "IFH - Institut Francais de l'Hotellerie supports students aiming for careers in hotel and hospitality sectors. The training model blends classroom instruction with practical exposure in service operations and hospitality leadership fundamentals.",
+    highlights: [
+      'Hospitality-first curriculum',
+      'Practice-based training format',
+      'Career pathways in hotel and tourism sectors',
+      'Industry-aligned skill development',
+      'International student-friendly environment',
+      'Paris location with hospitality ecosystem access',
+      'Job-readiness focused outcomes'
+    ],
+    contact: 'admissions@ifh-paris.com',
+    website: 'https://ifh-paris.com/'
   }
 ];
 
@@ -507,7 +638,6 @@ export const categories = [
   'Business School',
   'Higher Education Institution',
   'American University',
-  'Professional Training'
 ];
 
 export const partnerCompanies = [

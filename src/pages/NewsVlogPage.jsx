@@ -9,12 +9,17 @@ import { newsItems as fallbackNewsItems } from '../data/newsData';
 const getCardImage = (item) => item.thumbnail || item.image;
 const INVALID_MEDIA_VALUES = new Set(['', 'null', 'undefined', 'false', 'none', 'n/a', 'na', '#']);
 const VIDEO_DISABLED_ARTICLE_KEY = 'how-universities-can-improve-offer-conversion-in-india';
+const IMAGE_FALLBACK_URL = '/videos/hero-poster.jpg';
 const ALLOWED_ARTICLE_ORDER = [
-  'partnership-expansion-across-the-uk',
-  'how-universities-can-improve-offer-conversion-in-india',
+  'study-in-cyprus-mba-opportunities-at-kes-college-nicosia',
+  'building-the-future-of-gaming-study-game-design-and-development-at-euas-estonia',
 ];
 const ALLOWED_ARTICLE_SET = new Set(ALLOWED_ARTICLE_ORDER);
 const IMAGE_OVERRIDE_BY_ARTICLE = {
+  'study-in-cyprus-mba-opportunities-at-kes-college-nicosia':
+    '/universities/kes-college-nicosia-hero.jpg',
+  'building-the-future-of-gaming-study-game-design-and-development-at-euas-estonia':
+    'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
   'partnership-expansion-across-the-uk':
     'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1600&q=80',
 };
@@ -32,10 +37,13 @@ const normalizeIdentity = (value) =>
     .replace(/^-+|-+$/g, '');
 
 const hasValue = (value) => value !== undefined && value !== null && String(value).trim() !== '';
+const isPublicAssetPath = (value) => /^\/(universities|gallery|team|videos)\//i.test(value);
 
 const sanitizeMediaUrl = (value) => {
   const raw = String(value || '').trim();
   if (!raw || INVALID_MEDIA_VALUES.has(raw.toLowerCase())) return '';
+  if (/^(https?:\/\/|data:|blob:)/i.test(raw)) return raw;
+  if (isPublicAssetPath(raw)) return raw;
   return resolveMediaUrl(raw);
 };
 
@@ -63,6 +71,12 @@ const applyImagePolicy = (item) => {
 };
 
 const applyContentPolicy = (item) => applyVideoPolicy(applyImagePolicy(item));
+const handleImageError = (event) => {
+  const target = event.currentTarget;
+  if (target.dataset.fallbackApplied === 'true') return;
+  target.dataset.fallbackApplied = 'true';
+  target.src = IMAGE_FALLBACK_URL;
+};
 
 const getArticleKey = (item) => normalizeIdentity(item?.slug || item?.title || item?.id);
 const isAllowedArticle = (item) => ALLOWED_ARTICLE_SET.has(getArticleKey(item));
@@ -340,6 +354,7 @@ export default function NewsVlogPage() {
                         alt={item.title}
                         loading="lazy"
                         decoding="async"
+                        onError={handleImageError}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
@@ -464,6 +479,7 @@ export default function NewsVlogPage() {
                             alt={item.title}
                             loading="lazy"
                             decoding="async"
+                            onError={handleImageError}
                             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                         ) : (
