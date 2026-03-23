@@ -1,290 +1,78 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BookOpen, Zap, Users, Globe, Award, CheckCircle, ArrowRight, MapPin } from 'lucide-react';
+import {
+  ArrowRight,
+  BarChart3,
+  Building2,
+  CheckCircle2,
+  ClipboardCheck,
+  Globe2,
+  Megaphone,
+  Network,
+  ShieldCheck,
+  Users,
+  Workflow,
+} from 'lucide-react';
+import { educationPrograms } from '../data/educationProgramsData';
 import { getOfferings } from '../services/contentApi';
 
-const programsData = {
-  'fulltime-degree': {
-    name: 'Market Entry & Representation',
-    description: 'Localized institutional representation for sustained growth in South Asia',
-    color: 'from-blue-500 to-blue-600',
-    icon: BookOpen,
-    overview: 'We position your university in high-potential markets through on-ground representation, recruitment strategy, and brand visibility programs.',
-    services: [
-      {
-        title: 'In-Country Representation',
-        description: 'Dedicated local team to represent your institution in priority markets.'
-      },
-      {
-        title: 'Institution Positioning',
-        description: 'Clear value proposition and messaging adapted to regional decision-makers.'
-      },
-      {
-        title: 'Channel Development',
-        description: 'Build and activate counselor and agency networks aligned to your goals.'
-      },
-      {
-        title: 'Admissions Process Alignment',
-        description: 'Optimize workflows between your admissions team and market channels.'
-      },
-      {
-        title: 'Quarterly Business Reviews',
-        description: 'Performance reviews with insights, opportunities, and action plans.'
-      },
-    ],
-    requirements: [
-      { title: 'Program Portfolio Clarity', description: 'Defined priority programs and intake cycles.' },
-      { title: 'Admissions Guidelines', description: 'Transparent criteria and turnaround expectations.' },
-      { title: 'Brand Assets', description: 'Approved marketing collateral and communication standards.' },
-      { title: 'Decision-Making SPOC', description: 'Institutional point of contact for campaign alignment.' },
-      { title: 'Growth KPIs', description: 'Agreement on measurable goals and reporting cadence.' },
-    ],
-    documents: [
-      'Institution profile and brand guidelines',
-      'Program matrix with entry requirements',
-      'Admissions SOP and timelines',
-      'Scholarship and fee policy',
-      'Offer and policy process notes',
-      'Compliance and partnership policy'
-    ],
-    countries: [
-      'India', 'Nepal', 'Bangladesh', 'Sri Lanka', 'UAE', 'UK', 'Canada', 'Germany', 'Australia'
-    ]
+const CORE_SERVICES = [
+  {
+    title: 'In-Country Representation',
+    description: 'We represent your university in India and nearby markets with a local team.',
+    icon: Building2,
   },
-  'online-program': {
-    name: 'Digital Demand Generation',
-    description: 'Campaign-led digital outreach for quality application demand',
-    color: 'from-purple-500 to-purple-600',
-    icon: Zap,
-    overview: 'Run digital-first campaigns to improve program awareness, generate qualified leads, and increase conversion efficiency.',
-    services: [
-      {
-        title: 'Campaign Strategy',
-        description: 'Channel mix planning for high-intent segments and priority geographies.'
-      },
-      {
-        title: 'Landing Page & Funnel Setup',
-        description: 'Build conversion-ready pathways from awareness to qualified inquiry.'
-      },
-      {
-        title: 'Content Localization',
-        description: 'Region-specific content adapted for applicants, counselors, and institution stakeholders.'
-      },
-      {
-        title: 'Lead Qualification Framework',
-        description: 'Scoring and filtering rules to improve application quality.'
-      },
-      {
-        title: 'Performance Optimization',
-        description: 'Weekly optimization based on CPL, conversion, and intake demand.'
-      },
-    ],
-    requirements: [
-      { title: 'Target Segment Definition', description: 'Priority audience and program focus.' },
-      { title: 'Approved Messaging', description: 'Institutional positioning for campaign consistency.' },
-      { title: 'Response SLA', description: 'Timely follow-up from admissions or recruitment teams.' },
-      { title: 'CRM Visibility', description: 'Lead tracking and funnel transparency.' },
-    ],
-    documents: [
-      'Campaign brief and intake objectives',
-      'Approved communication templates',
-      'Program brochures and fee sheets',
-      'Application process FAQs',
-      'Scholarship and financial aid details',
-      'Contact matrix for escalations'
-    ],
-    countries: ['Global - Digital Outreach']
+  {
+    title: 'Marketing & Promotion',
+    description: 'We run city-wise and digital promotion to increase quality student interest.',
+    icon: Megaphone,
   },
-  'vocational-courses': {
-    name: 'Counselor & Agent Enablement',
-    description: 'Structured training and quality controls for partner channels',
-    color: 'from-green-500 to-green-600',
-    icon: Award,
-    overview: 'Strengthen your channel ecosystem with training frameworks, governance controls, and performance-led partner enablement.',
-    services: [
-      {
-        title: 'Partner Onboarding',
-        description: 'Structured onboarding for counselors and recruitment agencies.'
-      },
-      {
-        title: 'Training Modules',
-        description: 'Program updates, admission criteria, and compliance best practices.'
-      },
-      {
-        title: 'Quality Monitoring',
-        description: 'Application quality checks and partner performance review loops.'
-      },
-      {
-        title: 'Incentive Design',
-        description: 'Aligned reward models for sustainable and ethical growth.'
-      },
-      {
-        title: 'Partner Communication Hub',
-        description: 'Centralized updates, webinars, and support touchpoints.'
-      },
-    ],
-    requirements: [
-      { title: 'Channel Policy', description: 'Defined partner code of conduct and compliance terms.' },
-      { title: 'Training Calendar', description: 'Regular enablement schedule across intakes.' },
-      { title: 'Quality Benchmarks', description: 'Submission standards and rejection controls.' },
-    ],
-    documents: [
-      'Partner onboarding toolkit',
-      'Program fact sheets',
-      'Admission and visa requirement notes',
-      'Compliance declaration templates',
-      'Performance scorecard format'
-    ],
-    countries: ['India', 'Nepal', 'Bangladesh', 'Sri Lanka', 'Middle East']
+  {
+    title: 'Agent & Counselor Management',
+    description: 'We onboard, train, and guide trusted partners with clear quality standards.',
+    icon: Network,
   },
-  'internship-abroad': {
-    name: 'Application Conversion Operations',
-    description: 'End-to-end operations to improve offer quality and conversion velocity',
-    color: 'from-orange-500 to-orange-600',
-    icon: Globe,
-    overview: 'We support your admission funnel from inquiry to enrollment with process governance, conversion nudges, and stakeholder coordination.',
-    services: [
-      {
-        title: 'Application Triage',
-        description: 'Pre-screening and profile matching to reduce non-fit submissions.'
-      },
-      {
-        title: 'Document Readiness',
-        description: 'Structured support to improve first-pass application quality.'
-      },
-      {
-        title: 'Offer Acceptance Support',
-        description: 'Coordinated communication to improve decision timelines.'
-      },
-      {
-        title: 'Offer Conversion Coordination',
-        description: 'Support operations for post-offer conversion continuity.'
-      },
-      {
-        title: 'Intake Forecasting',
-        description: 'Pipeline forecasting for better planning and resource allocation.'
-      },
-    ],
-    requirements: [
-      { title: 'Clear Admissions Criteria', description: 'Program-level eligibility and priorities.' },
-      { title: 'Offer Timelines', description: 'Defined SLA for review and decisions.' },
-      { title: 'Conversion KPIs', description: 'Offer-to-enrollment targets and monitoring cadence.' },
-      { title: 'Escalation Matrix', description: 'Fast resolution path for critical cases.' },
-    ],
-    documents: [
-      'Application checklist by program',
-      'Decision timeline matrix',
-      'Offer communication templates',
-      'Visa support FAQs',
-      'Pre-departure communication flow'
-    ],
-    countries: ['UK', 'Canada', 'USA', 'Germany', 'France', 'Australia', 'Netherlands']
+  {
+    title: 'Market Research & Insights',
+    description: 'We share practical market trends, demand signals, and intake-ready suggestions.',
+    icon: BarChart3,
   },
-  'summer-winter-school': {
-    name: 'Partner Events & Delegations',
-    description: 'B2B events, institutional visits, and recruitment-facing engagement',
-    color: 'from-pink-500 to-pink-600',
+  {
+    title: 'Admissions Support',
+    description: 'We assist with application flow, document readiness, and offer follow-up.',
+    icon: ClipboardCheck,
+  },
+  {
+    title: 'Collaboration & Partnerships',
+    description: 'We help build long-term collaborations with schools, counselors, and industry bodies.',
     icon: Users,
-    overview: 'Create direct engagement with schools, counselors, and recruitment networks through curated B2B events and institutional delegations.',
-    services: [
-      {
-        title: 'Institution Showcases',
-        description: 'City-based events to present programs and value proposition.'
-      },
-      {
-        title: 'Counselor Workshops',
-        description: 'Focused sessions for training and relationship strengthening.'
-      },
-      {
-        title: 'Delegation Planning',
-        description: 'End-to-end planning for regional visits and institutional meetings.'
-      },
-      {
-        title: 'B2B Conference Support',
-        description: 'Participation strategy and execution at key industry events.'
-      },
-      {
-        title: 'Post-Event Follow Through',
-        description: 'Lead capture, partner follow-up, and conversion handover support.'
-      },
-    ],
-    requirements: [
-      { title: 'Event Objectives', description: 'Clear targets by geography and stakeholder type.' },
-      { title: 'Speaker Availability', description: 'Institution representation for sessions and meetings.' },
-      { title: 'Program Priorities', description: 'Defined portfolio focus for outreach events.' },
-    ],
-    documents: [
-      'Event calendar and priority locations',
-      'Presentation deck and brochures',
-      'Speaker notes and FAQs',
-      'Lead capture and follow-up workflow',
-      'Reporting template for event outcomes'
-    ],
-    countries: ['India', 'UAE', 'Nepal', 'Sri Lanka', 'Bangladesh', 'Europe']
-  }
+  },
+];
+
+const HOW_WE_WORK = [
+  'Understand your market goals and intake priorities.',
+  'Build a practical action plan with timelines.',
+  'Execute with local team support and weekly tracking.',
+  'Improve results through regular review and clear reporting.',
+];
+
+const OFFERING_ICON_MAP = {
+  'fulltime-degree': Building2,
+  'online-program': Megaphone,
+  'vocational-courses': Network,
+  'internship-abroad': Workflow,
+  'summer-winter-school': Users,
 };
 
+const parseList = (value) =>
+  String(value || '')
+    .split(/[,|;/]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
 export default function WhatWeOfferPage() {
-  const [activeTab, setActiveTab] = useState('fulltime-degree');
   const [apiProgramMap, setApiProgramMap] = useState({});
-
-  const parseCountries = (value) =>
-    String(value || '')
-      .split(/[,|;/]/)
-      .map((item) => item.trim())
-      .filter(Boolean);
-
-  const mergedPrograms = useMemo(() => {
-    const defaultColors = [
-      'from-blue-500 to-blue-600',
-      'from-purple-500 to-purple-600',
-      'from-green-500 to-green-600',
-      'from-orange-500 to-orange-600',
-      'from-pink-500 to-pink-600',
-    ];
-    const defaultIcons = [BookOpen, Zap, Award, Globe, Users];
-
-    const merged = { ...programsData };
-
-    Object.entries(apiProgramMap).forEach(([slug, offering], index) => {
-      const fallback = merged[slug];
-      const generated = {
-        name: offering.title || `Program ${index + 1}`,
-        description: offering.description || 'Explore this service track with structured execution support from our team.',
-        color: defaultColors[index % defaultColors.length],
-        icon: defaultIcons[index % defaultIcons.length],
-        overview:
-          offering.description || 'Detailed program information will be added soon.',
-        services: [
-          {
-            title: 'Expert Guidance',
-            description:
-              'Our team aligns your institution goals, market priorities, and delivery process.',
-          },
-        ],
-        requirements: [
-          {
-            title: 'Eligibility Review',
-            description: 'Requirements vary by institution policy and target market.',
-          },
-        ],
-        documents: ['Institution Brief', 'Program Matrix', 'Partner SOP'],
-        countries: parseCountries(offering.countries),
-      };
-
-      merged[slug] = {
-        ...(fallback || generated),
-        ...(offering.title ? { name: offering.title } : {}),
-        ...(offering.description ? { overview: offering.description } : {}),
-        ...(parseCountries(offering.countries).length > 0
-          ? { countries: parseCountries(offering.countries) }
-          : {}),
-      };
-    });
-
-    return merged;
-  }, [apiProgramMap]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -293,10 +81,7 @@ export default function WhatWeOfferPage() {
       try {
         const data = await getOfferings({ signal: controller.signal });
         const offerings = Array.isArray(data) ? data : [];
-
-        if (offerings.length === 0) {
-          return;
-        }
+        if (offerings.length === 0) return;
 
         const mapped = offerings.reduce((acc, item) => {
           const slug = String(item.slug || '').trim();
@@ -314,223 +99,71 @@ export default function WhatWeOfferPage() {
     };
 
     loadOfferings();
-
     return () => controller.abort();
   }, []);
 
-  useEffect(() => {
-    if (mergedPrograms[activeTab]) return;
-    const firstProgram = Object.keys(mergedPrograms)[0];
-    if (firstProgram) {
-      setActiveTab(firstProgram);
-    }
-  }, [activeTab, mergedPrograms]);
+  const mergedPrograms = useMemo(
+    () =>
+      educationPrograms.map((program) => {
+        const apiOffering = apiProgramMap[program.id];
+        const apiRegions = parseList(apiOffering?.countries);
 
-  const currentProgram = mergedPrograms[activeTab] || programsData['fulltime-degree'];
-  const CurrentIcon = currentProgram.icon;
+        return {
+          ...program,
+          name: apiOffering?.title || program.name,
+          description: apiOffering?.description || program.description,
+          regions: apiRegions.length > 0 ? apiRegions : program.regions,
+        };
+      }),
+    [apiProgramMap]
+  );
 
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="relative py-16 px-4 bg-gradient-to-b from-primary/10 to-background">
-        <div className="max-w-7xl mx-auto text-center mb-12">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-bold text-foreground mb-4"
-          >
+    <div className="min-h-screen bg-background pb-20 pt-20">
+      <section className="relative overflow-hidden px-4 pb-12 pt-10 sm:px-6 lg:px-8">
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 bg-[radial-gradient(60%_90%_at_50%_0%,rgba(83,64,176,0.22),transparent)]" />
+        <div className="mx-auto max-w-7xl rounded-[30px] border border-border/70 bg-[linear-gradient(140deg,rgba(45,27,105,0.08)_0%,rgba(255,255,255,0.97)_50%,rgba(232,82,26,0.09)_100%)] px-6 py-10 shadow-[0_24px_66px_rgba(20,14,45,0.16)] dark:bg-[linear-gradient(140deg,rgba(45,27,105,0.34)_0%,rgba(14,10,28,0.97)_50%,rgba(232,82,26,0.16)_100%)] sm:px-8 lg:px-12">
+          <h1 className="text-4xl font-bold leading-tight text-foreground sm:text-5xl lg:text-6xl">
             What We Offer
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-          >
-            Explore our institution-first service tracks built to strengthen market presence and conversion quality
-          </motion.p>
-        </div>
+          </h1>
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            We help universities grow in India and nearby markets through local representation, partner management,
+            marketing support, and admissions process guidance. Our approach is practical, transparent, and result-focused.
+          </p>
 
-        {/* Tabs Navigation */}
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap gap-2 justify-center md:justify-start md:gap-3 mb-12">
-            {Object.entries(mergedPrograms).map(([key, program]) => (
-              <motion.button
-                key={key}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveTab(key)}
-                className={`px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium transition-all duration-300 ${
-                  activeTab === key
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'bg-muted text-foreground hover:bg-muted-foreground/20'
-                }`}
-              >
-                <span className="hidden sm:inline">{program.name}</span>
-                <span className="sm:hidden">{program.name.split(' ')[0]}</span>
-              </motion.button>
+          <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {HOW_WE_WORK.map((step) => (
+              <div key={step} className="rounded-xl border border-border/70 bg-background/80 p-3 text-sm text-muted-foreground">
+                {step}
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Content Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {/* Header */}
-            <div className="mb-12">
-              <div className="flex items-center gap-4 mb-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${currentProgram.color} text-white`}>
-                  <CurrentIcon className="w-6 h-6" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">{currentProgram.name}</h2>
-              </div>
-              <p className="text-lg text-muted-foreground mb-6">{currentProgram.overview}</p>
-            </div>
-
-            {/* Two Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-              {/* Services */}
-              <div>
-                <h3 className="text-2xl font-bold text-foreground mb-6">Key Services</h3>
-                <div className="space-y-4">
-                  {currentProgram.services.map((service, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: idx * 0.05 }}
-                      className="flex gap-3 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                    >
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-foreground mb-1">{service.title}</h4>
-                        <p className="text-sm text-muted-foreground">{service.description}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Requirements */}
-              <div>
-                <h3 className="text-2xl font-bold text-foreground mb-6">Key Requirements</h3>
-                <div className="space-y-4">
-                  {currentProgram.requirements.map((req, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: idx * 0.05 }}
-                      className="p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors border border-border"
-                    >
-                      <h4 className="font-semibold text-foreground mb-2">{req.title}</h4>
-                      <p className="text-sm text-muted-foreground">{req.description}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Documents Required */}
-            <div className="mb-16">
-              <h3 className="text-2xl font-bold text-foreground mb-6">Documents Typically Required</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {currentProgram.documents.map((doc, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: idx * 0.03 }}
-                    className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/20"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0"></div>
-                    <span className="text-foreground text-sm">{doc}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Countries */}
-            <div className="mb-12 p-8 rounded-xl bg-gradient-to-br from-muted/50 to-background border border-border">
-              <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <MapPin className="w-6 h-6 text-primary" />
-                Countries Offering This Program
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {currentProgram.countries.map((country, idx) => (
-                  <motion.span
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.2, delay: idx * 0.05 }}
-                    className="px-4 py-2 rounded-full bg-primary/10 text-primary font-medium border border-primary/20"
-                  >
-                    {country}
-                  </motion.span>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA */}
-            <div className="text-center">
-              <Link
-                to={`/education-program/${activeTab}/undergraduate`}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                Explore {currentProgram.name}
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Why Choose Us Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Partner With Us?</h2>
-            <p className="text-lg text-muted-foreground">We provide full-cycle partnership support from strategy to measurable outcomes</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                title: 'Expert Guidance',
-                description: 'Our experienced consultants align strategy, channels, and delivery with your institution goals.',
-                icon: Users
-              },
-              {
-                title: 'Global Network',
-                description: 'Access to partnerships with top universities and institutions worldwide.',
-                icon: Globe
-              },
-              {
-                title: 'Complete Support',
-                description: 'From demand generation to application conversion, we support every stage of the partnership lifecycle.',
-                icon: CheckCircle
-              }
-            ].map((benefit, idx) => {
-              const Icon = benefit.icon;
+      <section className="px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Core Services</h2>
+          <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+            These are the main support areas we provide to partner institutions.
+          </p>
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {CORE_SERVICES.map((item, index) => {
+              const Icon = item.icon;
               return (
                 <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className="p-8 rounded-xl bg-background border border-border hover:shadow-lg transition-shadow"
+                  key={item.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.32, delay: index * 0.05 }}
+                  className="rounded-2xl border border-border/70 bg-background p-5 shadow-sm"
                 >
-                  <Icon className="w-8 h-8 text-primary mb-4" />
-                  <h3 className="text-xl font-bold text-foreground mb-2">{benefit.title}</h3>
-                  <p className="text-muted-foreground">{benefit.description}</p>
+                  <span className="mb-4 inline-flex rounded-xl border border-primary/20 bg-primary/10 p-2.5 text-primary">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
                 </motion.div>
               );
             })}
@@ -538,17 +171,116 @@ export default function WhatWeOfferPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Ready to Scale Your Institutional Reach?</h2>
-          <p className="text-lg text-muted-foreground mb-8">Connect with our team to design a partnership model aligned to your growth priorities.</p>
+      <section className="px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Service Tracks</h2>
+          <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+            Choose the track that matches your current market stage.
+          </p>
+
+          <div className="mt-6 space-y-5">
+            {mergedPrograms.map((program, index) => {
+              const Icon = OFFERING_ICON_MAP[program.id] || Building2;
+              return (
+                <motion.article
+                  key={program.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-70px' }}
+                  transition={{ duration: 0.34, delay: index * 0.05 }}
+                  className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="max-w-3xl">
+                      <div className="mb-3 inline-flex rounded-xl border border-primary/20 bg-primary/10 p-2.5 text-primary">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-foreground">{program.name}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                        {program.description}
+                      </p>
+                    </div>
+                    <Link
+                      to={`/education-program/${program.id}/undergraduate`}
+                      className="inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                    >
+                      View Full Details
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+                    <div className="rounded-xl border border-border/70 bg-muted/20 p-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                        Key Work Areas
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {program.modules.map((module) => (
+                          <li key={module.title} className="text-sm text-muted-foreground">
+                            <span className="font-semibold text-foreground">{module.title}:</span> {module.detail}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="rounded-xl border border-border/70 bg-muted/20 p-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                        What We Track
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {program.kpis.map((kpi) => (
+                          <li key={kpi} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                            <span>{kpi}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="rounded-xl border border-border/70 bg-muted/20 p-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                        Quality & Compliance
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {program.complianceFocus.map((point) => (
+                          <li key={point} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                            <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {program.regions.map((region) => (
+                          <span
+                            key={region}
+                            className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+                          >
+                            {region}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl rounded-2xl border border-border/70 bg-background p-6 text-center shadow-sm sm:p-8">
+          <h2 className="text-3xl font-bold text-foreground">Ready To Plan Your Next Intake?</h2>
+          <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Talk to our partnership team. We will share a clear scope, timeline, and execution plan based on your priorities.
+          </p>
           <Link
             to="/collaborate"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(92deg,#2D1B69_0%,#5B45C6_55%,#E8521A_100%)] px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(45,27,105,0.30)]"
           >
-            Start the Partnership
-            <ArrowRight className="w-5 h-5" />
+            Connect With Us
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>

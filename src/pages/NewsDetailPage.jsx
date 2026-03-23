@@ -10,10 +10,16 @@ import BackNavButton from '../components/ui/BackNavButton';
 const getCardImage = (item) => item.thumbnail || item.image;
 const INVALID_MEDIA_VALUES = new Set(['', 'null', 'undefined', 'false', 'none', 'n/a', 'na', '#']);
 const VIDEO_DISABLED_ARTICLE_KEY = 'how-universities-can-improve-offer-conversion-in-india';
+const IMAGE_FALLBACK_URL = '/videos/hero-poster.jpg';
 const IMAGE_OVERRIDE_BY_ARTICLE = {
+  'study-in-cyprus-mba-opportunities-at-kes-college-nicosia':
+    '/universities/kes-college-nicosia-hero.jpg',
+  'building-the-future-of-gaming-study-game-design-and-development-at-euas-estonia':
+    'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
   'partnership-expansion-across-the-uk':
     'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1600&q=80',
 };
+const isPublicAssetPath = (value) => /^\/(universities|gallery|team|videos)\//i.test(value);
 
 const normalizeText = (value) =>
   String(value || '')
@@ -32,6 +38,8 @@ const normalizeIdentity = (value) =>
 const sanitizeMediaUrl = (value) => {
   const raw = String(value || '').trim();
   if (!raw || INVALID_MEDIA_VALUES.has(raw.toLowerCase())) return '';
+  if (/^(https?:\/\/|data:|blob:)/i.test(raw)) return raw;
+  if (isPublicAssetPath(raw)) return raw;
   return resolveMediaUrl(raw);
 };
 
@@ -59,6 +67,12 @@ const applyImagePolicy = (item) => {
 };
 
 const applyContentPolicy = (item) => applyVideoPolicy(applyImagePolicy(item));
+const handleImageError = (event) => {
+  const target = event.currentTarget;
+  if (target.dataset.fallbackApplied === 'true') return;
+  target.dataset.fallbackApplied = 'true';
+  target.src = IMAGE_FALLBACK_URL;
+};
 
 const mapFallbackPost = (item) =>
   applyContentPolicy({
@@ -318,6 +332,7 @@ export default function NewsDetailPage() {
                 alt={newsItem.title}
                 loading="lazy"
                 decoding="async"
+                onError={handleImageError}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -375,6 +390,7 @@ export default function NewsDetailPage() {
                           alt={article.title}
                           loading="lazy"
                           decoding="async"
+                          onError={handleImageError}
                           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       ) : (

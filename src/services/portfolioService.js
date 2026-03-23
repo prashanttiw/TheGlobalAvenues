@@ -37,6 +37,22 @@ const mapCmsPortfolio = (item, index) => {
     `Explore ${title} and discover global education opportunities.`
   );
 
+  const tuitionText = pickText(item, ['avg_tuition', 'tuition_fee'], '');
+  const visaRate = numericOrDefault(item.visa_success_rate, 0);
+
+  const details = {
+    location: [item.city, country].filter(Boolean).join(', ') || country,
+    ranking: pickText(item, ['ranking'], 'Partner Institution'),
+  };
+
+  if (visaRate > 0) {
+    details.visaSuccessRate = visaRate;
+  }
+
+  if (tuitionText) {
+    details.avgTuition = tuitionText;
+  }
+
   return {
     id: item.id || `cms-${index + 1}`,
     slug: slug || `university-${index + 1}`,
@@ -44,20 +60,15 @@ const mapCmsPortfolio = (item, index) => {
     category: pickText(item, ['category'], 'Partner University'),
     country,
     image: resolveMediaUrl(pickText(item, ['logo', 'image', 'featured_image'])),
+    logo: resolveMediaUrl(pickText(item, ['logo'])),
     studentsPlaced: numericOrDefault(item.students_enrolled || item.students_placed, 0),
     programs: numericOrDefault(item.program_count || item.programs, 0),
     successRate: numericOrDefault(item.success_rate || item.visa_success_rate, 95),
     achievement: pickText(item, ['achievement'], 'Verified Partner'),
+    contact: pickText(item, ['email', 'contact_email', 'contact'], ''),
+    website: pickText(item, ['website', 'url', 'link'], ''),
     description,
-    details: {
-      location: [item.city, country].filter(Boolean).join(', ') || country,
-      ranking: pickText(item, ['ranking'], 'Partner Institution'),
-      specializations: [],
-      visaSuccessRate: numericOrDefault(item.visa_success_rate, 0),
-      avgTuition: pickText(item, ['avg_tuition', 'tuition_fee'], ''),
-      scholarshipAvailable: Boolean(item.scholarship_available),
-      studentTestimonials: [],
-    },
+    details,
     highlights: [],
   };
 };

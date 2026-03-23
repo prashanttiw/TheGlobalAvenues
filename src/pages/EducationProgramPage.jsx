@@ -1,19 +1,102 @@
-import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Users, Building2, Globe, Clock, BookOpen } from 'lucide-react';
-import { getProgramById, getDegreeDetails } from '../data/educationProgramsData';
+import { motion } from 'framer-motion';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  ArrowRight,
+  BarChart3,
+  Building2,
+  CheckCircle2,
+  ClipboardCheck,
+  Globe2,
+  Megaphone,
+  Network,
+  ShieldCheck,
+  Users,
+  Workflow,
+} from 'lucide-react';
+import { getDegreeDetails, getProgramById } from '../data/educationProgramsData';
 import { getOfferingDetail } from '../services/contentApi';
 import BackNavButton from '../components/ui/BackNavButton';
+
+const TAB_ORDER = ['undergraduate', 'postgraduate', 'doctorate'];
+
+const PLAN_LABELS = {
+  undergraduate: 'Launch Sprint',
+  postgraduate: 'Growth Engine',
+  doctorate: 'Enterprise Command',
+};
+
+const normalizeRegionLabel = (raw) => {
+  const value = String(raw || '').trim();
+  const lower = value.toLowerCase();
+
+  if (!value) return '';
+  if (
+    lower === 'india' ||
+    lower === 'south asia' ||
+    lower === 'indian subcontinent' ||
+    lower === 'india & neighbouring countries' ||
+    lower === 'india and neighbouring countries'
+  ) {
+    return 'India & South Asia';
+  }
+  return value;
+};
+
+const parseList = (value) =>
+  Array.from(
+    new Set(
+      String(value || '')
+        .split(/[,|;/]/)
+        .map((item) => normalizeRegionLabel(item))
+        .filter(Boolean)
+    )
+  );
+
+const OFFERING_ICON_MAP = {
+  'fulltime-degree': Building2,
+  'online-program': Megaphone,
+  'vocational-courses': Network,
+  'internship-abroad': Workflow,
+  'summer-winter-school': Users,
+};
+
+const COMMON_REQUIREMENTS = [
+  'Institution profile and priority programs',
+  'Intake calendar and admission rules',
+  'Brand guidelines and approved messaging',
+  'Single point of contact from your team',
+  'Clear response timeline for admissions decisions',
+  'Regular review meeting schedule',
+];
+
+const COMMON_SUPPORT = [
+  'Weekly action updates',
+  'Lead and application tracking',
+  'Counselor and partner communication support',
+  'Issue escalation and follow-up support',
+  'Quality checks before final submission',
+  'Monthly summary report',
+];
+
+const VALUE_HIGHLIGHTS = [
+  'Dedicated account ownership',
+  'Clear communication and follow-up',
+  'Step-by-step process support',
+  'Quality checks before submission',
+  'Regional knowledge for practical decisions',
+  'Regular progress reporting',
+];
 
 export default function EducationProgramPage() {
   const { programType, degreeLevel } = useParams();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState(degreeLevel || 'undergraduate');
   const [offeringDetail, setOfferingDetail] = useState(null);
 
+  const resolvedLevel = TAB_ORDER.includes(degreeLevel) ? degreeLevel : 'undergraduate';
   const program = getProgramById(programType);
-  const currentDegree = getDegreeDetails(programType, `${programType}-${activeTab}`);
+  const currentPlan =
+    getDegreeDetails(programType, `${programType}-${resolvedLevel}`) || program?.degrees?.[0] || null;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -35,319 +118,262 @@ export default function EducationProgramPage() {
     };
 
     loadOfferingDetail();
-
     return () => controller.abort();
   }, [programType]);
 
-  const apiAwareProgram = useMemo(() => {
+  const pageContent = useMemo(() => {
     if (!program) return null;
-
-    const offering = offeringDetail?.offering || {};
-    const programs = Array.isArray(offeringDetail?.programs) ? offeringDetail.programs : [];
-
-    const matchedApiProgram = programs.find((item) => {
-      const level = String(item.level || item.degree_level || item.program_type || '').toLowerCase();
-      return level.includes(activeTab.toLowerCase());
-    }) || programs[0] || null;
-
-    const normalizedDegree = {
-      ...(currentDegree || {}),
-      ...(offering.duration ? { duration: offering.duration } : {}),
-      ...(offering.partner_universities ? { institutions: Number(offering.partner_universities) || currentDegree?.institutions } : {}),
-      ...(offering.students_enrolled ? { students: Number(offering.students_enrolled) || currentDegree?.students } : {}),
-      ...(matchedApiProgram?.title ? { description: matchedApiProgram.title } : {}),
-      ...(matchedApiProgram?.duration ? { duration: matchedApiProgram.duration } : {}),
-    };
-
+    const apiOffering = offeringDetail?.offering || {};
+    const apiRegions = parseList(apiOffering.countries);
     return {
       ...program,
-      ...(offering.title ? { name: offering.title } : {}),
-      ...(offering.description ? { description: offering.description } : {}),
-      degree: normalizedDegree,
+      name: apiOffering.title || program.name,
+      description: apiOffering.description || program.description,
+      regions: apiRegions.length > 0 ? apiRegions : program.regions,
     };
-  }, [activeTab, currentDegree, offeringDetail, program]);
+  }, [offeringDetail, program]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
-
-  const tabVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } }
-  };
-
-  if (!program) {
+  if (!pageContent || !currentPlan) {
     return (
-      <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Program Not Found</h1>
-          <BackNavButton label="Back to Home" onClick={() => navigate('/')} />
+      <div className="min-h-screen bg-background px-4 pb-20 pt-24 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-3xl flex-col items-center justify-center text-center">
+          <h1 className="text-4xl font-bold text-foreground">Service Not Found</h1>
+          <p className="mt-3 text-muted-foreground">This offering page is not available right now.</p>
+          <BackNavButton label="Back to Offerings" onClick={() => navigate('/what-we-offer')} className="mt-6" />
         </div>
       </div>
     );
   }
 
-  const highlights = [
-    { icon: Users, label: 'Partner Institutions', value: apiAwareProgram?.degree?.institutions || 0 },
-    { icon: Clock, label: 'Engagement Window', value: apiAwareProgram?.degree?.duration || 'Varies' },
-    { icon: BookOpen, label: 'Applications Managed', value: apiAwareProgram?.degree?.students || 0 },
-    { icon: Globe, label: 'Global Reach', value: '50+ Countries' },
-  ];
+  const Icon = OFFERING_ICON_MAP[pageContent.id] || Building2;
 
-  const requirements = [
-    'Institution profile and market priorities',
-    'Program portfolio and intake calendar',
-    'Admissions criteria and compliance notes',
-    'Partner communication matrix',
-    'Turnaround SLAs and escalation path',
-    'Brand assets and approved messaging'
-  ];
-
-  const benefits = [
-    'Market-entry strategy with localized execution',
-    'Higher-quality application pipelines',
-    'Better partner and counselor alignment',
-    'Faster decision-cycle coordination',
-    'Consistent compliance and documentation quality',
-    'Weekly performance visibility and reporting',
-    'Improved conversion predictability',
-    'Long-term institutional growth support'
+  const clarityCards = [
+    {
+      icon: Users,
+      label: 'Dedicated Team',
+      value: currentPlan.team || 'Dedicated partnership team for your institution',
+    },
+    {
+      icon: ClipboardCheck,
+      label: 'How We Work',
+      value: currentPlan.reporting || 'Regular updates and scheduled review meetings',
+    },
+    {
+      icon: CheckCircle2,
+      label: 'Main Focus',
+      value: currentPlan.focus || 'Practical execution and measurable progress',
+    },
+    {
+      icon: Globe2,
+      label: 'Coverage',
+      value: pageContent.regions.join(', '),
+    },
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-7xl mx-auto">
-        {/* Back Button */}
-        <BackNavButton
-          label="Back to Programs"
-          onClick={() => navigate('/what-we-offer')}
-          className="mb-8"
-        />
+    <div className="min-h-screen bg-background px-4 pb-20 pt-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <BackNavButton label="Back to Offerings" onClick={() => navigate('/what-we-offer')} className="mb-8" />
 
-        {/* Hero Section */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
+        <motion.section
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="rounded-[30px] border border-border/70 bg-[linear-gradient(140deg,rgba(45,27,105,0.10)_0%,rgba(255,255,255,0.97)_50%,rgba(232,82,26,0.10)_100%)] p-6 shadow-[0_24px_68px_rgba(20,14,45,0.16)] dark:bg-[linear-gradient(140deg,rgba(45,27,105,0.36)_0%,rgba(14,10,28,0.97)_50%,rgba(232,82,26,0.16)_100%)] sm:p-8 lg:p-10"
         >
-          <div
-            className="inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4"
-            style={{ backgroundColor: `${apiAwareProgram?.color || program.color}20`, color: apiAwareProgram?.color || program.color }}
-          >
-            {program.icon} {apiAwareProgram?.name || program.name}
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-4">
-            {apiAwareProgram?.name || program.name}
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+            <Icon className="h-3.5 w-3.5" />
+            {PLAN_LABELS[resolvedLevel]} Plan
+          </span>
+          <h1 className="mt-5 text-4xl font-bold leading-tight text-foreground sm:text-5xl lg:text-6xl">
+            {pageContent.name}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            {apiAwareProgram?.description || program.description}
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {pageContent.description}
           </p>
-        </motion.div>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">{currentPlan.description}</p>
+        </motion.section>
 
-        {/* Tab Navigation */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-3 mb-16"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          {['undergraduate', 'postgraduate', 'doctorate'].map((level) => (
-            <button
-              key={level}
-              onClick={() => {
-                setActiveTab(level);
-                navigate(`/education-program/${programType}/${level}`);
-              }}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 capitalize ${
-                activeTab === level
-                  ? 'text-white shadow-lg'
-                  : 'bg-muted text-foreground hover:bg-primary/10'
-              }`}
-              style={{
-                backgroundColor: activeTab === level ? program.color : undefined
-              }}
-            >
-              {level}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Content Section */}
-        <motion.div
-          key={activeTab}
-          variants={tabVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Highlights */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {highlights.map((highlight, index) => {
-              const Icon = highlight.icon;
-              return (
-                <motion.div
-                  key={index}
-                  className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-border rounded-xl p-6 text-center hover:shadow-lg transition-shadow"
-                  variants={itemVariants}
-                  whileHover={{ translateY: -4 }}
-                >
-                  <div
-                    className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4"
-                    style={{ backgroundColor: `${program.color}20` }}
-                  >
-                    <Icon className="w-6 h-6" style={{ color: program.color }} />
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-2">{highlight.label}</p>
-                  <p className="text-3xl font-bold" style={{ color: program.color }}>
-                    {highlight.value}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Program Details */}
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              animate="visible"
-              className="space-y-8"
-            >
-              <div className="bg-card border border-border rounded-2xl p-8">
-                <h2 className="text-3xl font-bold text-foreground mb-6">Program Overview</h2>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {apiAwareProgram?.degree?.description}
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4">
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1"
-                      style={{ backgroundColor: `${program.color}20` }}
-                    >
-                      <Clock className="w-5 h-5" style={{ color: program.color }} />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground">Duration</p>
-                      <p className="text-muted-foreground">{apiAwareProgram?.degree?.duration}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1"
-                      style={{ backgroundColor: `${program.color}20` }}
-                    >
-                      <Building2 className="w-5 h-5" style={{ color: program.color }} />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground">Partner Institutions</p>
-                      <p className="text-muted-foreground">{apiAwareProgram?.degree?.institutions}+ Universities</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Requirements */}
-              <div className="bg-card border border-border rounded-2xl p-8">
-                <h3 className="text-2xl font-bold text-foreground mb-6">Eligibility Requirements</h3>
-                <ul className="space-y-3">
-                  {requirements.map((req, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div
-                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
-                        style={{ backgroundColor: `${program.color}20` }}
-                      >
-                        <span
-                          className="w-2 h-2 rounded-full"
-                          style={{ backgroundColor: program.color }}
-                        />
-                      </div>
-                      <span className="text-muted-foreground">{req}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-
-            {/* Benefits & CTA */}
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              animate="visible"
-              className="space-y-8"
-            >
-              <div className="bg-card border border-border rounded-2xl p-8">
-                <h3 className="text-2xl font-bold text-foreground mb-6">Program Benefits</h3>
-                <ul className="space-y-3">
-                  {benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div
-                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
-                        style={{ backgroundColor: `${program.color}20` }}
-                      >
-                        <span
-                          className="w-2 h-2 rounded-full"
-                          style={{ backgroundColor: program.color }}
-                        />
-                      </div>
-                      <span className="text-muted-foreground">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* CTA Section */}
-              <div
-                className="rounded-2xl p-8 text-white"
-                style={{ backgroundColor: program.color }}
+        <section className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {clarityCards.map((item, index) => {
+            const CardIcon = item.icon;
+            return (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.32, delay: index * 0.05 }}
+                className="rounded-2xl border border-border/70 bg-background p-5 shadow-sm"
               >
-                <h3 className="text-2xl font-bold mb-4">Ready to Activate This Track?</h3>
-                <p className="mb-6 opacity-90">
-                  Align with our team to launch a focused partnership plan and execution timeline.
-                </p>
-                <button
-                  className="w-full bg-white text-foreground font-semibold py-3 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => navigate('/collaborate')}
-                  type="button"
-                >
-                  Plan a Strategy Call
-                </button>
-              </div>
+                <span className="mb-4 inline-flex rounded-xl border border-primary/20 bg-primary/10 p-2.5 text-primary">
+                  <CardIcon className="h-5 w-5" />
+                </span>
+                <p className="text-sm text-muted-foreground">{item.label}</p>
+                <p className="mt-1 text-base font-semibold leading-relaxed text-foreground">{item.value}</p>
+              </motion.div>
+            );
+          })}
+        </section>
 
-              {/* Contact Info */}
-              <div className="bg-muted border border-border rounded-2xl p-8">
-                <h3 className="text-xl font-bold text-foreground mb-6">Need Support?</h3>
-                <div className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Our partnership advisors are ready to assist with operational questions for this service track.
-                  </p>
-                  <button
-                    className="w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-semibold"
-                    onClick={() => navigate('/collaborate')}
-                    type="button"
-                  >
-                    Contact Partnership Team
-                  </button>
-                </div>
-              </div>
-            </motion.div>
+        <section className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
+          <div className="space-y-5 lg:col-span-7">
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h2 className="text-2xl font-bold text-foreground">What We Do For You</h2>
+              <ul className="mt-4 space-y-3">
+                {pageContent.modules.map((module) => (
+                  <li key={module.title} className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-foreground">{module.title}:</span> {module.detail}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">What You Can Expect</h3>
+              <ul className="mt-4 space-y-3">
+                {pageContent.outcomes.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </motion.div>
+
+          <div className="space-y-5 lg:col-span-5">
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">What We Track</h3>
+              <ul className="mt-4 space-y-3">
+                {pageContent.kpis.map((kpi) => (
+                  <li key={kpi} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <BarChart3 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    <span>{kpi}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">Quality & Compliance</h3>
+              <ul className="mt-4 space-y-3">
+                {pageContent.complianceFocus.map((point) => (
+                  <li key={point} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
+          <div className="space-y-5 lg:col-span-7">
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">From Your Side (Required)</h3>
+              <ul className="mt-4 space-y-3">
+                {COMMON_REQUIREMENTS.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <ClipboardCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">Support You Will Get</h3>
+              <ul className="mt-4 space-y-3">
+                {COMMON_SUPPORT.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">Service Value You Can Expect</h3>
+              <ul className="mt-4 space-y-3">
+                {VALUE_HIGHLIGHTS.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-5 lg:col-span-5">
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">Coverage Regions</h3>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {pageContent.regions.map((region) => (
+                  <span
+                    key={region}
+                    className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+                  >
+                    {region}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
+              <h3 className="text-2xl font-bold text-foreground">Available Plans</h3>
+              <p className="mt-2 text-sm text-muted-foreground">Pick the plan style that matches your current stage.</p>
+              <div className="mt-4 space-y-3">
+                {pageContent.degrees.map((plan) => {
+                  const slug = plan.id.replace(`${pageContent.id}-`, '');
+                  const isActivePlan = slug === resolvedLevel;
+                  return (
+                    <button
+                      key={plan.id}
+                      type="button"
+                      onClick={() => navigate(`/education-program/${pageContent.id}/${slug}`)}
+                      className={`w-full rounded-xl border p-3 text-left text-sm transition-colors ${
+                        isActivePlan
+                          ? 'border-primary/35 bg-primary/10'
+                          : 'border-border/70 bg-muted/20 hover:border-primary/30 hover:bg-primary/5'
+                      }`}
+                    >
+                      <p className="font-semibold text-foreground">{plan.level}</p>
+                      <p className="mt-1 text-muted-foreground">{plan.focus || 'Structured service execution'}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10 rounded-2xl border border-border/70 bg-background p-6 text-center shadow-sm sm:p-8">
+          <h3 className="text-3xl font-bold text-foreground">Ready To Start This Service?</h3>
+          <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Speak with our team and get a clear plan for launch, execution, and reporting.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate('/collaborate')}
+              className="inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(92deg,#2D1B69_0%,#5B45C6_55%,#E8521A_100%)] px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(45,27,105,0.30)]"
+            >
+              Connect With Us
+              <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/what-we-offer')}
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+            >
+              Back To Offerings
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );

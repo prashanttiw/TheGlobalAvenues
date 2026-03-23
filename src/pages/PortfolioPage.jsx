@@ -195,6 +195,18 @@ export default function PortfolioPage() {
                         transition={{ duration: 0.4 }}
                       />
 
+                      {portfolio.logo && (
+                        <div className="absolute top-4 left-4 rounded-xl border border-white/35 bg-white/95 p-1.5 shadow-md">
+                          <img
+                            src={portfolio.logo}
+                            alt={`${portfolio.title} logo`}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-7 w-auto max-w-[5.5rem] object-contain"
+                          />
+                        </div>
+                      )}
+
                       {/* Overlay Badge */}
                       <div className="absolute top-4 right-4 px-3 py-1 bg-primary/90 text-primary-foreground text-xs font-bold rounded-full flex items-center gap-1">
                         <Globe className="w-3 h-3" />
@@ -202,10 +214,12 @@ export default function PortfolioPage() {
                       </div>
 
                       {/* Achievement Badge */}
-                      <div className="absolute bottom-4 left-4 px-3 py-1 bg-accent/90 text-accent-foreground text-xs font-bold rounded-full flex items-center gap-1">
-                        <Award className="w-3 h-3" />
-                        {portfolio.achievement}
-                      </div>
+                      {portfolio.achievement && (
+                        <div className="absolute bottom-4 left-4 px-3 py-1 bg-accent/90 text-accent-foreground text-xs font-bold rounded-full flex items-center gap-1">
+                          <Award className="w-3 h-3" />
+                          {portfolio.achievement}
+                        </div>
+                      )}
                     </div>
 
                     {/* Content */}
@@ -217,6 +231,17 @@ export default function PortfolioPage() {
                     >
                       <h3 className="text-xl font-bold text-foreground mb-2">{portfolio.title}</h3>
                       <p className="text-muted-foreground text-sm mb-3">{portfolio.description}</p>
+                      {portfolio.details?.intakeWindows && (
+                        <p className="text-xs text-muted-foreground mb-1">
+                          <span className="font-semibold text-foreground">Intakes:</span>{' '}
+                          {portfolio.details.intakeWindows}
+                        </p>
+                      )}
+                      {portfolio.contact && (
+                        <p className="text-xs text-muted-foreground mb-3">
+                          <span className="font-semibold text-foreground">Email:</span> {portfolio.contact}
+                        </p>
+                      )}
 
                       {/* Stats */}
                       <div className="grid grid-cols-3 gap-3 mb-4 pb-4 border-b border-border/50">

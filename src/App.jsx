@@ -54,6 +54,7 @@ function App() {
                   path="/education-program/:programType/:degreeLevel"
                   element={<EducationProgramPage />}
                 />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
           </main>
