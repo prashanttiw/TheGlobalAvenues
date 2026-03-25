@@ -116,9 +116,9 @@ export const educationAgents = {
 
 export const universities = {
   title: 'University Partners',
-  description: '210+ partner universities worldwide focused on sustainable international growth',
+  description: '214+ partner universities worldwide focused on sustainable international growth',
   stats: [
-    { number: '210+', label: 'Partner Universities' },
+    { number: '214+', label: 'Partner Universities' },
     { number: '50+', label: 'Countries' },
     { number: '3000+', label: 'Programs' },
     { number: '98%', label: 'Offer Conversion Strength' },
@@ -126,12 +126,12 @@ export const universities = {
   regions: [
     {
       region: 'Europe',
-      count: 85,
+      count: 87,
       description: 'World-class universities in UK, Austria, France, Germany, and more',
     },
     {
       region: 'North America',
-      count: 45,
+      count: 47,
       description: 'Leading institutions across USA and Canada',
     },
     {

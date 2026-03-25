@@ -315,16 +315,22 @@ export default function HeroSection() {
   const heroOpacity = prefersReducedMotion ? 1 : 0;
   const heroSlide = homeContent.hero[0];
   const statCards = [
-    { value: '100+', label: 'Partner Universities' },
-    { value: '600+', label: 'Active Channel Partners in SAMEA' },
+    { value: '14+', label: 'Exclusive Universities' },
+    { value: '300+', label: 'Active Channel Partners in SAMEA' },
     { value: '4K+', label: 'Students Recruited' },
   ];
-  const heroBadge = heroSlide?.badge || "\u{1F30D} India's Trusted Global Education Partner";
-  const heroTitleLine1 = stripTrailingFullStop(heroSlide?.titleLine1, 'Expand Your University');
-  const heroTitleLine2 = stripTrailingFullStop(heroSlide?.titleLine2, 'Strengthen Your Enrolment Pipeline');
+  const heroBadge = heroSlide?.badge || "\u{1F30D} Asia's Trusted Global Education Partner";
+  const heroTitleLine1 = stripTrailingFullStop(
+    heroSlide?.titleLine1,
+    "Expanding Universities' Global Reach"
+  );
+  const heroTitleLine2 = stripTrailingFullStop(
+    heroSlide?.titleLine2,
+    'Delivering High-Quality International Enrolments'
+  );
   const heroDescription =
     heroSlide?.description ||
-    'We help universities build visibility in India, activate high-quality recruitment channels, and convert demand into sustained enrolment growth.';
+    'We help universities build a powerful presence across South Asia, activate high-quality recruitment networks, and convert student demand into sustained enrolment growth.';
   const primaryCtaLabel = heroSlide?.primaryCtaLabel || 'Partner With Us';
   const primaryCtaUrl = getSafeInternalPath(heroSlide?.primaryCtaUrl, '/collaborate');
   const secondaryCtaLabel = heroSlide?.secondaryCtaLabel || 'View Our Network';
@@ -454,13 +460,13 @@ export default function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 flex min-h-[100dvh] items-center px-4 pb-44 pt-28 sm:px-6 md:pb-40 lg:px-8">
+      <div className="relative z-10 flex min-h-[100dvh] items-center px-4 pb-44 pt-20 sm:px-6 sm:pt-24 md:pb-40 lg:px-8">
         <div
           ref={textRef}
           className="mx-auto w-full max-w-7xl"
           style={{ willChange: 'transform, opacity' }}
         >
-          <div className="relative max-w-3xl">
+          <div className="relative max-w-[920px]">
             <span
               className="relative inline-flex rounded-full border border-white/30 bg-[#150F2D]/45 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#FFD0B3] sm:text-xs dark:border-white/20 dark:bg-[#140F2A]/55 dark:text-[#FFC29A]"
               style={{ animation: heroAnimation('fadeDown', 500, 0), opacity: heroOpacity }}
@@ -469,18 +475,21 @@ export default function HeroSection() {
             </span>
 
             <h1
-              className="relative mt-6 font-heading text-[36px] font-bold leading-[1.08] text-white sm:text-[44px] lg:text-[60px]"
+              className="relative mt-6 font-heading text-[33px] font-bold leading-[1.1] text-white sm:text-[46px] sm:leading-[1.08] lg:text-[48px]"
               style={{
                 textShadow: isDark
                   ? '0 6px 24px rgba(13,10,26,0.45)'
                   : '0 8px 30px rgba(8,5,20,0.46)',
               }}
             >
-              <span className="block" style={{ animation: heroAnimation('fadeUp', 700, 100), opacity: heroOpacity }}>
+              <span
+                className="block lg:whitespace-nowrap"
+                style={{ animation: heroAnimation('fadeUp', 700, 100), opacity: heroOpacity }}
+              >
                 {heroTitleLine1}
               </span>
               <span
-                className="block bg-[linear-gradient(95deg,#FFFFFF_0%,#FFE7D8_55%,#FFB57F_100%)] bg-clip-text text-transparent"
+                className="mt-2 block text-[0.86em] leading-[1.12] lg:max-w-[22ch] bg-[linear-gradient(95deg,#FFFFFF_0%,#FFE7D8_55%,#FFB57F_100%)] bg-clip-text text-transparent"
                 style={{ animation: heroAnimation('fadeUp', 700, 200), opacity: heroOpacity }}
               >
                 {heroTitleLine2}

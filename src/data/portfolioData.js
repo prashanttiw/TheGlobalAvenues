@@ -31,7 +31,7 @@ export const portfolioData = [
       eligibility:
         'For bachelor pathways: around 70%+ in Higher Secondary with English and Mathematics. For master pathways: typically 65%+ in graduation (60% may be considered with relevant work profile).',
       scholarshipAvailable: true,
-      partnerUniversities: 210,
+      partnerUniversities: 213,
       studentTestimonials: [
         {
           name: 'Aditya Kumar',
@@ -49,7 +49,7 @@ export const portfolioData = [
     },
     longDescription: 'The University of Applied Sciences Kufstein Tirol (FH Kufstein) is a leading institution in Austria, offering internationally recognized degree programs that integrate innovation, sustainability, and global business practices. With state-of-the-art facilities and strong industry connections, FH Kufstein provides students with the skills and knowledge needed to succeed in their careers.',
     highlights: [
-      '210+ partner universities worldwide',
+      '213+ partner universities worldwide',
       'English-taught programs available',
       'Strong post-study work visa opportunities',
       'Central European hub location',
@@ -68,6 +68,222 @@ export const portfolioData = [
     website: 'https://www.fh-kufstein.ac.at/en/Home'
   },
   {
+    id: 3,
+    title: 'Estonian Entrepreneurship University of Applied Sciences (EUAS)',
+    slug: 'estonian-entrepreneurship-university-of-applied-sciences',
+    category: 'University of Applied Sciences',
+    country: 'Estonia',
+    image: '/universities/euas-hero.jpg',
+    logo: '/universities/euas-logo.svg',
+    studentsPlaced: 2000,
+    programs: 5,
+    successRate: 94,
+    description: "Estonia's largest private university of applied sciences with industry-focused bachelor and MBA pathways in Tallinn.",
+    details: {
+      founded: 1992,
+      location: 'Tallinn, Estonia',
+      ranking: "Estonia's largest private university of applied sciences",
+      specializations: [
+        'Creativity and Business Innovation (BA)',
+        'Creativity and Business Innovations - Joint Programme (BA)',
+        'Software Development and Entrepreneurship (BSc)',
+        'Game Design and Development (BA)',
+        'International Business Administration (MBA)'
+      ],
+      visaSuccessRate: 93,
+      avgTuition: 'Approx. EUR 6,260-EUR 8,740/year',
+      intakeWindows: 'September',
+      programDuration: '2-3 years depending pathway',
+      campusLocations: ['Tallinn', 'Tartu'],
+      eligibility:
+        'Admission is program-specific; EUAS admissions evaluate academic profile and country-based visa requirements per intake.',
+      scholarshipAvailable: true,
+      studentTestimonials: [
+        {
+          name: 'Rahul Mehta',
+          program: 'Software Development and Entrepreneurship',
+          quote: 'Strong practical curriculum, modern campus ecosystem, and excellent international exposure in Tallinn.',
+          location: 'Hyderabad'
+        }
+      ]
+    },
+    longDescription: 'Established in 1992, Estonian Entrepreneurship University of Applied Sciences (EUAS) is a leading private institution in Estonia known for practical, innovation-focused higher education. Located in Tallinn within the Ulemiste City ecosystem, EUAS connects students to business and technology networks while offering career-oriented bachelor and master pathways.',
+    highlights: [
+      "Estonia's largest private university of applied sciences",
+      'Established in 1992 with nationally accredited curricula',
+      'Located in Tallinn at the Ulemiste City business and innovation hub',
+      'English-taught bachelor and MBA pathways',
+      'Practical, industry-aligned learning model',
+      'International student community across multiple nationalities',
+      'Academic presence in both Tallinn and Tartu'
+    ],
+    contact: 'eek@eek.ee',
+    website: 'https://euas.eu/'
+  },
+  {
+    id: 13,
+    title: 'Benedictine University',
+    slug: 'benedictine-university',
+    category: 'American University',
+    country: 'USA',
+    image: '/universities/benedictine-university-hero.jpg',
+    logo: '/universities/benedictine-university-logo.png',
+    studentsPlaced: 2100,
+    programs: 7,
+    successRate: 93,
+    description: 'Values-based Catholic university in the Benedictine tradition with campuses in Lisle (Illinois) and Mesa (Arizona).',
+    details: {
+      founded: 1887,
+      location: 'Lisle, Illinois and Mesa, Arizona',
+      ranking: 'Niche 2026: #441 Most Diverse Colleges in America',
+      specializations: [
+        'Business and Liberal Arts (Goodwin College)',
+        'Science and Health Programs',
+        'Education Programs',
+        'Undergraduate, Graduate, and Doctoral Pathways',
+        'Certificate Programs'
+      ],
+      visaSuccessRate: 91,
+      avgTuition: 'Program-wise tuition; verify the latest fees on official Benedictine pages',
+      intakeWindows: 'Multiple intakes by program and campus',
+      programDuration: 'Varies by degree and pathway',
+      campusLocations: ['Lisle, Illinois', 'Mesa, Arizona'],
+      eligibility:
+        'International applicants are evaluated through dedicated undergraduate and graduate international admissions pathways, including academic credential review and English-language requirements.',
+      scholarshipAvailable: true,
+      studentTestimonials: [
+        {
+          name: 'Siddharth Khanna',
+          program: 'Business and Liberal Arts',
+          quote: 'The dual-campus environment and values-based teaching style make Benedictine a strong fit for global students.',
+          location: 'Chandigarh'
+        }
+      ]
+    },
+    longDescription: 'Founded in 1887, Benedictine University is a Catholic university in the Benedictine tradition. The institution provides a values-based liberal arts education and serves students across two U.S. campuses in Lisle, Illinois and Mesa, Arizona. Benedictine offers pathways through the Goodwin College of Business and Liberal Arts, the College of Science and Health, and the School of Education, with undergraduate, graduate, doctoral, and certificate options.',
+    highlights: [
+      'A Catholic University in the Benedictine tradition, founded in 1887',
+      'Values-based liberal arts education with leadership focus',
+      'Two U.S. campus environments: Lisle (Illinois) and Mesa (Arizona)',
+      'Academic pathways across business, liberal arts, science, health, and education',
+      'Undergraduate, graduate, doctoral, and certificate options',
+      'Dedicated international admissions tracks for undergraduate and graduate students',
+      'International undergraduate scholarship opportunities are available'
+    ],
+    website: 'https://ben.edu/'
+  },
+  {
+    id: 14,
+    title: 'Elmhurst University',
+    slug: 'elmhurst-university',
+    category: 'American University',
+    country: 'USA',
+    image: '/universities/elmhurst-university-hero.jpg',
+    logo: '/universities/elmhurst-university-logo.png',
+    studentsPlaced: 2300,
+    programs: 6,
+    successRate: 94,
+    description: 'Private liberal arts university near Chicago, founded in 1871, with undergraduate, graduate, degree completion, and certificate pathways.',
+    details: {
+      founded: 1871,
+      location: 'Elmhurst, Illinois (Chicago metropolitan area)',
+      ranking: 'Niche 2026: #11 Best Colleges in Illinois',
+      specializations: [
+        'Undergraduate Programs',
+        'Graduate Studies',
+        'Degree Completion Programs',
+        'Certificate Programs',
+        'International Student Pathways'
+      ],
+      visaSuccessRate: 92,
+      avgTuition: 'Program-wise tuition; check official Elmhurst tuition and fee pages by level',
+      intakeWindows: 'Program-dependent start terms across undergraduate and graduate pathways',
+      programDuration: 'Varies by degree level and chosen pathway',
+      campusLocations: ['Elmhurst, Illinois'],
+      eligibility:
+        'International admission includes dedicated first-year, transfer, and graduate requirement routes, with I-20 and F-1 visa process guidance.',
+      scholarshipAvailable: true,
+      studentTestimonials: [
+        {
+          name: 'Aarushi Kapoor',
+          program: 'Graduate Studies',
+          quote: 'Elmhurst offers a strong academic culture and practical learning, with Chicago access adding real career value.',
+          location: 'Gurugram'
+        }
+      ]
+    },
+    longDescription: 'Elmhurst University is a private liberal arts university founded in 1871 and located in Elmhurst, Illinois, near Chicago. On July 1, 2020, the institution officially changed its name from Elmhurst College to Elmhurst University to reflect its expanded academic profile. Elmhurst offers undergraduate and graduate studies, degree-completion pathways, and certificate programs within a close-knit campus community.',
+    highlights: [
+      'Private liberal arts university founded in 1871',
+      'Located around 30 minutes from downtown Chicago',
+      'Officially renamed from Elmhurst College to Elmhurst University in 2020',
+      'Undergraduate, graduate, degree-completion, and certificate pathways',
+      'Hands-on learning in an inclusive campus environment',
+      'Accredited by the Higher Learning Commission',
+      'Dedicated support for international students, including I-20 and F-1 visa steps'
+    ],
+    website: 'https://www.elmhurst.edu/'
+  },
+  {
+    id: 15,
+    title: 'EIT InnoEnergy',
+    slug: 'eit-innoenergy',
+    category: 'Higher Education Institution',
+    country: 'Europe',
+    image: '/universities/eit-innoenergy/eit-innoenergy-hero.jpg',
+    logo: '/universities/eit-innoenergy/eit-innoenergy-legacy-logo.jpeg',
+    studentsPlaced: 2500,
+    programs: 5,
+    successRate: 95,
+    description:
+      'Pan-European master-level education ecosystem in sustainable energy, delivered with mobility pathways across top partner institutions.',
+    details: {
+      founded: 2010,
+      location: 'Pan-European multi-campus model (partner universities across Europe)',
+      ranking: 'EIT-backed European sustainable energy education ecosystem',
+      specializations: [
+        "Master's in Renewable Energy",
+        "Master's in Sustainable Energy Systems",
+        "Master's in Smart Electrical Networks and Systems",
+        "Master's in Nuclear Energy",
+        "Master's in Advanced Energy Systems and AI"
+      ],
+      visaSuccessRate: 93,
+      avgTuition:
+        'Tuition and fees vary by program and mobility path; connect with our admissions team for the latest cycle guidance.',
+      intakeWindows: 'Annual intake cycle with end-to-end application support from our admissions team',
+      programDuration: 'Typically 2 years with cross-country academic mobility',
+      campusLocations: [
+        'Leuven',
+        'Eindhoven',
+        'Stockholm',
+        'Barcelona',
+        'Paris',
+        'Torino',
+        'Lisbon',
+        'Grenoble',
+        'Munich',
+        'Espoo',
+        'Krakow'
+      ],
+      eligibility:
+        'Admission is profile-based and programme-specific, with academic review, English-language readiness, and pathway fit evaluated through the official admissions process.',
+      scholarshipAvailable: true
+    },
+    longDescription:
+      "EIT InnoEnergy is a Europe-focused higher education ecosystem built around sustainable energy and innovation. Through an integrated pathway across partner universities, students gain interdisciplinary training, international mobility exposure, and industry-aligned learning in future-focused energy domains.",
+    highlights: [
+      '5 flagship master pathways in renewable, sustainable, smart-grid, nuclear, and AI-energy domains',
+      'Co-funded by the European Institute of Innovation and Technology (EIT)',
+      'Partner university ecosystem spanning key European innovation hubs',
+      'Multi-country mobility model during the degree journey',
+      'Strong industry and innovation orientation in the clean-energy sector',
+      'Program discovery and application through a single digital admissions platform',
+      'International classroom and cross-border professional network exposure'
+    ],
+    website: 'https://apply.innoenergy.com/'
+  },
+  {
     id: 2,
     title: 'MJM Graphic Design',
     slug: 'mjm-graphic-design',
@@ -81,7 +297,7 @@ export const portfolioData = [
     description: 'Creative design school in France with bachelor and master options in graphic, interior, fashion, and audiovisual design fields.',
     details: {
       founded: 1979,
-      location: 'Paris, Bordeaux, Lille, Marseille, Nantes, Reims, Rennes, Strasbourg, Toulouse',
+      location: 'Paris, Bordeaux, Le Havre, Lille, Marseille, Nantes, Reims, Rennes, Strasbourg, Toulouse, Madrid, London, 100% Visio Campus',
       ranking: 'QUALIOPI Certified',
       specializations: [
         'Bachelor in Graphic Design',
@@ -94,7 +310,7 @@ export const portfolioData = [
       avgTuition: 'Approx. EUR 11,000-EUR 11,500/year',
       intakeWindows: 'September, February',
       programDuration: '3-4 years (bachelor), 1-2 years (master)',
-      campusLocations: ['Paris', 'Bordeaux', 'Lille', 'Marseille', 'Nantes', 'Reims', 'Rennes', 'Strasbourg', 'Toulouse'],
+      campusLocations: ['Paris', 'Bordeaux', 'Le Havre', 'Lille', 'Marseille', 'Nantes', 'Reims', 'Rennes', 'Strasbourg', 'Toulouse', 'Madrid', 'London', '100% Visio Campus'],
       documentsRequired: [
         'Academic transcripts',
         'Passport',
@@ -140,11 +356,11 @@ export const portfolioData = [
     studentsPlaced: 2800,
     programs: 12,
     successRate: 96,
-    description: 'Multi-campus business school with bachelor and master pathways across management, finance, marketing, audit, and supply chain.',
+    description: 'ICN is a triple-accredited creative business school in France with bachelor, master, and doctoral pathways built around the #ArtTechnologyManagement approach.',
     details: {
       founded: 1905,
-      location: 'Nancy, Paris, Berlin',
-      ranking: 'Multi-campus business school with international pathways',
+      location: 'Nancy, Paris La Defense, Berlin (Coming Soon)',
+      ranking: 'Top 1% Business School Worldwide (Triple Crown: AACSB, AMBA, EQUIS)',
       specializations: [
         'Bachelor in Management (BIM)',
         'International Bachelor in Business Administration (BBA)',
@@ -162,12 +378,12 @@ export const portfolioData = [
       visaSuccessRate: 97,
       avgTuition: 'Approx. EUR 9,000-EUR 14,000/year',
       intakeWindows: 'September, January',
-      programDuration: '1-4 years depending program and entry level',
-      campusLocations: ['Paris', 'Nancy', 'Berlin'],
+      programDuration: '1-4 years depending on program and entry level',
+      campusLocations: ['Nancy', 'Paris La Defense', 'Berlin (Coming Soon)'],
       eligibility:
         'Age guidance from sheet: bachelor up to about 25 years, MiM up to about 28 years, 2-year MSc up to about 30 years, and selected direct M2 options up to about 34 years.',
       scholarshipAvailable: true,
-      accreditations: ['AACSB', 'EQUIS', 'CEFDG'],
+      accreditations: ['AACSB', 'AMBA', 'EQUIS', 'CEFDG'],
       philosophy: '#ArtTechnologyManagement',
       studentTestimonials: [
         {
@@ -178,15 +394,15 @@ export const portfolioData = [
         }
       ]
     },
-    longDescription: 'ICN Business School, founded in 1905, is a state-approved private institution with strong academic accreditations. Known for its unique #ArtTechnologyManagement (ATM) philosophy, it combines creative innovation with technological expertise and business acumen.',
+    longDescription: 'Founded in 1905, ICN Business School is a creative business school with a strong international outlook and campuses in Nancy, Paris La Defense, and Berlin (coming soon). Its #ArtTechnologyManagement model integrates design, digital capability, and management fundamentals to prepare students for modern global careers.',
     highlights: [
-      'Founded in 1905 - over 115 years of excellence',
-      'Unique #ArtTechnologyManagement philosophy',
-      'AACSB International Accreditation',
-      'EQUIS Accreditation',
-      'Global partnerships with 100+ universities',
-      'Strong emphasis on research and innovation',
-      'Career-focused curriculum with industry experts'
+      'Founded in 1905 with over a century of academic heritage',
+      'Triple accreditation: AACSB, AMBA, EQUIS',
+      'Distinct #ArtTechnologyManagement teaching philosophy',
+      'Campuses in Nancy, Paris La Defense, and Berlin (coming soon)',
+      'International pathways across bachelor, master, and doctoral levels',
+      'Strong corporate and industry ecosystem access',
+      'Career-oriented curriculum with applied learning'
     ],
     contact: 'icn@theglobalavenues.com',
     website: 'https://www.icn-artem.com/en/'

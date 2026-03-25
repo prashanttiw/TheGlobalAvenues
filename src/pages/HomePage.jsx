@@ -4,7 +4,6 @@ import useLazySection from '../hooks/useLazySection';
 
 const HeroSection = lazy(() => import('../components/home/HeroSection'));
 const UniversityTrustBar = lazy(() => import('../components/home/UniversityTrustBar'));
-const SummerSchoolHighlightSection = lazy(() => import('../components/home/SummerSchoolHighlightSection'));
 const ImageCarousel = lazy(() => import('../components/ImageCarousel'));
 const Services = lazy(() =>
   import('../components/Services').then((module) => ({ default: module.Services }))
@@ -36,9 +35,6 @@ export default function HomePage() {
       </Suspense>
       <Suspense fallback={<SectionSkeleton height="h-24" />}>
         <UniversityTrustBar />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height="h-[640px]" />}>
-        <SummerSchoolHighlightSection />
       </Suspense>
       <div ref={servicesRef}>
         {servicesVisible ? (

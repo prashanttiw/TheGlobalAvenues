@@ -15,6 +15,12 @@ import {
   FileText,
   Flame,
   Rocket,
+  BadgeCheck,
+  Building2,
+  GraduationCap,
+  Palette,
+  Cpu,
+  Briefcase,
 } from 'lucide-react';
 import { getPortfolioById, getPortfolios } from '../services/portfolioService';
 import { getUniversityDetail } from '../services/contentApi';
@@ -56,6 +62,105 @@ const MJM_TRACK_CARD_THEME_CLASSES = [
   'border-[#D3E0FF] bg-[linear-gradient(145deg,rgba(239,249,255,0.95)_0%,rgba(247,242,255,0.95)_56%,rgba(255,242,226,0.94)_100%)] dark:border-[#42557F] dark:bg-[linear-gradient(145deg,rgba(20,33,46,0.78)_0%,rgba(28,22,56,0.86)_55%,rgba(40,27,30,0.74)_100%)]',
   'border-[#F2D4DC] bg-[linear-gradient(145deg,rgba(255,240,244,0.94)_0%,rgba(243,243,255,0.96)_52%,rgba(255,246,225,0.95)_100%)] dark:border-[#5A4574] dark:bg-[linear-gradient(145deg,rgba(39,23,44,0.76)_0%,rgba(28,24,58,0.86)_55%,rgba(44,29,24,0.74)_100%)]',
 ];
+const ICN_PREMIUM_SPOTLIGHT = {
+  subtitle: 'ICN Official Profile',
+  heading: 'ICN Creative Business School',
+  description:
+    'ICN combines creativity, technology, and management through its #ArtTechnologyManagement approach, with study pathways across Europe.',
+  officialFacts: [
+    'Triple-accredited business school in France',
+    'Main campuses in Nancy and Paris La Defense, with Berlin campus coming soon',
+    'Founded in 1905',
+  ],
+  accreditations: ['AACSB', 'AMBA', 'EQUIS', 'CEFDG'],
+  pillars: [
+    {
+      key: 'art',
+      title: 'Art',
+      description:
+        'Design thinking and creative expression are integrated into management learning and problem solving.',
+    },
+    {
+      key: 'technology',
+      title: 'Technology',
+      description:
+        'Digital tools and innovation methods are embedded across business programs and project work.',
+    },
+    {
+      key: 'management',
+      title: 'Management',
+      description:
+        'Students build strategic, entrepreneurial, and leadership capabilities for global careers.',
+    },
+  ],
+  campuses: [
+    {
+      name: 'Nancy Campus',
+      image: '/universities/icn-campuses/nancy-320.jpg',
+      detail:
+        'Located close to the city center, the Artem campus spans 97,000 m2 and supports a vibrant student environment.',
+    },
+    {
+      name: 'Paris La Defense Campus',
+      image: '/universities/icn-campuses/paris-la-defense-320.jpg',
+      detail:
+        'In the heart of La Defense, the campus connects students with major corporate headquarters and decision hubs.',
+    },
+    {
+      name: 'Berlin Campus',
+      image: '/universities/icn-campuses/berlin-320.png',
+      status: 'Coming Soon',
+      detail:
+        'Berlin campus is coming soon. The Alt-Moabit location near Berlin Hauptbahnhof is planned as a modern 2,000 m2 learning environment.',
+    },
+  ],
+};
+const ICN_PILLAR_ICON_MAP = {
+  art: Palette,
+  technology: Cpu,
+  management: Briefcase,
+};
+const EIT_INNOENERGY_SPOTLIGHT = {
+  subtitle: 'EIT InnoEnergy Profile',
+  heading: 'EIT InnoEnergy',
+  description:
+    'A mobility-based European master ecosystem focused on sustainable energy, delivered through partner universities and an integrated admissions platform.',
+  quickFacts: [
+    '5 flagship master programmes',
+    'Pan-European institution network',
+    'Application and programme discovery through a single admissions ecosystem',
+  ],
+  programs: [
+    "Master's in Renewable Energy",
+    "Master's in Sustainable Energy Systems",
+    "Master's in Smart Electrical Networks and Systems",
+    "Master's in Nuclear Energy",
+    "Master's in Advanced Energy Systems and AI",
+  ],
+  partnerLogos: [
+    { name: 'Grenoble INP', logo: '/universities/eit-innoenergy/partners/grenoble-inp.png' },
+    {
+      name: 'Ecole des Ponts ParisTech',
+      logo: '/universities/eit-innoenergy/partners/ecole-des-ponts-paristech.png',
+    },
+    { name: 'Tecnico Lisboa (IST)', logo: '/universities/eit-innoenergy/partners/tecnico-lisboa-ist.png' },
+    { name: 'Universite Paris Saclay', logo: '/universities/eit-innoenergy/partners/universite-paris-saclay.png' },
+    { name: 'UPC Barcelona Tech', logo: '/universities/eit-innoenergy/partners/upc-barcelona-tech.png' },
+    { name: 'KTH', logo: '/universities/eit-innoenergy/partners/kth.png' },
+    { name: 'Aalto University', logo: '/universities/eit-innoenergy/partners/aalto-university.png' },
+    { name: 'ESADE', logo: '/universities/eit-innoenergy/partners/esade-business-school.png' },
+    { name: 'KU Leuven', logo: '/universities/eit-innoenergy/partners/ku-leuven.png' },
+    { name: 'PSL', logo: '/universities/eit-innoenergy/partners/psl-university.png' },
+    { name: 'AGH UST', logo: '/universities/eit-innoenergy/partners/agh-ust.png' },
+    { name: 'Ecole Polytechnique', logo: '/universities/eit-innoenergy/partners/ecole-polytechnique.png' },
+    { name: 'UnternehmerTUM', logo: '/universities/eit-innoenergy/partners/unternehmertum.png' },
+    {
+      name: 'Politecnico di Torino',
+      logo: '/universities/eit-innoenergy/partners/politecnico-di-torino.png',
+    },
+    { name: 'TU/e Eindhoven', logo: '/universities/eit-innoenergy/partners/tue-eindhoven.png' },
+  ],
+};
 
 export default function PortfolioDetailPage() {
   const { id } = useParams();
@@ -187,6 +292,12 @@ export default function PortfolioDetailPage() {
   const normalizedTitle = String(portfolio?.title || '').toLowerCase();
   const isMjmGraphicDesignProfile =
     normalizedSlug === 'mjm-graphic-design' || normalizedTitle.includes('mjm graphic design');
+  const isIcnBusinessSchoolProfile =
+    normalizedSlug === 'icn-business-school' || normalizedTitle.includes('icn business school');
+  const isEitInnoenergyProfile =
+    normalizedSlug === 'eit-innoenergy' ||
+    normalizedTitle.includes('eit innoenergy') ||
+    normalizedTitle.includes('innoenergy masters');
 
   useEffect(() => {
     const section = mjmSpotlightRef.current;
@@ -292,7 +403,7 @@ export default function PortfolioDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Content */}
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16"
+          className={`grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 ${isIcnBusinessSchoolProfile ? 'lg:items-stretch' : ''}`}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -302,7 +413,13 @@ export default function PortfolioDetailPage() {
             className="lg:col-span-2"
             variants={itemVariants}
           >
-            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 h-96 sm:h-[500px]">
+            <div
+              className={`relative h-96 overflow-hidden rounded-2xl sm:h-[500px] ${
+                isIcnBusinessSchoolProfile
+                  ? 'border border-[#F59E0B]/35 bg-[radial-gradient(circle_at_25%_15%,rgba(245,158,11,0.26)_0%,rgba(14,23,47,0.08)_42%,rgba(9,13,30,0.58)_100%)] shadow-[0_30px_80px_rgba(16,20,41,0.24)] dark:border-[#F59E0B]/25 dark:bg-[radial-gradient(circle_at_25%_15%,rgba(245,158,11,0.2)_0%,rgba(17,24,39,0.7)_52%,rgba(2,6,23,0.92)_100%)]'
+                  : 'bg-gradient-to-br from-primary/20 to-secondary/20'
+              }`}
+            >
               <motion.img
                 src={portfolio.image}
                 alt={portfolio.partnerName || portfolio.title}
@@ -313,10 +430,21 @@ export default function PortfolioDetailPage() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.6 }}
               />
+              {isIcnBusinessSchoolProfile && (
+                <>
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(8,14,32,0.18)_0%,rgba(8,14,32,0.48)_38%,rgba(8,14,32,0.84)_100%)]" />
+                  <div className="pointer-events-none absolute -left-20 -top-20 h-52 w-52 rounded-full bg-[#F59E0B]/30 blur-3xl" />
+                  <div className="pointer-events-none absolute -bottom-16 right-16 h-44 w-44 rounded-full bg-[#FB923C]/22 blur-3xl" />
+                </>
+              )}
 
               {portfolio.logo && (
                 <motion.div
-                  className="absolute top-6 right-6 rounded-xl border border-white/35 bg-white/95 p-2 shadow-lg"
+                  className={`absolute top-6 right-6 rounded-xl p-2 shadow-lg ${
+                    isIcnBusinessSchoolProfile
+                      ? 'border border-white/30 bg-black/45 backdrop-blur-md'
+                      : 'border border-white/35 bg-white/95'
+                  }`}
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, delay: 0.15 }}
@@ -326,7 +454,13 @@ export default function PortfolioDetailPage() {
                     alt={`${portfolio.title} logo`}
                     loading="lazy"
                     decoding="async"
-                    className="h-10 w-auto max-w-[8.5rem] object-contain"
+                    className={`h-10 w-auto object-contain ${
+                      isIcnBusinessSchoolProfile
+                        ? 'max-w-[10rem] brightness-110'
+                        : isEitInnoenergyProfile
+                          ? 'max-w-[11rem]'
+                          : 'max-w-[8.5rem]'
+                    }`}
                   />
                 </motion.div>
               )}
@@ -340,6 +474,24 @@ export default function PortfolioDetailPage() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
                   {portfolio.achievement}
+                </motion.div>
+              )}
+
+              {isIcnBusinessSchoolProfile && (
+                <motion.div
+                  className="absolute bottom-6 left-6 flex flex-wrap gap-2"
+                  initial={{ x: -12, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.45, delay: 0.2 }}
+                >
+                  <span className="inline-flex items-center gap-1 rounded-full border border-white/35 bg-black/45 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm">
+                    <BadgeCheck className="h-3.5 w-3.5 text-[#FCD34D]" />
+                    Triple Accredited
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-white/30 bg-black/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm">
+                    <Building2 className="h-3.5 w-3.5 text-[#FDBA74]" />
+                    Nancy | Paris | Berlin
+                  </span>
                 </motion.div>
               )}
 
@@ -362,18 +514,40 @@ export default function PortfolioDetailPage() {
             variants={itemVariants}
           >
             {/* University Title */}
-            <div className="bg-gradient-to-br from-primary/10 to-secondary/10 backdrop-blur-sm border border-primary/30 rounded-xl p-6">
+            <div
+              className={`rounded-xl border p-6 backdrop-blur-sm ${
+                isIcnBusinessSchoolProfile
+                  ? 'border-[#F59E0B]/35 bg-[linear-gradient(145deg,rgba(255,247,230,0.94)_0%,rgba(255,236,209,0.9)_40%,rgba(255,255,255,0.95)_100%)] dark:border-[#F59E0B]/25 dark:bg-[linear-gradient(145deg,rgba(40,26,10,0.75)_0%,rgba(22,23,34,0.92)_56%,rgba(17,24,39,0.88)_100%)]'
+                  : 'border-primary/30 bg-gradient-to-br from-primary/10 to-secondary/10'
+              }`}
+            >
               <p className="text-muted-foreground text-sm font-medium mb-2">Institution</p>
               <h1 className="text-3xl font-bold text-foreground mb-2">{portfolio.title}</h1>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Globe className="w-4 h-4" />
                 <span>{portfolio.country}</span>
               </div>
+              {isIcnBusinessSchoolProfile && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {ICN_PREMIUM_SPOTLIGHT.accreditations.map((badge) => (
+                    <span
+                      key={badge}
+                      className="inline-flex items-center rounded-full border border-[#F59E0B]/40 bg-[#FFF4E5]/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.11em] text-[#9A4D00] dark:border-[#F59E0B]/35 dark:bg-white/10 dark:text-[#FCD34D]"
+                    >
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {(portfolio.website || portfolio.contact) && (
               <motion.div
-                className="bg-muted/40 border border-border/50 rounded-xl p-4 space-y-3"
+                className={`space-y-3 rounded-xl border p-4 ${
+                  isIcnBusinessSchoolProfile
+                    ? 'border-[#F59E0B]/25 bg-[linear-gradient(145deg,rgba(255,251,242,0.95)_0%,rgba(255,244,228,0.92)_40%,rgba(255,255,255,0.96)_100%)] dark:border-[#F59E0B]/20 dark:bg-[linear-gradient(145deg,rgba(38,30,19,0.74)_0%,rgba(20,23,35,0.88)_100%)]'
+                    : 'border-border/50 bg-muted/40'
+                }`}
                 whileHover={{ translateY: -2 }}
               >
                 {portfolio.contact && (
@@ -390,7 +564,11 @@ export default function PortfolioDetailPage() {
                     href={portfolio.website}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-secondary transition-colors"
+                    className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
+                      isIcnBusinessSchoolProfile
+                        ? 'bg-[linear-gradient(95deg,#9A3412_0%,#EA580C_55%,#F59E0B_100%)] text-white hover:brightness-110'
+                        : 'bg-primary text-primary-foreground hover:bg-secondary'
+                    }`}
                   >
                     Visit Official Website
                     <ExternalLink className="w-4 h-4" />
@@ -401,11 +579,15 @@ export default function PortfolioDetailPage() {
 
             {/* Location & Ranking */}
             <motion.div
-              className="bg-muted/40 border border-border/50 rounded-xl p-6"
+              className={`rounded-xl border p-6 ${
+                isIcnBusinessSchoolProfile
+                  ? 'border-[#F59E0B]/25 bg-[linear-gradient(140deg,rgba(255,246,233,0.92)_0%,rgba(255,255,255,0.95)_100%)] dark:border-[#F59E0B]/20 dark:bg-[linear-gradient(140deg,rgba(31,27,20,0.8)_0%,rgba(16,21,34,0.9)_100%)]'
+                  : 'border-border/50 bg-muted/40'
+              }`}
               whileHover={{ translateY: -4 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <MapPin className="w-4 h-4 text-primary" />
@@ -427,16 +609,34 @@ export default function PortfolioDetailPage() {
 
         {/* Description Section */}
         <motion.div
-          className="bg-muted/20 border border-border/50 rounded-2xl p-8 mb-16"
+          className={`rounded-2xl border p-8 mb-16 ${
+            isIcnBusinessSchoolProfile
+              ? 'border-[#F59E0B]/25 bg-[linear-gradient(145deg,rgba(255,250,242,0.94)_0%,rgba(255,242,222,0.86)_36%,rgba(255,255,255,0.95)_100%)] dark:border-[#F59E0B]/20 dark:bg-[linear-gradient(145deg,rgba(36,31,24,0.74)_0%,rgba(18,23,37,0.9)_56%,rgba(13,18,30,0.86)_100%)]'
+              : 'border-border/50 bg-muted/20'
+          }`}
           variants={itemVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold text-foreground mb-6">About This University</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-6">
+            {isIcnBusinessSchoolProfile ? 'Why ICN Business School Stands Out' : 'About This University'}
+          </h2>
           <p className="text-lg text-muted-foreground leading-relaxed mb-6">
             {portfolio.description}
           </p>
+          {isIcnBusinessSchoolProfile && (
+            <div className="mb-6 flex flex-wrap gap-2.5">
+              {ICN_PREMIUM_SPOTLIGHT.officialFacts.map((fact) => (
+                <span
+                  key={fact}
+                  className="inline-flex items-center rounded-full border border-[#F59E0B]/35 bg-white/80 px-3 py-1 text-xs font-semibold text-[#9A4D00] dark:border-[#F59E0B]/30 dark:bg-white/10 dark:text-[#FCD34D]"
+                >
+                  {fact}
+                </span>
+              ))}
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-border/50">
             <div>
               <h4 className="font-bold text-foreground mb-2">Specializations</h4>
@@ -477,6 +677,238 @@ export default function PortfolioDetailPage() {
             </div>
           </div>
         </motion.div>
+
+        {isEitInnoenergyProfile && (
+          <motion.div
+            className="relative mb-16 overflow-hidden rounded-3xl border border-[#C8E2FF] bg-[linear-gradient(118deg,#EDF6FF_0%,#E8F3FF_32%,#F3FAFF_62%,#FFF4E8_100%)] p-6 shadow-[0_28px_70px_rgba(16,24,40,0.14)] dark:border-[#2D4B75] dark:bg-[linear-gradient(118deg,#16233A_0%,#132A42_38%,#10283D_68%,#2A1E19_100%)] sm:p-8"
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-sky-300/30 blur-3xl dark:bg-sky-400/20" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-amber-300/25 blur-3xl dark:bg-amber-500/15" />
+
+            <div className="relative z-10">
+              <div className="mb-5 flex flex-wrap items-center gap-2.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/70 bg-white/85 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#0B4D8F] shadow-[0_8px_20px_rgba(12,74,140,0.12)] dark:border-sky-300/35 dark:bg-white/10 dark:text-sky-200">
+                  <BadgeCheck className="h-3.5 w-3.5" />
+                  {EIT_INNOENERGY_SPOTLIGHT.subtitle}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  Sustainable Energy Masters
+                </span>
+              </div>
+
+              <h3 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl">
+                {EIT_INNOENERGY_SPOTLIGHT.heading}
+              </h3>
+              <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+                {EIT_INNOENERGY_SPOTLIGHT.description}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {EIT_INNOENERGY_SPOTLIGHT.quickFacts.map((fact) => (
+                  <span
+                    key={fact}
+                    className="inline-flex items-center rounded-full border border-sky-300/45 bg-white/85 px-3 py-1 text-xs font-semibold text-[#104E85] dark:border-sky-300/30 dark:bg-white/10 dark:text-sky-100"
+                  >
+                    {fact}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="rounded-2xl border border-sky-200/70 bg-white/80 p-5 shadow-[0_12px_28px_rgba(15,23,42,0.08)] dark:border-sky-300/20 dark:bg-white/5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    Programmes
+                  </p>
+                  <div className="mt-3 space-y-2.5">
+                    {EIT_INNOENERGY_SPOTLIGHT.programs.map((program, index) => (
+                      <article
+                        key={program}
+                        className="rounded-xl border border-sky-100 bg-white/95 px-3 py-2.5 dark:border-sky-300/15 dark:bg-white/5"
+                      >
+                        <p className="text-sm font-semibold text-foreground">
+                          {index + 1}. {program}
+                        </p>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="mt-5 rounded-xl border border-sky-200/80 bg-white/90 p-3.5 dark:border-sky-300/20 dark:bg-white/5">
+                    <Link
+                      to="/collaborate"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(95deg,#0B4D8F_0%,#1D6FD0_52%,#F59E0B_100%)] px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                    >
+                      Connect With Our Team
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-sky-200/70 bg-[linear-gradient(140deg,rgba(255,255,255,0.92)_0%,rgba(240,248,255,0.95)_100%)] p-5 shadow-[0_16px_30px_rgba(15,23,42,0.08)] dark:border-sky-300/20 dark:bg-[linear-gradient(140deg,rgba(18,34,55,0.86)_0%,rgba(16,28,46,0.92)_100%)]">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="h-4.5 w-4.5 text-primary" />
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                      Partner Institutions
+                    </p>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {EIT_INNOENERGY_SPOTLIGHT.partnerLogos.map((partner) => (
+                      <article
+                        key={partner.name}
+                        className="flex h-20 items-center justify-center rounded-xl border border-sky-100 bg-white/95 p-2.5 transition-transform duration-200 hover:-translate-y-0.5 dark:border-sky-300/15 dark:bg-white/5"
+                        title={partner.name}
+                      >
+                        <img
+                          src={partner.logo}
+                          alt={`${partner.name} logo`}
+                          loading="lazy"
+                          decoding="async"
+                          className="max-h-10 w-auto object-contain"
+                        />
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {isIcnBusinessSchoolProfile && (
+          <motion.div
+            className="relative mb-16 overflow-hidden rounded-3xl border border-[#F59E0B]/35 bg-[linear-gradient(132deg,#FFF3E0_0%,#FFE3C2_35%,#F9FAFB_72%,#FFF7ED_100%)] p-6 shadow-[0_28px_70px_rgba(17,24,39,0.2)] dark:border-[#F59E0B]/20 dark:bg-[linear-gradient(132deg,#2D1E12_0%,#1C1E2C_42%,#111827_76%,#261A10_100%)] sm:p-8"
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-[#F59E0B]/28 blur-3xl" />
+            <div className="pointer-events-none absolute -right-16 -bottom-16 h-56 w-56 rounded-full bg-[#FB923C]/22 blur-3xl" />
+
+            <div className="relative z-10">
+              <div className="mb-4 flex flex-wrap items-center gap-2.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#F59E0B]/45 bg-white/80 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#9A4D00] shadow-[0_10px_22px_rgba(154,77,0,0.16)] dark:border-[#F59E0B]/35 dark:bg-white/10 dark:text-[#FCD34D]">
+                  <BadgeCheck className="h-3.5 w-3.5" />
+                  {ICN_PREMIUM_SPOTLIGHT.subtitle}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  ICN Signature Experience
+                </span>
+              </div>
+
+              <h3 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl">
+                {ICN_PREMIUM_SPOTLIGHT.heading}
+              </h3>
+              <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+                {ICN_PREMIUM_SPOTLIGHT.description}
+              </p>
+
+              <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1.12fr_0.88fr]">
+                <div className="space-y-3.5">
+                  {ICN_PREMIUM_SPOTLIGHT.pillars.map((pillar) => {
+                    const PillarIcon = ICN_PILLAR_ICON_MAP[pillar.key] || Star;
+                    return (
+                      <article
+                        key={pillar.key}
+                        className="rounded-2xl border border-[#F59E0B]/30 bg-[linear-gradient(145deg,rgba(255,255,255,0.85)_0%,rgba(255,246,232,0.86)_100%)] p-4 shadow-[0_14px_30px_rgba(20,24,40,0.08)] dark:border-[#F59E0B]/25 dark:bg-[linear-gradient(145deg,rgba(39,28,18,0.74)_0%,rgba(19,24,36,0.9)_100%)]"
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className="mt-0.5 inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-[#F59E0B]/35 bg-white/70 dark:bg-white/10">
+                            <PillarIcon className="h-4.5 w-4.5 text-[#C2410C] dark:text-[#FDBA74]" />
+                          </span>
+                          <div>
+                            <p className="text-base font-semibold text-foreground">{pillar.title}</p>
+                            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{pillar.description}</p>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <div className="rounded-2xl border border-[#F59E0B]/30 bg-[linear-gradient(145deg,rgba(255,249,236,0.9)_0%,rgba(255,255,255,0.95)_100%)] p-5 shadow-[0_16px_32px_rgba(20,24,40,0.08)] dark:border-[#F59E0B]/25 dark:bg-[linear-gradient(145deg,rgba(45,29,16,0.72)_0%,rgba(17,23,35,0.92)_100%)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    Trust Markers
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {ICN_PREMIUM_SPOTLIGHT.accreditations.map((badge) => (
+                      <span
+                        key={badge}
+                        className="inline-flex items-center rounded-full border border-[#F59E0B]/35 bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#9A4D00] dark:border-[#F59E0B]/30 dark:bg-white/10 dark:text-[#FCD34D]"
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-5 space-y-2 text-sm text-muted-foreground">
+                    <p className="flex items-start gap-2">
+                      <Building2 className="mt-0.5 h-4 w-4 text-primary" />
+                      <span>Main campuses are in Nancy and Paris La Defense, with Berlin campus coming soon.</span>
+                    </p>
+                    <p className="flex items-start gap-2">
+                      <BadgeCheck className="mt-0.5 h-4 w-4 text-primary" />
+                      <span>Aligned with ICN&apos;s official positioning as a triple-accredited business school.</span>
+                    </p>
+                  </div>
+
+                  <div className="mt-5">
+                    <Link
+                      to="/collaborate"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(95deg,#9A3412_0%,#EA580C_55%,#F59E0B_100%)] px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                    >
+                      Contact Our Team
+                      <ChevronRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  Campus Spotlight
+                </p>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  {ICN_PREMIUM_SPOTLIGHT.campuses.map((campus, index) => (
+                    <article
+                      key={campus.name}
+                      className="group overflow-hidden rounded-2xl border border-[#F59E0B]/30 bg-white/80 shadow-[0_14px_30px_rgba(16,24,40,0.08)] dark:border-[#F59E0B]/20 dark:bg-white/5"
+                    >
+                      <div className="relative h-44 overflow-hidden">
+                        <img
+                          src={campus.image}
+                          alt={`${campus.name} at ICN Business School`}
+                          loading="eager"
+                          fetchPriority={index === 0 ? 'high' : 'auto'}
+                          decoding="async"
+                          width="320"
+                          height="240"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0)_34%,rgba(15,23,42,0.7)_100%)]" />
+                        {campus.status && (
+                          <span className="absolute right-3 top-3 rounded-full border border-white/35 bg-black/55 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#FCD34D] backdrop-blur-sm">
+                            {campus.status}
+                          </span>
+                        )}
+                        <p className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                          <MapPin className="h-3.5 w-3.5 text-[#FDBA74]" />
+                          {campus.name}
+                        </p>
+                      </div>
+                      <div className="p-4">
+                        <p className="text-sm leading-relaxed text-muted-foreground">{campus.detail}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {isMjmGraphicDesignProfile && (
           <motion.div

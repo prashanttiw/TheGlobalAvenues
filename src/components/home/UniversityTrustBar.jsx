@@ -1,13 +1,17 @@
 import useScrollAnimation from '../../hooks/useScrollAnimation';
 
 const trustItems = [
-  { id: 1, label: 'Mesoyios College', href: 'https://www.mesoyios.ac.cy/' },
-  { id: 2, label: 'CEFAM International School', href: 'https://www.cefam.fr/en/' },
-  { id: 3, label: 'KES College Nicosia', href: 'https://www.kescollege.ac.cy/en/' },
-  { id: 4, label: 'International American University', href: 'https://iaula.edu/' },
-  { id: 6, label: 'FH Kufstein Tirol', href: 'https://www.fh-kufstein.ac.at/en/Home' },
-  { id: 7, label: 'MJM Graphic Design', href: 'https://www.mjm-design.com/en' },
-  { id: 9, label: 'ICN Business School', href: 'https://www.icn-artem.com/en/' },
+  { id: 1, label: 'ICN Business School', href: 'https://www.icn-artem.com/en/' },
+  { id: 2, label: 'Benedictine University', href: 'https://ben.edu/' },
+  { id: 3, label: 'Elmhurst University', href: 'https://www.elmhurst.edu/' },
+  { id: 4, label: 'Mesoyios College', href: 'https://www.mesoyios.ac.cy/' },
+  { id: 5, label: 'CEFAM International School', href: 'https://www.cefam.fr/en/' },
+  { id: 6, label: 'KES College Nicosia', href: 'https://www.kescollege.ac.cy/en/' },
+  { id: 7, label: 'International American University', href: 'https://iaula.edu/' },
+  { id: 8, label: 'FH Kufstein Tirol', href: 'https://www.fh-kufstein.ac.at/en/Home' },
+  { id: 9, label: 'EUAS', href: 'https://euas.eu/' },
+  { id: 10, label: 'MJM Graphic Design', href: 'https://www.mjm-design.com/en' },
+  { id: 11, label: 'EIT InnoEnergy', href: 'https://apply.innoenergy.com/' },
 ];
 
 export default function UniversityTrustBar() {

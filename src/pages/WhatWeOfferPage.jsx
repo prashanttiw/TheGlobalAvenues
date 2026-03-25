@@ -65,6 +65,11 @@ const OFFERING_ICON_MAP = {
   'summer-winter-school': Users,
 };
 
+const BEGIN_GROUP_PARTNER = {
+  name: 'Begin Group',
+  logo: '/partners/begin-group-logo.png',
+};
+
 const parseList = (value) =>
   String(value || '')
     .split(/[,|;/]/)
@@ -191,7 +196,7 @@ export default function WhatWeOfferPage() {
                   className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="max-w-3xl">
+                    <div className="min-w-0 max-w-3xl">
                       <div className="mb-3 inline-flex rounded-xl border border-primary/20 bg-primary/10 p-2.5 text-primary">
                         <Icon className="h-5 w-5" />
                       </div>
@@ -199,17 +204,33 @@ export default function WhatWeOfferPage() {
                       <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
                         {program.description}
                       </p>
+                      {program.id === 'summer-winter-school' && (
+                        <div className="mt-4 flex max-w-2xl items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5">
+                          <img
+                            src={BEGIN_GROUP_PARTNER.logo}
+                            alt={`${BEGIN_GROUP_PARTNER.name} logo`}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-7 w-auto rounded-sm bg-white px-1 py-0.5"
+                          />
+                          <div className="min-w-0">
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                              In partner with Begin Group
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <Link
                       to={`/education-program/${program.id}/undergraduate`}
-                      className="inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground sm:w-auto"
                     >
                       View Full Details
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
 
-                  <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+                  <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                     <div className="rounded-xl border border-border/70 bg-muted/20 p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                         Key Work Areas
@@ -277,7 +298,7 @@ export default function WhatWeOfferPage() {
           </p>
           <Link
             to="/collaborate"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(92deg,#2D1B69_0%,#5B45C6_55%,#E8521A_100%)] px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(45,27,105,0.30)]"
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(92deg,#2D1B69_0%,#5B45C6_55%,#E8521A_100%)] px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(45,27,105,0.30)] sm:w-auto"
           >
             Connect With Us
             <ArrowRight className="h-4 w-4" />

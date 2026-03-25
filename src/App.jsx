@@ -17,6 +17,7 @@ const ServicesPage = lazy(() => import('./pages/ServicesPage'));
 const CollaboratePage = lazy(() => import('./pages/CollaboratePage'));
 const UniversitiesPage = lazy(() => import('./pages/UniversitiesPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const GalleryCollectionPage = lazy(() => import('./pages/GalleryCollectionPage'));
 const PartnersPage = lazy(() => import('./pages/PartnersPage'));
 const NewsVlogPage = lazy(() => import('./pages/NewsVlogPage'));
 const NewsDetailPage = lazy(() => import('./pages/NewsDetailPage'));
@@ -51,6 +52,7 @@ function App() {
               <Route path="/collaborate" element={<CollaboratePage />} />
               <Route path="/universities" element={<UniversitiesPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/gallery/collection/:collectionSlug" element={<GalleryCollectionPage />} />
               <Route path="/partners" element={<PartnersPage />} />
               <Route path="/news-blog" element={<NewsVlogPage />} />
               <Route path="/news/:id" element={<NewsDetailPage />} />

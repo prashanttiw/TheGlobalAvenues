@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   BookOpen,
@@ -57,6 +57,39 @@ export function Header() {
   const primaryEndItems = siteConfig.navigation.primary.slice(2);
   const offeringItems = siteConfig.navigation.offerings;
   const logoSrc = isDark ? siteConfig.company.logo.darkSrc : siteConfig.company.logo.lightSrc;
+  const prioritizedPortfolioItems = useMemo(() => {
+    const isIcnBusinessSchool = (item = {}) => {
+      const slug = String(item.slug || '').toLowerCase();
+      const title = String(item.title || item.name || '').toLowerCase();
+      return slug === 'icn-business-school' || title.includes('icn business school');
+    };
+    const shouldStayAtBottom = (item = {}) => {
+      const slug = String(item.slug || '').toLowerCase();
+      const title = String(item.title || item.name || '').toLowerCase();
+      return (
+        slug === 'benedictine-university' ||
+        slug === 'elmhurst-university' ||
+        title.includes('benedictine university') ||
+        title.includes('elmhurst university')
+      );
+    };
+
+    const prioritized = [];
+    const regular = [];
+    const bottomPinned = [];
+
+    portfolioItems.forEach((item) => {
+      if (isIcnBusinessSchool(item)) {
+        prioritized.push(item);
+      } else if (shouldStayAtBottom(item)) {
+        bottomPinned.push(item);
+      } else {
+        regular.push(item);
+      }
+    });
+
+    return [...prioritized, ...regular, ...bottomPinned];
+  }, [portfolioItems]);
 
   const getPrimaryIcon = (path) => {
     if (path === '/news-blog') return Newspaper;
@@ -265,7 +298,7 @@ export function Header() {
                   </div>
 
                   <div className="grid max-h-[20rem] grid-cols-1 gap-1.5 overflow-y-auto p-2.5">
-                    {portfolioItems.map((portfolio) => (
+                    {prioritizedPortfolioItems.map((portfolio) => (
                       <Link
                         key={portfolio.id}
                         to={`/portfolio/${portfolio.slug || portfolio.id}`}
@@ -490,7 +523,7 @@ export function Header() {
 
                 {openMobileDropdown === 'portfolio' && (
                   <div className="space-y-2 px-2 pb-2">
-                    {portfolioItems.map((portfolio) => (
+                    {prioritizedPortfolioItems.map((portfolio) => (
                       <Link
                         key={portfolio.id}
                         to={`/portfolio/${portfolio.slug || portfolio.id}`}
