@@ -19,6 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
+import SummerSchoolHighlightSection from './home/SummerSchoolHighlightSection';
 
 const services = [
   {
@@ -904,6 +905,8 @@ export function Services() {
             />
           ))}
         </div>
+
+        <SummerSchoolHighlightSection />
 
         <div className="mt-24 border-t border-border pt-20">
           <div

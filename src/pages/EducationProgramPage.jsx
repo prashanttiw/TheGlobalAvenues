@@ -88,6 +88,11 @@ const VALUE_HIGHLIGHTS = [
   'Regular progress reporting',
 ];
 
+const BEGIN_GROUP_PARTNER = {
+  name: 'Begin Group',
+  logo: '/partners/begin-group-logo.png',
+};
+
 export default function EducationProgramPage() {
   const { programType, degreeLevel } = useParams();
   const navigate = useNavigate();
@@ -192,6 +197,22 @@ export default function EducationProgramPage() {
             {pageContent.description}
           </p>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">{currentPlan.description}</p>
+          {pageContent.id === 'summer-winter-school' && (
+            <div className="mt-5 flex max-w-3xl items-center gap-3 rounded-xl border border-primary/25 bg-primary/5 px-3 py-2.5">
+              <img
+                src={BEGIN_GROUP_PARTNER.logo}
+                alt={`${BEGIN_GROUP_PARTNER.name} logo`}
+                loading="lazy"
+                decoding="async"
+                className="h-8 w-auto rounded-sm bg-white px-1 py-0.5"
+              />
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                  In partner with Begin Group
+                </p>
+              </div>
+            </div>
+          )}
         </motion.section>
 
         <section className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -216,8 +237,8 @@ export default function EducationProgramPage() {
           })}
         </section>
 
-        <section className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
-          <div className="space-y-5 lg:col-span-7">
+        <section className="mt-10 grid grid-cols-1 gap-8 xl:grid-cols-12">
+          <div className="space-y-5 xl:col-span-7">
             <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
               <h2 className="text-2xl font-bold text-foreground">What We Do For You</h2>
               <ul className="mt-4 space-y-3">
@@ -242,7 +263,7 @@ export default function EducationProgramPage() {
             </div>
           </div>
 
-          <div className="space-y-5 lg:col-span-5">
+          <div className="space-y-5 xl:col-span-5">
             <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
               <h3 className="text-2xl font-bold text-foreground">What We Track</h3>
               <ul className="mt-4 space-y-3">
@@ -269,8 +290,8 @@ export default function EducationProgramPage() {
           </div>
         </section>
 
-        <section className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
-          <div className="space-y-5 lg:col-span-7">
+        <section className="mt-10 grid grid-cols-1 gap-8 xl:grid-cols-12">
+          <div className="space-y-5 xl:col-span-7">
             <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
               <h3 className="text-2xl font-bold text-foreground">From Your Side (Required)</h3>
               <ul className="mt-4 space-y-3">
@@ -308,7 +329,7 @@ export default function EducationProgramPage() {
             </div>
           </div>
 
-          <div className="space-y-5 lg:col-span-5">
+          <div className="space-y-5 xl:col-span-5">
             <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
               <h3 className="text-2xl font-bold text-foreground">Coverage Regions</h3>
               <div className="mt-4 flex flex-wrap gap-2.5">
@@ -320,32 +341,6 @@ export default function EducationProgramPage() {
                     {region}
                   </span>
                 ))}
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-border/70 bg-background p-6 shadow-sm sm:p-7">
-              <h3 className="text-2xl font-bold text-foreground">Available Plans</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Pick the plan style that matches your current stage.</p>
-              <div className="mt-4 space-y-3">
-                {pageContent.degrees.map((plan) => {
-                  const slug = plan.id.replace(`${pageContent.id}-`, '');
-                  const isActivePlan = slug === resolvedLevel;
-                  return (
-                    <button
-                      key={plan.id}
-                      type="button"
-                      onClick={() => navigate(`/education-program/${pageContent.id}/${slug}`)}
-                      className={`w-full rounded-xl border p-3 text-left text-sm transition-colors ${
-                        isActivePlan
-                          ? 'border-primary/35 bg-primary/10'
-                          : 'border-border/70 bg-muted/20 hover:border-primary/30 hover:bg-primary/5'
-                      }`}
-                    >
-                      <p className="font-semibold text-foreground">{plan.level}</p>
-                      <p className="mt-1 text-muted-foreground">{plan.focus || 'Structured service execution'}</p>
-                    </button>
-                  );
-                })}
               </div>
             </div>
           </div>
@@ -360,7 +355,7 @@ export default function EducationProgramPage() {
             <button
               type="button"
               onClick={() => navigate('/collaborate')}
-              className="inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(92deg,#2D1B69_0%,#5B45C6_55%,#E8521A_100%)] px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(45,27,105,0.30)]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(92deg,#2D1B69_0%,#5B45C6_55%,#E8521A_100%)] px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(45,27,105,0.30)] sm:w-auto"
             >
               Connect With Us
               <ArrowRight className="h-4 w-4" />
@@ -368,7 +363,7 @@ export default function EducationProgramPage() {
             <button
               type="button"
               onClick={() => navigate('/what-we-offer')}
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-primary/40 hover:text-primary sm:w-auto"
             >
               Back To Offerings
             </button>
