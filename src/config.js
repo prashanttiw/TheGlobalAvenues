@@ -43,6 +43,25 @@ export const SITE_CONFIG = {
     whatsapp: 'https://wa.me/919319831133',
   },
 
+  quickWhatsappContacts: [
+    {
+      name: 'Neetu',
+      role: 'Director',
+      phone: '+91 93198 31133',
+      whatsappNumber: '919319831133',
+      prefilledMessage:
+        'Hello Neetu, I would like to connect with The Global Avenues regarding a new enquiry.',
+    },
+    {
+      name: 'Deepshikha',
+      role: 'International Recruitment Head',
+      phone: '+91 97178 01133',
+      whatsappNumber: '919717801133',
+      prefilledMessage:
+        'Hello Deepshikha, I would like to connect with The Global Avenues regarding a new enquiry.',
+    },
+  ],
+
   stats: {
     studentsRecruited: '4000+',
     partnerUniversities: '15+',

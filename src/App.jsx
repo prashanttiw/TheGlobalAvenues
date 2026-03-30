@@ -5,6 +5,7 @@ import { SettingsProvider } from './context/SettingsContext';
 import { HomeContentProvider } from './context/HomeContentContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { FloatingContactButton } from './components/FloatingContactButton';
 import { ScrollRestoration } from './components/ScrollRestoration';
 import PageLoader from './components/ui/PageLoader';
 
@@ -67,6 +68,7 @@ function App() {
           </Suspense>
         </main>
         <Footer />
+        <FloatingContactButton />
       </div>
     </SettingsProvider>
   );

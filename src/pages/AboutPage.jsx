@@ -1,5 +1,6 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  ArrowUpRight,
   Award,
   CheckCircle,
   Globe,
@@ -16,6 +17,18 @@ import SectionSkeleton from '../components/ui/SectionSkeleton';
 
 const ProfileCard = memo(function ProfileCard({ member, featured }) {
   const cardRef = useScrollAnimation({ y: 24, duration: 600, delay: featured ? 0 : 80 });
+  const [hasImageError, setHasImageError] = useState(!member.image);
+  const initials = useMemo(
+    () =>
+      member.name
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0])
+        .join('')
+        .toUpperCase(),
+    [member.name]
+  );
 
   return (
     <div ref={cardRef} className={`relative h-full ${featured ? 'lg:col-span-2' : ''}`}>
@@ -25,13 +38,20 @@ const ProfileCard = memo(function ProfileCard({ member, featured }) {
           <div className="flex items-start gap-5">
             <div className="relative">
               <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/40 to-accent/40 blur-lg opacity-70" />
-              <img
-                src={member.image}
-                alt={member.name}
-                loading="lazy"
-                decoding="async"
-                className="relative h-20 w-20 rounded-2xl object-cover ring-1 ring-white/60 dark:ring-white/10"
-              />
+              {hasImageError ? (
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,#2D1B69_0%,#5B45C6_58%,#E8521A_100%)] text-lg font-bold text-white ring-1 ring-white/60 dark:ring-white/10">
+                  {initials}
+                </div>
+              ) : (
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  loading="lazy"
+                  decoding="async"
+                  onError={() => setHasImageError(true)}
+                  className="relative h-20 w-20 rounded-2xl object-cover ring-1 ring-white/60 dark:ring-white/10"
+                />
+              )}
             </div>
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground/70">
@@ -75,8 +95,12 @@ const ValueCard = ({ item, index }) => {
 };
 
 export default function AboutPage() {
+  const ICEF_ACCOUNT_ID = '5944';
+  const ICEF_DIRECTORY_URL = 'https://www.icef.com/ias-directory/';
   const badgeRef = useRef(null);
   const [isBadgeReady, setIsBadgeReady] = useState(false);
+  const [showBadgeFallback, setShowBadgeFallback] = useState(false);
+  const [badgeRetryKey, setBadgeRetryKey] = useState(0);
   const { ref: valuesRef, isVisible: valuesVisible } = useLazySection();
   const { ref: teamRef, isVisible: teamVisible } = useLazySection();
   const { ref: accreditationRef, isVisible: accreditationVisible } = useLazySection();
@@ -87,9 +111,12 @@ export default function AboutPage() {
     }
 
     setIsBadgeReady(false);
+    setShowBadgeFallback(false);
     let mounted = true;
     let checkTimer;
     let stopTimer;
+    let observer;
+    let hasResolved = false;
     const scriptSrc = 'https://www-cdn.icef.com/scripts/iasbadgeid.js';
 
     const checkBadge = () => {
@@ -97,8 +124,11 @@ export default function AboutPage() {
       const hasBadgeContent =
         badgeRef.current.children.length > 0 || badgeRef.current.textContent.trim().length > 0;
       if (hasBadgeContent) {
+        hasResolved = true;
         setIsBadgeReady(true);
+        setShowBadgeFallback(false);
         if (checkTimer) window.clearInterval(checkTimer);
+        if (stopTimer) window.clearTimeout(stopTimer);
       }
     };
 
@@ -116,19 +146,39 @@ export default function AboutPage() {
     script.onload = () => {
       window.setTimeout(checkBadge, 350);
     };
+    script.onerror = () => {
+      if (!mounted) return;
+      setIsBadgeReady(false);
+    };
     document.body.appendChild(script);
     checkTimer = window.setInterval(checkBadge, 600);
-    stopTimer = window.setTimeout(() => window.clearInterval(checkTimer), 7000);
+    observer = new MutationObserver(checkBadge);
+    observer.observe(badgeRef.current, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    stopTimer = window.setTimeout(() => {
+      window.clearInterval(checkTimer);
+      if (!mounted) return;
+      if (!badgeRef.current) return;
+      const hasBadgeContent =
+        badgeRef.current.children.length > 0 || badgeRef.current.textContent.trim().length > 0;
+      if (!hasResolved && !hasBadgeContent) {
+        setShowBadgeFallback(true);
+      }
+    }, 30000);
 
     return () => {
       mounted = false;
       if (checkTimer) window.clearInterval(checkTimer);
       if (stopTimer) window.clearTimeout(stopTimer);
+      if (observer) observer.disconnect();
       if (script.parentNode) {
         script.parentNode.removeChild(script);
       }
     };
-  }, [accreditationVisible]);
+  }, [accreditationVisible, badgeRetryKey]);
 
   const values = useMemo(
     () => [
@@ -197,6 +247,18 @@ export default function AboutPage() {
         role: 'Admissions Coordinator',
         image: '/team/suraj-kumar-soni.webp',
         bio: 'Dedicated professional managing admissions workflows, documentation quality, and partner compliance',
+      },
+      {
+        name: 'Nancy Goel',
+        role: 'Recruitment Specialist',
+        image: '',
+        bio: 'Focused on student recruitment engagement, counselor coordination, and nurturing strong applicant pipelines.',
+      },
+      {
+        name: 'Ishita Nagpal',
+        role: 'Admission Coordinator',
+        image: '',
+        bio: 'Supports application progress, candidate communication, and detail-oriented admissions coordination across partners.',
       },
     ],
     []
@@ -387,15 +449,39 @@ export default function AboutPage() {
                   </div>
                   <div className="mt-6 flex min-h-[180px] items-center justify-center rounded-2xl border border-[#DAD3F0] bg-[#F6F4FD] p-6 dark:border-[#3A2E72] dark:bg-[#17122D]">
                     <div className="relative flex h-[112px] w-full max-w-[320px] items-center justify-center overflow-hidden rounded-xl border border-[#D3CBEA] bg-white p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] dark:border-[#43337C] dark:bg-[#1A1435] sm:h-[120px]">
-                      {!isBadgeReady ? (
+                      {!isBadgeReady && !showBadgeFallback ? (
                         <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                           Loading ICEF badge...
                         </p>
                       ) : null}
+                      {showBadgeFallback ? (
+                        <div className="absolute inset-2 z-20 flex flex-col items-center justify-center gap-3 rounded-xl border border-[#D3CBEA] bg-white/96 px-3 py-3 dark:border-[#43337C] dark:bg-[#1A1435]/96 sm:px-4">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowBadgeFallback(false);
+                              setIsBadgeReady(false);
+                              setBadgeRetryKey((value) => value + 1);
+                            }}
+                            className="inline-flex w-full max-w-[220px] items-center justify-center rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-primary transition-all duration-200 hover:bg-primary hover:text-white sm:text-xs"
+                          >
+                            Retry Badge
+                          </button>
+                          <a
+                            href={ICEF_DIRECTORY_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex w-full max-w-[220px] items-center justify-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-primary transition-all duration-200 hover:bg-primary hover:text-white sm:text-xs"
+                          >
+                            <span className="truncate">Search IAS Code {ICEF_ACCOUNT_ID}</span>
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                          </a>
+                        </div>
+                      ) : null}
                       <span
                         ref={badgeRef}
                         id="iasBadge"
-                        data-account-id="5944"
+                        data-account-id={ICEF_ACCOUNT_ID}
                         className={`relative z-10 block max-w-full origin-center scale-[0.66] transition-opacity duration-300 sm:scale-[0.72] ${isBadgeReady ? 'opacity-100' : 'opacity-0'}`}
                       />
                     </div>

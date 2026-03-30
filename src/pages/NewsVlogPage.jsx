@@ -3,17 +3,18 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Calendar, Flame, Newspaper, Play, Sparkles, User } from 'lucide-react';
 import { newsItems as fallbackNewsItems } from '../data/newsData';
+import { subscribeToNews } from '../services/contactFormService';
 
 const getCardImage = (item) => item.thumbnail || item.image;
 const INVALID_MEDIA_VALUES = new Set(['', 'null', 'undefined', 'false', 'none', 'n/a', 'na', '#']);
 const IMAGE_FALLBACK_URL = '/videos/hero-poster.jpg';
 const IMAGE_OVERRIDE_BY_ARTICLE = {
   'study-in-cyprus-opportunities-at-mesoyios-college-limassol':
-    '/universities/mesoyios-college-hero.webp',
+    '/blogs/mesoyios-college-opportunities.jpg',
   'study-in-cyprus-mba-opportunities-at-kes-college-nicosia':
     '/universities/kes-college-nicosia-hero.jpg',
   'building-the-future-of-gaming-study-game-design-and-development-at-euas-estonia':
-    'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
+    '/blogs/euas-game-design-development.jpg',
 };
 
 const normalizeText = (value) =>
@@ -113,6 +114,10 @@ const formatDate = (value) => {
 export default function NewsVlogPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
+  const [subscriberEmail, setSubscriberEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState('idle');
+  const [subscribeMessage, setSubscribeMessage] = useState('');
 
   const newsItems = useMemo(
     () =>
@@ -156,6 +161,30 @@ export default function NewsVlogPage() {
 
   const resetFilters = () => {
     setActiveTab('all');
+  };
+
+  const handleSubscribe = async (event) => {
+    event.preventDefault();
+    if (isSubscribing) return;
+
+    setIsSubscribing(true);
+    setSubscribeStatus('idle');
+    setSubscribeMessage('');
+
+    try {
+      await subscribeToNews({
+        email: subscriberEmail,
+        source: '/news-blog',
+      });
+      setSubscribeStatus('success');
+      setSubscribeMessage('Subscribed successfully.');
+      setSubscriberEmail('');
+    } catch (error) {
+      setSubscribeStatus('error');
+      setSubscribeMessage(error.message || 'Subscription failed. Please try again.');
+    } finally {
+      setIsSubscribing(false);
+    }
   };
 
   return (
@@ -431,13 +460,35 @@ export default function NewsVlogPage() {
             <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
               Subscribe for partnership announcements, market intelligence, and international recruitment updates.
             </p>
-            <button
-              className="group mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all duration-300 hover:scale-105 hover:bg-secondary"
-              type="button"
-            >
-              Subscribe Now
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            <form onSubmit={handleSubscribe} className="mx-auto flex max-w-xl flex-col gap-3 sm:flex-row">
+              <input
+                type="email"
+                required
+                value={subscriberEmail}
+                onChange={(event) => setSubscriberEmail(event.target.value)}
+                placeholder="Enter your email"
+                className="w-full rounded-full border border-border bg-background px-5 py-3 text-sm text-foreground outline-none ring-0 transition-colors focus:border-primary/50"
+              />
+              <button
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all duration-300 hover:scale-105 hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-70"
+                type="submit"
+                disabled={isSubscribing}
+              >
+                {isSubscribing ? 'Subscribing...' : 'Subscribe Now'}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+            </form>
+            {subscribeStatus !== 'idle' && (
+              <p
+                className={`mx-auto mt-4 max-w-xl rounded-xl px-4 py-2 text-sm font-medium ${
+                  subscribeStatus === 'success'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-red-100 text-red-700'
+                }`}
+              >
+                {subscribeMessage}
+              </p>
+            )}
           </motion.div>
         </div>
       </section>

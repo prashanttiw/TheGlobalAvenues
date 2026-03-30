@@ -10,11 +10,11 @@ const INVALID_MEDIA_VALUES = new Set(['', 'null', 'undefined', 'false', 'none', 
 const IMAGE_FALLBACK_URL = '/videos/hero-poster.jpg';
 const IMAGE_OVERRIDE_BY_ARTICLE = {
   'study-in-cyprus-opportunities-at-mesoyios-college-limassol':
-    '/universities/mesoyios-college-hero.webp',
+    '/blogs/mesoyios-college-opportunities.jpg',
   'study-in-cyprus-mba-opportunities-at-kes-college-nicosia':
     '/universities/kes-college-nicosia-hero.jpg',
   'building-the-future-of-gaming-study-game-design-and-development-at-euas-estonia':
-    'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
+    '/blogs/euas-game-design-development.jpg',
 };
 
 const normalizeText = (value) =>
