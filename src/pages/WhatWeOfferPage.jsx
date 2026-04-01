@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { educationPrograms } from '../data/educationProgramsData';
 import { getOfferings } from '../services/contentApi';
+import Seo from '../components/seo/Seo';
 
 const CORE_SERVICES = [
   {
@@ -125,6 +126,13 @@ export default function WhatWeOfferPage() {
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-20">
+      <Seo
+        title="What We Offer"
+        description="Explore The Global Avenues offerings including in-country representation, admissions support, market intelligence, and recruitment partner management."
+        path="/what-we-offer"
+        image="/videos/hero-poster.jpg"
+        keywords={['what we offer', 'education support services', 'international recruitment support']}
+      />
       <section className="relative overflow-hidden px-4 pb-12 pt-10 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 bg-[radial-gradient(60%_90%_at_50%_0%,rgba(83,64,176,0.22),transparent)]" />
         <div className="mx-auto max-w-7xl rounded-[30px] border border-border/70 bg-[linear-gradient(140deg,rgba(45,27,105,0.08)_0%,rgba(255,255,255,0.97)_50%,rgba(232,82,26,0.09)_100%)] px-6 py-10 shadow-[0_24px_66px_rgba(20,14,45,0.16)] dark:bg-[linear-gradient(140deg,rgba(45,27,105,0.34)_0%,rgba(14,10,28,0.97)_50%,rgba(232,82,26,0.16)_100%)] sm:px-8 lg:px-12">

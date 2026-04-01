@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Search, Filter, Globe, Award } from 'lucide-react';
 import { getPortfolios, getCategories, searchPortfolios } from '../services/portfolioService';
+import Seo from '../components/seo/Seo';
 
 export default function PortfolioPage() {
   const [portfolios, setPortfolios] = useState([]);
@@ -82,6 +83,13 @@ export default function PortfolioPage() {
 
   return (
     <div className="pt-16 min-h-screen">
+      <Seo
+        title="Partner Institutions and University Portfolio"
+        description="Explore global partner institutions represented by The Global Avenues, including key highlights, profiles, and recruitment opportunities."
+        path="/portfolio"
+        image="/universities/icn-business-school-hero.png"
+        keywords={['partner universities', 'institution portfolio', 'study abroad partners']}
+      />
       {/* Hero Section */}
       <motion.section
         className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-primary/5 to-background"

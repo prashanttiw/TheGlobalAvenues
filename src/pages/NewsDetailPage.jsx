@@ -1,20 +1,22 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Calendar, Clock, Eye, User } from 'lucide-react';
 import { newsItems as fallbackNewsItems } from '../data/newsData';
 import BackNavButton from '../components/ui/BackNavButton';
+import Seo from '../components/seo/Seo';
+import { SITE_NAME, SITE_URL, trimDescription, toAbsoluteUrl } from '../seo/siteMeta';
 
 const getCardImage = (item) => item.thumbnail || item.image;
 const INVALID_MEDIA_VALUES = new Set(['', 'null', 'undefined', 'false', 'none', 'n/a', 'na', '#']);
 const IMAGE_FALLBACK_URL = '/videos/hero-poster.jpg';
 const IMAGE_OVERRIDE_BY_ARTICLE = {
   'study-in-cyprus-opportunities-at-mesoyios-college-limassol':
-    '/universities/mesoyios-college-hero.webp',
+    '/blogs/mesoyios-college-opportunities.jpg',
   'study-in-cyprus-mba-opportunities-at-kes-college-nicosia':
     '/universities/kes-college-nicosia-hero.jpg',
   'building-the-future-of-gaming-study-game-design-and-development-at-euas-estonia':
-    'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
+    '/blogs/euas-game-design-development.jpg',
 };
 
 const normalizeText = (value) =>
@@ -116,6 +118,60 @@ export default function NewsDetailPage() {
 
   const sourcePost = useMemo(() => findFallbackPostBySlugOrId(id), [id]);
   const newsItem = useMemo(() => (sourcePost ? mapFallbackPost(sourcePost) : null), [sourcePost]);
+  const articleSchema = useMemo(() => {
+    if (!newsItem) return null;
+    const articlePath = `/news/${newsItem.slug || id || ''}`;
+    const description = trimDescription(newsItem.excerpt || newsItem.content, 165);
+
+    return [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: newsItem.title,
+        description,
+        image: [toAbsoluteUrl(getCardImage(newsItem) || IMAGE_FALLBACK_URL)],
+        datePublished: newsItem.date || undefined,
+        dateModified: newsItem.date || undefined,
+        author: {
+          '@type': 'Organization',
+          name: newsItem.author || SITE_NAME,
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${SITE_URL}/logo-light.png`,
+          },
+        },
+        mainEntityOfPage: `${SITE_URL}${articlePath}`,
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: `${SITE_URL}/`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'News & Blog',
+            item: `${SITE_URL}/news-blog`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: newsItem.title,
+            item: `${SITE_URL}${articlePath}`,
+          },
+        ],
+      },
+    ];
+  }, [id, newsItem]);
 
   const contentBlocks = useMemo(() => {
     if (!newsItem) return [];
@@ -135,6 +191,12 @@ export default function NewsDetailPage() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
+        <Seo
+          title="Article Not Found"
+          description="The requested news article could not be found."
+          path={`/news/${id || ''}`}
+          noindex
+        />
         <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ duration: 0.4 }}>
           <h1 className="mb-4 text-4xl font-bold">Article Not Found</h1>
           <p className="mb-8 text-muted-foreground">The article you're looking for doesn't exist.</p>
@@ -159,6 +221,17 @@ export default function NewsDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 pt-16">
+      <Seo
+        title={newsItem.title}
+        description={trimDescription(newsItem.excerpt || newsItem.content, 165)}
+        path={`/news/${newsItem.slug || id || ''}`}
+        image={getCardImage(newsItem) || IMAGE_FALLBACK_URL}
+        type="article"
+        publishedTime={newsItem.date || undefined}
+        modifiedTime={newsItem.date || undefined}
+        keywords={['news article', 'study abroad update', newsItem.category || 'education']}
+        jsonLd={articleSchema}
+      />
       <motion.div
         className="sticky top-16 z-40 border-b border-border/70 bg-background/70 px-4 py-2 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55 sm:px-6 lg:px-8"
         initial={{ y: -20, opacity: 0 }}
@@ -274,6 +347,33 @@ export default function NewsDetailPage() {
                 />
               </div>
             )}
+
+            <div className="rounded-2xl border border-border/70 bg-muted/20 p-5 sm:p-6">
+              <h2 className="text-xl font-bold text-foreground">Continue Exploring</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Discover more insights and services related to this topic.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                <Link
+                  to="/news-blog"
+                  className="rounded-full border border-primary/25 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary"
+                >
+                  More Articles
+                </Link>
+                <Link
+                  to="/what-we-offer"
+                  className="rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
+                >
+                  What We Offer
+                </Link>
+                <Link
+                  to="/collaborate"
+                  className="rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-foreground"
+                >
+                  Collaborate
+                </Link>
+              </div>
+            </div>
           </motion.div>
 
         </motion.div>

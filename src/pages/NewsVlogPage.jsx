@@ -1,19 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, Flame, Newspaper, Play, Sparkles, User } from 'lucide-react';
 import { newsItems as fallbackNewsItems } from '../data/newsData';
+import { subscribeToNews } from '../services/contactFormService';
+import Seo from '../components/seo/Seo';
+import { SITE_NAME, SITE_URL } from '../seo/siteMeta';
 
 const getCardImage = (item) => item.thumbnail || item.image;
 const INVALID_MEDIA_VALUES = new Set(['', 'null', 'undefined', 'false', 'none', 'n/a', 'na', '#']);
 const IMAGE_FALLBACK_URL = '/videos/hero-poster.jpg';
 const IMAGE_OVERRIDE_BY_ARTICLE = {
   'study-in-cyprus-opportunities-at-mesoyios-college-limassol':
-    '/universities/mesoyios-college-hero.webp',
+    '/blogs/mesoyios-college-opportunities.jpg',
   'study-in-cyprus-mba-opportunities-at-kes-college-nicosia':
     '/universities/kes-college-nicosia-hero.jpg',
   'building-the-future-of-gaming-study-game-design-and-development-at-euas-estonia':
-    'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
+    '/blogs/euas-game-design-development.jpg',
 };
 
 const normalizeText = (value) =>
@@ -111,8 +114,11 @@ const formatDate = (value) => {
 };
 
 export default function NewsVlogPage() {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
+  const [subscriberEmail, setSubscriberEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState('idle');
+  const [subscribeMessage, setSubscribeMessage] = useState('');
 
   const newsItems = useMemo(
     () =>
@@ -134,6 +140,23 @@ export default function NewsVlogPage() {
   }, [newsItems]);
 
   const featuredItems = useMemo(() => newsItems.slice(0, 2), [newsItems]);
+  const seoImage = featuredItems[0]?.image || '/videos/hero-poster.jpg';
+  const newsListSchema = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: `${SITE_NAME} News & Blog`,
+      itemListOrder: 'https://schema.org/ItemListOrderDescending',
+      itemListElement: newsItems.slice(0, 12).map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${SITE_URL}/news/${item.slug}`,
+        name: item.title,
+        datePublished: item.date || undefined,
+      })),
+    }),
+    [newsItems]
+  );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -158,8 +181,40 @@ export default function NewsVlogPage() {
     setActiveTab('all');
   };
 
+  const handleSubscribe = async (event) => {
+    event.preventDefault();
+    if (isSubscribing) return;
+
+    setIsSubscribing(true);
+    setSubscribeStatus('idle');
+    setSubscribeMessage('');
+
+    try {
+      await subscribeToNews({
+        email: subscriberEmail,
+        source: '/news-blog',
+      });
+      setSubscribeStatus('success');
+      setSubscribeMessage('Subscribed successfully.');
+      setSubscriberEmail('');
+    } catch (error) {
+      setSubscribeStatus('error');
+      setSubscribeMessage(error.message || 'Subscription failed. Please try again.');
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background pt-16">
+      <Seo
+        title="News and Blog"
+        description="Read the latest updates, market signals, and study abroad insights from The Global Avenues."
+        path="/news-blog"
+        image={seoImage}
+        keywords={['news', 'study abroad blog', 'education insights']}
+        jsonLd={newsListSchema}
+      />
       <motion.section
         className="relative overflow-hidden px-4 pb-14 pt-10 sm:px-6 lg:px-8"
         initial={{ opacity: 0 }}
@@ -230,68 +285,69 @@ export default function NewsVlogPage() {
               viewport={{ once: true }}
             >
               {featuredItems.map((item) => (
-                <motion.div
+                <motion.article
                   key={item.id}
-                  className="group cursor-pointer overflow-hidden rounded-2xl border border-border/70 bg-background/95 transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_22px_50px_rgba(20,14,45,0.18)]"
+                  className="group overflow-hidden rounded-2xl border border-border/70 bg-background/95 transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_22px_50px_rgba(20,14,45,0.18)]"
                   variants={itemVariants}
                   whileHover={{ translateY: -8 }}
-                  onClick={() => navigate(`/news/${item.slug}`)}
                 >
-                  <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
-                    {item.videoUrl && (
-                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/80 transition-transform group-hover:scale-110">
-                          <Play className="ml-1 h-8 w-8 fill-white text-white" />
-                        </div>
-                      </div>
-                    )}
-                    {getCardImage(item) ? (
-                      <img
-                        src={getCardImage(item)}
-                        alt={item.title}
-                        loading="lazy"
-                        decoding="async"
-                        onError={handleImageError}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center px-5 text-center text-sm font-medium text-muted-foreground">
-                        {item.title}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-6">
-                    <div className="mb-3 flex items-center gap-2">
-                      <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                        {item.category}
-                      </span>
+                  <Link to={`/news/${item.slug}`} className="block h-full" aria-label={`Read ${item.title}`}>
+                    <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
                       {item.videoUrl && (
-                        <span className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-                          {item.readTime}
-                        </span>
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20">
+                          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/80 transition-transform group-hover:scale-110">
+                            <Play className="ml-1 h-8 w-8 fill-white text-white" />
+                          </div>
+                        </div>
+                      )}
+                      {getCardImage(item) ? (
+                        <img
+                          src={getCardImage(item)}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          onError={handleImageError}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center px-5 text-center text-sm font-medium text-muted-foreground">
+                          {item.title}
+                        </div>
                       )}
                     </div>
 
-                    <h3 className="mb-3 line-clamp-2 text-xl font-bold transition-colors group-hover:text-primary">
-                      {item.title}
-                    </h3>
-                    <p className="mb-4 line-clamp-2 text-muted-foreground">{item.excerpt}</p>
+                    <div className="p-6">
+                      <div className="mb-3 flex items-center gap-2">
+                        <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                          {item.category}
+                        </span>
+                        {item.videoUrl && (
+                          <span className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+                            {item.readTime}
+                          </span>
+                        )}
+                      </div>
 
-                    <div className="flex items-center justify-between border-t border-border pt-4">
-                      <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          {formatDate(item.date)}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <User className="h-4 w-4" />
-                          {item.author}
+                      <h3 className="mb-3 line-clamp-2 text-xl font-bold transition-colors group-hover:text-primary">
+                        {item.title}
+                      </h3>
+                      <p className="mb-4 line-clamp-2 text-muted-foreground">{item.excerpt}</p>
+
+                      <div className="flex items-center justify-between border-t border-border pt-4">
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4" />
+                            {formatDate(item.date)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <User className="h-4 w-4" />
+                            {item.author}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </Link>
+                </motion.article>
               ))}
             </motion.div>
           </div>
@@ -343,56 +399,57 @@ export default function NewsVlogPage() {
           {filteredItems.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredItems.map((item) => (
-                <div
+                <article
                   key={item.id}
-                  className="group cursor-pointer overflow-hidden rounded-2xl border border-border/70 bg-background transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_18px_42px_rgba(20,14,45,0.18)]"
-                  onClick={() => navigate(`/news/${item.slug}`)}
+                  className="group overflow-hidden rounded-2xl border border-border/70 bg-background transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_18px_42px_rgba(20,14,45,0.18)]"
                 >
-                  <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
-                    {item.videoUrl && (
-                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/80 transition-transform group-hover:scale-110">
-                          <Play className="ml-1 h-6 w-6 fill-white text-white" />
-                        </div>
-                      </div>
-                    )}
-                    {getCardImage(item) ? (
-                      <img
-                        src={getCardImage(item)}
-                        alt={item.title}
-                        loading="lazy"
-                        decoding="async"
-                        onError={handleImageError}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center px-5 text-center text-sm font-medium text-muted-foreground">
-                        {item.title}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-6">
-                    <div className="mb-2 flex items-center gap-2">
-                      <span className="rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
-                        {item.category}
-                      </span>
+                  <Link to={`/news/${item.slug}`} className="block h-full" aria-label={`Read ${item.title}`}>
+                    <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
                       {item.videoUrl && (
-                        <span className="text-xs text-muted-foreground">{item.readTime}</span>
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/80 transition-transform group-hover:scale-110">
+                            <Play className="ml-1 h-6 w-6 fill-white text-white" />
+                          </div>
+                        </div>
+                      )}
+                      {getCardImage(item) ? (
+                        <img
+                          src={getCardImage(item)}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          onError={handleImageError}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center px-5 text-center text-sm font-medium text-muted-foreground">
+                          {item.title}
+                        </div>
                       )}
                     </div>
 
-                    <h3 className="mb-2 line-clamp-2 text-lg font-bold transition-colors group-hover:text-primary">
-                      {item.title}
-                    </h3>
-                    <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">{item.excerpt}</p>
+                    <div className="p-6">
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className="rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
+                          {item.category}
+                        </span>
+                        {item.videoUrl && (
+                          <span className="text-xs text-muted-foreground">{item.readTime}</span>
+                        )}
+                      </div>
 
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>{formatDate(item.date)}</span>
-                      {item.views ? <span>{item.views.toLocaleString()} views</span> : <span>&nbsp;</span>}
+                      <h3 className="mb-2 line-clamp-2 text-lg font-bold transition-colors group-hover:text-primary">
+                        {item.title}
+                      </h3>
+                      <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">{item.excerpt}</p>
+
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>{formatDate(item.date)}</span>
+                        {item.views ? <span>{item.views.toLocaleString()} views</span> : <span>&nbsp;</span>}
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </Link>
+                </article>
               ))}
             </div>
           ) : (
@@ -431,13 +488,35 @@ export default function NewsVlogPage() {
             <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
               Subscribe for partnership announcements, market intelligence, and international recruitment updates.
             </p>
-            <button
-              className="group mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all duration-300 hover:scale-105 hover:bg-secondary"
-              type="button"
-            >
-              Subscribe Now
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            <form onSubmit={handleSubscribe} className="mx-auto flex max-w-xl flex-col gap-3 sm:flex-row">
+              <input
+                type="email"
+                required
+                value={subscriberEmail}
+                onChange={(event) => setSubscriberEmail(event.target.value)}
+                placeholder="Enter your email"
+                className="w-full rounded-full border border-border bg-background px-5 py-3 text-sm text-foreground outline-none ring-0 transition-colors focus:border-primary/50"
+              />
+              <button
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all duration-300 hover:scale-105 hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-70"
+                type="submit"
+                disabled={isSubscribing}
+              >
+                {isSubscribing ? 'Subscribing...' : 'Subscribe Now'}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+            </form>
+            {subscribeStatus !== 'idle' && (
+              <p
+                className={`mx-auto mt-4 max-w-xl rounded-xl px-4 py-2 text-sm font-medium ${
+                  subscribeStatus === 'success'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-red-100 text-red-700'
+                }`}
+              >
+                {subscribeMessage}
+              </p>
+            )}
           </motion.div>
         </div>
       </section>

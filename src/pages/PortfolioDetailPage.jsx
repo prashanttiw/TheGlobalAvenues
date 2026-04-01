@@ -26,6 +26,8 @@ import { getPortfolioById, getPortfolios } from '../services/portfolioService';
 import { getUniversityDetail } from '../services/contentApi';
 import { resolveMediaUrl } from '../services/apiClient';
 import BackNavButton from '../components/ui/BackNavButton';
+import Seo from '../components/seo/Seo';
+import { SITE_URL, trimDescription, toAbsoluteUrl } from '../seo/siteMeta';
 
 const MJM_SUMMER_SCHOOL_HIGHLIGHT = {
   city: 'Rennes, France',
@@ -354,6 +356,11 @@ export default function PortfolioDetailPage() {
   if (isLoading) {
     return (
       <div className="pt-20 min-h-screen flex items-center justify-center">
+        <Seo
+          title="Institution Profile"
+          description="Loading institution profile and partnership details."
+          path={`/portfolio/${id || ''}`}
+        />
         <div className="w-12 h-12 border-4 border-muted border-t-primary rounded-full animate-spin" />
       </div>
     );
@@ -362,6 +369,12 @@ export default function PortfolioDetailPage() {
   if (!portfolio) {
     return (
       <div className="pt-20 min-h-screen flex flex-col items-center justify-center">
+        <Seo
+          title="Portfolio Not Found"
+          description="The requested institution profile could not be found."
+          path={`/portfolio/${id || ''}`}
+          noindex
+        />
         <h1 className="text-4xl font-bold mb-4">Portfolio Not Found</h1>
         <BackNavButton label="Back to Portfolio" onClick={() => navigate('/portfolio')} />
       </div>
@@ -375,6 +388,51 @@ export default function PortfolioDetailPage() {
   const catalogDocuments = Array.isArray(portfolio.details?.catalogs)
     ? portfolio.details.catalogs.filter((item) => item && typeof item.file === 'string' && item.file.trim())
     : [];
+  const portfolioPath = `/portfolio/${portfolio.slug || portfolio.id || id || ''}`;
+  const portfolioDescription = trimDescription(
+    portfolio.description ||
+      `Explore ${portfolio.title} and discover institution profile details, programs, and partnership highlights.`,
+    165
+  );
+  const portfolioSchema = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'EducationalOrganization',
+      name: portfolio.title,
+      description: portfolioDescription,
+      url: `${SITE_URL}${portfolioPath}`,
+      image: toAbsoluteUrl(portfolio.image || portfolio.logo || '/videos/hero-poster.jpg'),
+      logo: portfolio.logo ? toAbsoluteUrl(portfolio.logo) : undefined,
+      address: portfolio.details?.location || portfolio.country || undefined,
+      areaServed: portfolio.country || undefined,
+      email: portfolio.contact || undefined,
+      sameAs: portfolio.website ? [portfolio.website] : undefined,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: `${SITE_URL}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Portfolio',
+          item: `${SITE_URL}/portfolio`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: portfolio.title,
+          item: `${SITE_URL}${portfolioPath}`,
+        },
+      ],
+    },
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -391,6 +449,14 @@ export default function PortfolioDetailPage() {
 
   return (
     <div className="pt-20 min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <Seo
+        title={portfolio.title}
+        description={portfolioDescription}
+        path={portfolioPath}
+        image={portfolio.image || portfolio.logo || '/videos/hero-poster.jpg'}
+        keywords={['university profile', 'partner institution', portfolio.title, portfolio.country]}
+        jsonLd={portfolioSchema}
+      />
       {/* Back Button */}
       <motion.div
         className="sticky top-16 z-40 border-b border-border/70 bg-background/70 px-4 py-2 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55 sm:px-6 lg:px-8"

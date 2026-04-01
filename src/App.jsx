@@ -5,6 +5,7 @@ import { SettingsProvider } from './context/SettingsContext';
 import { HomeContentProvider } from './context/HomeContentContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { FloatingContactButton } from './components/FloatingContactButton';
 import { ScrollRestoration } from './components/ScrollRestoration';
 import PageLoader from './components/ui/PageLoader';
 
@@ -23,6 +24,7 @@ const NewsVlogPage = lazy(() => import('./pages/NewsVlogPage'));
 const NewsDetailPage = lazy(() => import('./pages/NewsDetailPage'));
 const EducationProgramPage = lazy(() => import('./pages/EducationProgramPage'));
 const WhatWeOfferPage = lazy(() => import('./pages/WhatWeOfferPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
   return (
@@ -62,11 +64,12 @@ function App() {
                 path="/education-program/:programType/:degreeLevel"
                 element={<EducationProgramPage />}
               />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
         </main>
         <Footer />
+        <FloatingContactButton />
       </div>
     </SettingsProvider>
   );

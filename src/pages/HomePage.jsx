@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import SectionSkeleton from '../components/ui/SectionSkeleton';
 import useLazySection from '../hooks/useLazySection';
+import Seo from '../components/seo/Seo';
+import { SITE_URL } from '../seo/siteMeta';
 
 const HeroSection = lazy(() => import('../components/home/HeroSection'));
 const UniversityTrustBar = lazy(() => import('../components/home/UniversityTrustBar'));
@@ -17,6 +19,15 @@ const Testimonials = lazy(() =>
 const PortfolioSection = lazy(() => import('../components/PortfolioSection'));
 const ENABLE_HOME_TEXTURED_BG = true; // Undo option: set to false if you prefer the previous plain home background.
 
+const HOME_SCHEMA = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'The Global Avenues',
+    url: `${SITE_URL}/`,
+  },
+];
+
 export default function HomePage() {
   const { ref: carouselRef, isVisible: carouselVisible } = useLazySection();
   const { ref: servicesRef, isVisible: servicesVisible } = useLazySection();
@@ -25,62 +36,78 @@ export default function HomePage() {
   const { ref: contactRef, isVisible: contactVisible } = useLazySection();
 
   return (
-    <div
-      className={`home-page-gradient relative pt-16 ${
-        ENABLE_HOME_TEXTURED_BG ? 'home-page-gradient--textured' : ''
-      }`}
-    >
-      <Suspense fallback={<SectionSkeleton height="h-screen" />}>
-        <HeroSection />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height="h-24" />}>
-        <UniversityTrustBar />
-      </Suspense>
-      <div ref={servicesRef}>
-        {servicesVisible ? (
-          <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-            <Services />
-          </Suspense>
-        ) : (
-          <SectionSkeleton height="h-[600px]" />
-        )}
+    <>
+      <Seo
+        title="Global Education Partnerships and Student Recruitment"
+        description="Partner with The Global Avenues for international education consulting, university market entry strategy, and measurable enrollment growth support."
+        path="/"
+        image="/videos/hero-poster.jpg"
+        keywords={[
+          'international education consulting',
+          'university partnerships',
+          'student recruitment',
+          'admissions support',
+          'The Global Avenues',
+        ]}
+        jsonLd={HOME_SCHEMA}
+      />
+      <div
+        className={`home-page-gradient relative pt-16 ${
+          ENABLE_HOME_TEXTURED_BG ? 'home-page-gradient--textured' : ''
+        }`}
+      >
+        <Suspense fallback={<SectionSkeleton height="h-screen" />}>
+          <HeroSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton height="h-24" />}>
+          <UniversityTrustBar />
+        </Suspense>
+        <div ref={servicesRef}>
+          {servicesVisible ? (
+            <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+              <Services />
+            </Suspense>
+          ) : (
+            <SectionSkeleton height="h-[600px]" />
+          )}
+        </div>
+        <div ref={carouselRef}>
+          {carouselVisible ? (
+            <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
+              <ImageCarousel />
+            </Suspense>
+          ) : (
+            <SectionSkeleton height="h-[500px]" />
+          )}
+        </div>
+        <div ref={portfolioRef}>
+          {portfolioVisible ? (
+            <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+              <PortfolioSection />
+            </Suspense>
+          ) : (
+            <SectionSkeleton height="h-[600px]" />
+          )}
+        </div>
+        <div ref={testimonialsRef}>
+          {testimonialsVisible ? (
+            <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
+              <Testimonials />
+            </Suspense>
+          ) : (
+            <SectionSkeleton height="h-[500px]" />
+          )}
+        </div>
+        <div ref={contactRef}>
+          {contactVisible ? (
+            <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+              <Contact />
+            </Suspense>
+          ) : (
+            <SectionSkeleton height="h-[600px]" />
+          )}
+        </div>
       </div>
-      <div ref={carouselRef}>
-        {carouselVisible ? (
-          <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-            <ImageCarousel />
-          </Suspense>
-        ) : (
-          <SectionSkeleton height="h-[500px]" />
-        )}
-      </div>
-      <div ref={portfolioRef}>
-        {portfolioVisible ? (
-          <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-            <PortfolioSection />
-          </Suspense>
-        ) : (
-          <SectionSkeleton height="h-[600px]" />
-        )}
-      </div>
-      <div ref={testimonialsRef}>
-        {testimonialsVisible ? (
-          <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-            <Testimonials />
-          </Suspense>
-        ) : (
-          <SectionSkeleton height="h-[500px]" />
-        )}
-      </div>
-      <div ref={contactRef}>
-        {contactVisible ? (
-          <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-            <Contact />
-          </Suspense>
-        ) : (
-          <SectionSkeleton height="h-[600px]" />
-        )}
-      </div>
-    </div>
+    </>
   );
 }

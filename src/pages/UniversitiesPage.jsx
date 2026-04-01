@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Globe, Search, TrendingUp, Users } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 import { useSettings } from '../context/SettingsContext';
+import Seo from '../components/seo/Seo';
 
 const countries = ['all', ...new Set(portfolioData.map((item) => item.country))];
 
@@ -41,6 +42,13 @@ export default function UniversitiesPage() {
 
   return (
     <div className="min-h-screen pt-16">
+      <Seo
+        title="Partner Universities"
+        description="Browse partner universities and institutions across Europe and beyond with The Global Avenues."
+        path="/universities"
+        image="/universities/benedictine-university-hero.jpg"
+        keywords={['partner universities', 'study abroad institutions', 'international universities']}
+      />
       <motion.section
         className="bg-gradient-to-b from-primary/5 to-background px-4 py-20 sm:px-6 lg:px-8"
         initial={{ opacity: 0 }}

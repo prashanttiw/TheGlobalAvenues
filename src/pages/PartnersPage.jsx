@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, Award, Building2, Globe, CheckCircle } from 'lucide-react';
 import { industryPartners, schoolCounsellors, educationAgents, universities } from '../data/partnersData';
+import Seo from '../components/seo/Seo';
 
 export default function PartnersPage() {
   const [activeTab, setActiveTab] = useState('universities');
@@ -27,6 +28,13 @@ export default function PartnersPage() {
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-background">
+      <Seo
+        title="Partnership Ecosystem"
+        description="Explore The Global Avenues partner ecosystem across universities, industry partners, counselor networks, and education agents."
+        path="/partners"
+        image="/universities/university-of-nicosia-hero.jpg"
+        keywords={['education partners', 'university partnerships', 'counselor network']}
+      />
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-16"

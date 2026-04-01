@@ -17,6 +17,8 @@ import {
 import { getDegreeDetails, getProgramById } from '../data/educationProgramsData';
 import { getOfferingDetail } from '../services/contentApi';
 import BackNavButton from '../components/ui/BackNavButton';
+import Seo from '../components/seo/Seo';
+import { trimDescription } from '../seo/siteMeta';
 
 const TAB_ORDER = ['undergraduate', 'postgraduate', 'doctorate'];
 
@@ -141,6 +143,12 @@ export default function EducationProgramPage() {
   if (!pageContent || !currentPlan) {
     return (
       <div className="min-h-screen bg-background px-4 pb-20 pt-24 sm:px-6 lg:px-8">
+        <Seo
+          title="Service Not Found"
+          description="The requested offering page is currently unavailable."
+          path={`/education-program/${programType || ''}/${resolvedLevel}`}
+          noindex
+        />
         <div className="mx-auto flex max-w-3xl flex-col items-center justify-center text-center">
           <h1 className="text-4xl font-bold text-foreground">Service Not Found</h1>
           <p className="mt-3 text-muted-foreground">This offering page is not available right now.</p>
@@ -177,6 +185,13 @@ export default function EducationProgramPage() {
 
   return (
     <div className="min-h-screen bg-background px-4 pb-20 pt-24 sm:px-6 lg:px-8">
+      <Seo
+        title={`${pageContent.name} - ${PLAN_LABELS[resolvedLevel]}`}
+        description={trimDescription(pageContent.description || currentPlan.description, 165)}
+        path={`/education-program/${pageContent.id}/${resolvedLevel}`}
+        image="/videos/hero-poster.jpg"
+        keywords={['education program', 'institution offering', 'market entry support']}
+      />
       <div className="mx-auto max-w-7xl">
         <BackNavButton label="Back to Offerings" onClick={() => navigate('/what-we-offer')} className="mb-8" />
 

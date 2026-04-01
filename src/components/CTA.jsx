@@ -1,13 +1,55 @@
 import { Mail, Phone, ArrowRight } from 'lucide-react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useSideSlideAnimation } from '../hooks/useScrollAnimation'
+import { submitContactForm } from '../services/contactFormService'
 
 export default function CTA() {
   const contentRef = useRef(null)
   const formRef = useRef(null)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: '',
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [statusMessage, setStatusMessage] = useState('')
 
   useSideSlideAnimation(contentRef, 'left')
   useSideSlideAnimation(formRef, 'right')
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setFormData((previous) => ({ ...previous, [name]: value }))
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (isSubmitting) return
+
+    setIsSubmitting(true)
+    setStatusMessage('')
+
+    try {
+      await submitContactForm({
+        formName: 'CTA Contact Form',
+        source: '/',
+        fields: {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.company,
+          message: formData.message,
+          company: formData.company,
+        },
+      })
+      setStatusMessage('Message sent.')
+      setFormData({ name: '', email: '', company: '', message: '' })
+    } catch (error) {
+      setStatusMessage('Message failed. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <section id="contact" className="py-20 md:py-32 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground overflow-hidden relative">
@@ -57,15 +99,19 @@ export default function CTA() {
           {/* Right Form */}
           <div ref={formRef} className="bg-primary-foreground/10 backdrop-blur border border-primary-foreground/20 rounded-xl p-8 lg:p-10 scroll-slide-in-right card-hover" style={{ opacity: 0 }}>
             <h3 className="text-2xl font-bold mb-8 text-primary-foreground">Get in Touch</h3>
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={handleSubmit}>
               <div className="scroll-fade-in" style={{ animation: 'fadeInUp 0.6s ease-out 0.1s forwards', opacity: 0 }}>
                 <label className="block text-sm font-semibold mb-2 text-primary-foreground">
                   Full Name
                 </label>
                 <input
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg text-primary-foreground placeholder-primary-foreground/60 focus:outline-none focus:border-secondary/80 focus:bg-primary-foreground/20 transition-all duration-300"
                   placeholder="Your name"
+                  required
                 />
               </div>
 
@@ -75,8 +121,12 @@ export default function CTA() {
                 </label>
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg text-primary-foreground placeholder-primary-foreground/60 focus:outline-none focus:border-secondary/80 focus:bg-primary-foreground/20 transition-all duration-300"
                   placeholder="your@email.com"
+                  required
                 />
               </div>
 
@@ -86,6 +136,9 @@ export default function CTA() {
                 </label>
                 <input
                   type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg text-primary-foreground placeholder-primary-foreground/60 focus:outline-none focus:border-secondary/80 focus:bg-primary-foreground/20 transition-all duration-300"
                   placeholder="Your company"
                 />
@@ -96,19 +149,27 @@ export default function CTA() {
                   Message
                 </label>
                 <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows="4"
                   className="w-full px-4 py-3 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg text-primary-foreground placeholder-primary-foreground/60 focus:outline-none focus:border-secondary/80 focus:bg-primary-foreground/20 transition-all duration-300 resize-none"
                   placeholder="Tell us about your needs..."
+                  required
                 ></textarea>
               </div>
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full py-3 bg-secondary text-secondary-foreground font-semibold rounded-lg hover:bg-secondary/90 transition-all duration-300 cursor-pointer hover:shadow-lg transform hover:-translate-y-1 scroll-fade-in"
                 style={{ animation: 'fadeInUp 0.6s ease-out 0.5s forwards', opacity: 0 }}
               >
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
+              {statusMessage ? (
+                <p className="text-sm text-primary-foreground/90">{statusMessage}</p>
+              ) : null}
             </form>
           </div>
         </div>
