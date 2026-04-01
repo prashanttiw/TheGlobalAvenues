@@ -252,13 +252,13 @@ export default function AboutPage() {
       {
         name: 'Nancy Goel',
         role: 'Recruitment Specialist',
-        image: '',
+        image: '/team/nancy.jpeg',
         bio: 'Focused on student recruitment engagement, counselor coordination, and nurturing strong applicant pipelines.',
       },
       {
         name: 'Ishita Nagpal',
         role: 'Admission Coordinator',
-        image: '',
+        image: '/team/ishita.jpeg',
         bio: 'Supports application progress, candidate communication, and detail-oriented admissions coordination across partners.',
       },
     ],
