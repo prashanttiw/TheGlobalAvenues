@@ -1,5 +1,36 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { CheckCircle, BookOpen, Users, FileText, Zap, Target, BarChart3, Briefcase } from 'lucide-react';
+import Seo from '../components/seo/Seo';
+import { SITE_NAME, SITE_URL } from '../seo/siteMeta';
+
+const FAQ_ITEMS = [
+  {
+    question: 'What services does The Global Avenues provide for universities?',
+    answer:
+      'We provide market-entry strategy, admissions operations support, brand enablement, recruitment partner network management, compliance support, and performance analytics.',
+  },
+  {
+    question: 'How quickly can a university launch in a new market?',
+    answer:
+      'Timelines depend on your program portfolio and intake targets, but we typically begin execution immediately after discovery and strategy alignment.',
+  },
+  {
+    question: 'Do you support admissions and documentation workflows?',
+    answer:
+      'Yes. We help institutions standardize application workflows, document quality checks, and follow-up processes for stronger conversion outcomes.',
+  },
+  {
+    question: 'Can you help build recruitment partner networks in India and South Asia?',
+    answer:
+      'Yes. We support partner onboarding, quality filtering, channel governance, and performance tracking across target markets.',
+  },
+  {
+    question: 'How do you measure results?',
+    answer:
+      'We track lead sources, conversion trends, intake outcomes, and partner performance through practical analytics and regular review cycles.',
+  },
+];
 
 export default function ServicesPage() {
   const services = [
@@ -65,9 +96,52 @@ export default function ServicesPage() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
+  const servicesSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'International Education Consulting',
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: `${SITE_URL}/`,
+    },
+    areaServed: ['India', 'South Asia', 'Global'],
+    url: `${SITE_URL}/services`,
+    name: 'Education Growth Services',
+    description:
+      'Market entry strategy, admissions operations, partner network management, and recruitment growth services for universities.',
+  };
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_ITEMS.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE_URL}/services` },
+    ],
+  };
 
   return (
     <div className="pt-16 min-h-screen">
+      <Seo
+        title="Education Growth Services"
+        description="Discover services from The Global Avenues including market entry strategy, admissions operations, brand enablement, and partnership success management."
+        path="/services"
+        image="/videos/hero-poster.jpg"
+        keywords={['education consulting services', 'admissions operations', 'market entry strategy']}
+        jsonLd={[servicesSchema, faqSchema, breadcrumbSchema]}
+      />
       {/* Hero Section */}
       <motion.section
         className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-primary/5 to-background"
@@ -210,6 +284,52 @@ export default function ServicesPage() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            className="mb-10 text-center"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.45 }}
+          >
+            <h2 className="text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+            <p className="text-muted-foreground text-lg">
+              Clear answers for institutions evaluating our market expansion and admissions support services.
+            </p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {FAQ_ITEMS.map((item, index) => (
+              <motion.details
+                key={item.question}
+                className="rounded-2xl border border-border/70 bg-background/80 p-5 shadow-sm"
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: index * 0.05 }}
+              >
+                <summary className="cursor-pointer text-left text-lg font-semibold text-foreground">
+                  {item.question}
+                </summary>
+                <p className="mt-3 text-muted-foreground">{item.answer}</p>
+              </motion.details>
+            ))}
+          </div>
+
+          <motion.p
+            className="mt-8 text-center text-muted-foreground"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.35, delay: 0.2 }}
+          >
+            Need a custom plan? Visit <Link to="/what-we-offer" className="text-primary font-semibold">What We Offer</Link>{' '}
+            or start directly from <Link to="/collaborate" className="text-primary font-semibold">Collaborate</Link>.
+          </motion.p>
         </div>
       </section>
 

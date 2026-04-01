@@ -894,7 +894,7 @@ export const portfolioData = [
       'Paris location with hospitality ecosystem access',
       'Job-readiness focused outcomes'
     ],
-    contact: 'admissions@ifh-paris.com',
+    contact: 'globalavenue@ifh-paris.com',
     website: 'https://ifh-paris.com/'
   }
 ];

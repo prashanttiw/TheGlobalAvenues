@@ -17,6 +17,7 @@ import useScrollAnimation from '../hooks/useScrollAnimation';
 import useLazySection from '../hooks/useLazySection';
 import SectionSkeleton from '../components/ui/SectionSkeleton';
 import { CONTACT_FORM_RECIPIENT_EMAIL, submitContactForm } from '../services/contactFormService';
+import Seo from '../components/seo/Seo';
 
 const inputClassName =
   'w-full rounded-xl border border-[#D8D2EE] bg-white/85 px-4 py-3 text-sm text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.75)] outline-none transition-all duration-200 ease-out placeholder:text-muted-foreground/70 focus:border-primary/40 focus:ring-2 focus:ring-primary/20 dark:border-[#3B2C73] dark:bg-[#181231]/80 dark:shadow-none dark:placeholder:text-white/45';
@@ -152,15 +153,22 @@ export default function CollaboratePage() {
 
   return (
     <div className="collaborate-page-gradient min-h-screen pt-16 text-foreground">
+      <Seo
+        title="Collaborate With The Global Avenues"
+        description="Connect with The Global Avenues for institutional partnerships, admissions support, and strategic market expansion in international education."
+        path="/collaborate"
+        image="/videos/hero-poster.jpg"
+        keywords={['collaborate', 'institution partnerships', 'global education consulting']}
+      />
       <section className="collaborate-section-shell px-4 py-20 sm:px-6 lg:px-8">
         <div ref={heroRef} className="mx-auto max-w-5xl text-center">
           <div className="section-kicker-classic mb-5 inline-flex">Collaborate With Us</div>
-          <h3 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-5xl">
+          <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-5xl">
             {/* Build Global Education */}
             <span className="block bg-[linear-gradient(96deg,#2D1B69_0%,#5B45C6_45%,#E8521A_100%)] bg-clip-text text-transparent">
               Scale Your International Student Enrolment
             </span>
-          </h3>
+          </h1>
           <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             Collaborate with us to build effective recruitment pathways, strengthen admissions support, and grow your enrolment footprint across South Asia.
           </p>

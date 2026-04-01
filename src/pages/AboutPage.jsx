@@ -14,6 +14,7 @@ import {
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import useLazySection from '../hooks/useLazySection';
 import SectionSkeleton from '../components/ui/SectionSkeleton';
+import Seo from '../components/seo/Seo';
 
 const ProfileCard = memo(function ProfileCard({ member, featured }) {
   const cardRef = useScrollAnimation({ y: 24, duration: 600, delay: featured ? 0 : 80 });
@@ -281,6 +282,13 @@ export default function AboutPage() {
 
   return (
     <div className="about-page-gradient min-h-screen pt-16 text-foreground">
+      <Seo
+        title="About The Global Avenues"
+        description="Learn about The Global Avenues, our mission, values, leadership team, and our trusted approach to international education partnerships."
+        path="/about"
+        image="/team/neetu-verma-gupta.webp"
+        keywords={['about The Global Avenues', 'international education partner', 'ICEF accredited agency']}
+      />
       <section className="about-section-shell relative overflow-hidden bg-gradient-to-b from-primary/8 via-background/80 to-background/40 px-4 py-20 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(83,64,176,0.14),transparent_35%),radial-gradient(circle_at_top_right,rgba(232,82,26,0.12),transparent_40%)]" />
         <div ref={heroRef} className="relative mx-auto max-w-5xl text-center">

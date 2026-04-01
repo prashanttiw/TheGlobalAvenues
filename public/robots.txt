@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://theglobalavenues.com/sitemap.xml
+Sitemap: https://theglobalavenues.com/sitemap-images.xml

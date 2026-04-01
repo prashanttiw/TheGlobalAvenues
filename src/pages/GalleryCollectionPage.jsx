@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BackNavButton from '../components/ui/BackNavButton';
 import { getGalleryCollectionBySlug } from '../data/galleryCollectionsData';
+import Seo from '../components/seo/Seo';
 
 const FALLBACK_IMAGE = '/videos/hero-poster.jpg';
 const SWIPE_THRESHOLD_PX = 50;
@@ -118,6 +119,12 @@ export default function GalleryCollectionPage() {
   if (!collection) {
     return (
       <div className="min-h-screen bg-background px-4 pb-20 pt-24 sm:px-6 lg:px-8">
+        <Seo
+          title="Gallery Collection Not Found"
+          description="The requested gallery collection is currently unavailable."
+          path={`/gallery/collection/${collectionSlug || ''}`}
+          noindex
+        />
         <div className="mx-auto max-w-4xl">
           <BackNavButton label="Back to Gallery" onClick={() => navigate('/gallery')} className="mb-8" />
           <div className="rounded-2xl border border-border/70 bg-muted/20 p-10 text-center">
@@ -131,6 +138,13 @@ export default function GalleryCollectionPage() {
 
   return (
     <div className="min-h-screen bg-background px-4 pb-20 pt-24 sm:px-6 lg:px-8">
+      <Seo
+        title={`${collection.title} - Gallery`}
+        description={collection.description || `Browse photos from ${collection.title}.`}
+        path={`/gallery/collection/${collection.slug}`}
+        image={photos[0]?.src || FALLBACK_IMAGE}
+        keywords={['gallery collection', collection.category, collection.title]}
+      />
       <div className="mx-auto max-w-7xl">
         <BackNavButton label="Back to Gallery" onClick={() => navigate('/gallery')} className="mb-8" />
 

@@ -3,6 +3,7 @@ import { FolderOpen, ImageIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { galleryCollections } from '../data/galleryCollectionsData';
+import Seo from '../components/seo/Seo';
 
 const ALL_CATEGORIES_KEY = 'all-categories';
 const FALLBACK_COVER_IMAGE = '/videos/hero-poster.jpg';
@@ -71,6 +72,13 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-20">
+      <Seo
+        title="Gallery"
+        description="View The Global Avenues gallery with counselling events, conferences, campus highlights, and partner university collections."
+        path="/gallery"
+        image="/gallery/collections/conferences/conference-events-2026/conference-cover-team-introduction.jpg"
+        keywords={['education gallery', 'university events', 'partner university photos']}
+      />
       <section className="relative overflow-hidden px-4 pb-12 pt-8 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(83,64,176,0.22),transparent)]" />
         <motion.div
