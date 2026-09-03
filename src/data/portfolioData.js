@@ -1,30 +1,59 @@
 export const portfolioData = [
   {
     id: 1,
-    title: 'FH Kufstein Tirol',
-    slug: 'fh-kufstein-tirol',
+    title: 'Hochschule für Angewandte Wissenschaften Kufstein Tirol',
+    slug: 'hok-kufstein-tirol',
     category: 'University of Applied Sciences',
     country: 'Austria',
-    image: '/universities/fh-kufstein-tirol-hero.webp',
-    logo: '/universities/fh-kufstein-tirol-logo.png',
+    image: '/universities/hok-kufstein-tirol-hero.webp',
+    logo: '/universities/hok-kufstein-tirol-logo.svg',
     studentsPlaced: 3000,
-    programs: 6,
+    programs: 9,
     successRate: 95,
-    description: 'Austria-based applied sciences university with focused programs in AI, data science, sustainability, business, and event management.',
+    description: 'Austria-based university of applied sciences with focused programs in AI, data science, sustainability, business, and event management.',
     details: {
       founded: 1997,
       location: 'Kufstein, Tirol',
       ranking: 'Top 50 in Austria',
       specializations: [
-        'BSc in Drone Engineering and AI-based Innovation',
-        'MSc in Data Science and Intelligence Analytics',
-        'MSc in Energy and Sustainability Management',
-        'MA in International Business Studies',
-        'MSc in Smart Products and AI-driven Development',
-        'MA in Sports, Culture and Event Management'
+        'Drone Engineering',
+        'Energy & Sustainability Management',
+        'Facility & Real Estate Management',
+        'Data Science & Intelligent Analytics',
+        'Energy & Sustainability Management',
+        'International Business Management',
+        'Smart Products & AI-driven Development',
+        'Sports, Culture & Event Management',
+        'Digital Marketing'
+      ],
+      programsByLevel: [
+        {
+          level: "Bachelor's Programme",
+          items: [
+            'Drone Engineering',
+            'Energy & Sustainability Management',
+            'Facility & Real Estate Management'
+          ]
+        },
+        {
+          level: "Master's Programme",
+          items: [
+            'Data Science & Intelligent Analytics',
+            'Energy & Sustainability Management',
+            'International Business Management',
+            'Smart Products & AI-driven Development',
+            'Sports, Culture & Event Management',
+            'Digital Marketing'
+          ]
+        }
       ],
       visaSuccessRate: 98,
-      avgTuition: 'Approx. EUR 700-EUR 800/year',
+      avgTuition: 'Tuition Fee: EUR 726.72 per semester; ÖH Student Union Fee: EUR 25.20 per semester; Initial Tuition Deposit for non-EU/EEA applicants: EUR 726.72',
+      tuitionBreakdown: [
+        { label: 'Tuition Fee', amount: 'EUR 726.72 / semester' },
+        { label: 'ÖH Student Union Fee', amount: 'EUR 25.20 / semester' },
+        { label: 'Initial Tuition Deposit (Non-EU/EEA applicants)', amount: 'EUR 726.72' }
+      ],
       intakeWindows: 'September',
       programDuration: '2-3 years',
       campusLocations: ['Kufstein, Tirol'],
@@ -47,7 +76,7 @@ export const portfolioData = [
         }
       ]
     },
-    longDescription: 'The University of Applied Sciences Kufstein Tirol (FH Kufstein) is a leading institution in Austria, offering internationally recognized degree programs that integrate innovation, sustainability, and global business practices. With state-of-the-art facilities and strong industry connections, FH Kufstein provides students with the skills and knowledge needed to succeed in their careers.',
+    longDescription: 'Hochschule für Angewandte Wissenschaften Kufstein Tirol, University of Applied Sciences, is a leading institution in Austria, offering internationally recognized degree programs that integrate innovation, sustainability, and global business practices. With state-of-the-art facilities and strong industry connections, HOK provides students with the skills and knowledge needed to succeed in their careers.',
     highlights: [
       '215+ partner universities worldwide',
       'English-taught programs available',
@@ -64,8 +93,8 @@ export const portfolioData = [
         includes: ['Tuition Fee', 'German Language Course', 'Student Residence', 'Rental Bike', 'Climate Ticket', 'Food Credits']
       }
     ],
-    contact: 'fh-kufstein@theglobalavenues.com',
-    website: 'https://www.fh-kufstein.ac.at/en/Home'
+    contact: 'hok@theglobalavenues.com',
+    website: 'https://www.hok.ac.at/en/Home'
   },
   {
     id: 3,
